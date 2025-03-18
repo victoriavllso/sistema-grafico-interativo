@@ -1,2 +1,2 @@
-pip install PyQt6
-pip install pyqt6-tools
+PyQt6==6.6.1
+PyQt6-tools==6.4.2.3.3

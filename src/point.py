@@ -7,5 +7,6 @@ class Point(GraphicObject):
 		self.y = y
 		self.color = color
 	
+	#TODO: Draw with API
 	def draw(self):
 		print(f"Drawing a point at ({self.x}, {self.y})")

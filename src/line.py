@@ -8,5 +8,6 @@ class Line(GraphicObject):
 		self.point2 = point2
 		self.color = color
 
+	#TODO: Draw with API
 	def draw(self) -> None:
 		print(f"Drawing a line from ({self.points[0].x}, {self.points[0].y}) to ({self.points[1].x}, {self.points[1].y})")
