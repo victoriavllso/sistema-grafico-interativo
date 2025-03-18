@@ -1,4 +1,4 @@
-from ABC import ABC, abstractmethod
+from abc import ABC, abstractmethod
 
 class GraphicObject(ABC):
 	def __init__(self):
@@ -7,4 +7,5 @@ class GraphicObject(ABC):
 	@abstractmethod
 	def draw(self):
 		pass
-	
+
+# ---------- DONE ---------- #
