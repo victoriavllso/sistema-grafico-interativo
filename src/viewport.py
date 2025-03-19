@@ -1,5 +1,5 @@
-from src.point import Point
-from src.window import Window
+from point import Point
+from window import Window
 from utils import WIDTH, HEIGHT
 
 class Viewport:

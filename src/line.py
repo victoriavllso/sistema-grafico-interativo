@@ -1,12 +1,14 @@
 from graphic_object import GraphicObject
 from point import Point
-from utils import BLACK_RGB
+from PyQt6.QtGui import QBrush
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsScene
 
 class Line(GraphicObject):
-	def __init__(self, point1: Point, point2: Point, color= BLACK_RGB) -> None:
+	def __init__(self, point1: Point, point2: Point):
+		super().__init__()
 		self.point1 = point1
 		self.point2 = point2
-		self.color = color
 
 	#TODO: Draw with API
 	def draw(self) -> None:

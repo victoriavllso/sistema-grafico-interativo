@@ -10,4 +10,12 @@ class Display_File:
     def add(self, graphic_object: GraphicObject) -> None:
         self.list.append(graphic_object)
 
+    def remove(self, name: str) -> None:
+        for obj in self.list:
+            if obj.name == name:
+                self.list.remove(obj)
+    
+    def get_all(self) -> list:
+        return self.list
+
             # ---------- DONE ---------- #

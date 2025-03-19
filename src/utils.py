@@ -1,0 +1,14 @@
+# window
+STEP = 1
+PERCENTAGE = 10
+X_MIN = 0
+X_MAX = 1000
+Y_MIN = 0
+Y_MAX = 1000
+
+# viewport
+WIDTH = 680
+HEIGHT = 620
+
+# line
+BLACK_RGB = (0, 0, 0)

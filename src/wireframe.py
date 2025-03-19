@@ -1,15 +1,15 @@
 from graphic_object import GraphicObject
 from point import Point
-from utils import BLACK_RGB
 
 class Wireframe(GraphicObject):
-    def __init__(self, points: list[Point], color=BLACK_RGB):
+    def __init__(self, points: list[Point]):
+        super().__init__()
+        
         # Verify if the given points form a valid polygon
         if not self._is_valid_polygon(points):
             raise ValueError("Invalid polygon: The given points do not form a valid shape.")
 
         self.points = points
-        self.color = color
         # Check if the polygon is concave
         self.concave = self._is_concave()
 
