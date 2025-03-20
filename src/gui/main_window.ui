@@ -167,7 +167,7 @@
      <string>name:</string>
     </property>
    </widget>
-   <widget class="QLabel" name="viewport">
+   <widget class="QLabel" name="vp">
     <property name="geometry">
      <rect>
       <x>10</x>
