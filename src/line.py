@@ -22,10 +22,6 @@ class Line(GraphicObject):
 		line_item = QGraphicsLineItem(transformed_p1.x, transformed_p1.y,
 										transformed_p2.x, transformed_p2.y)
 
-		# Configura a caneta (QPen) para desenhar a linha em vermelho
-		pen = QPen(Qt.GlobalColor.red)
 		line_item.setPen(pen)
 
-		# Adiciona o item à cena
-		scene.addItem(line_item)
 		print("linha desenhada")

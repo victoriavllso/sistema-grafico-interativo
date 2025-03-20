@@ -32,7 +32,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.z_in.clicked.connect(self.zoom_in)
         self.z_out.clicked.connect(self.zoom_out)
 
-
     # Create object from input
     def create_object(self):
         # Input
@@ -40,20 +39,42 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         if not text:
             return
         
-        # Process input text into a list of tuples (points)
-        points = [tuple(map(int, re.findall(r"-?\d+", p))) for p in text.split(",")]
+        points = self.parse_coordinates(text)
 
         # Decide which object to create
         if len(points) == 1:
-            obj = Point(*points[0])  # (x, y)
+            obj = Point(*points[0])
         elif len(points) == 2:
-            obj = Line(points[0], points[1])  # ((x1, y1), (x2, y2))
+            obj = Line(points[0], points[1])
         else:
-            obj = Wireframe([Point(x, y) for x, y in points])  # Converte tuplas para objetos Point
-
+            obj = Wireframe([Point(x, y) for x, y in points])
+    
         # Add object to display file and update viewport
         self.display_file.add(obj)
         self.update_viewport()
+
+    def parse_coordinates(self, input_text: str) -> list:
+        points = []
+
+        try:
+            # Remove espaços extras e divide a string em pares de coordenadas
+            pairs = input_text.strip().split("),")
+            for pair in pairs:
+                # Remove os parênteses e espaços extras
+                pair = pair.strip("(), ")
+                if not pair:
+                    continue  # Ignora pares vazios
+                # Divide a string em componentes x e y
+                x, y = pair.split(",")
+                # Remove espaços extras e converte para float
+                x = float(x.strip())
+                y = float(y.strip())
+                points.append((x, y))
+
+        except ValueError:
+            raise ValueError(f"Formato de coordenadas inválido: {input_text}. Certifique-se de usar o formato '(x1, y1), (x2, y2), ...'.")
+        
+        return points
 
     # Delete object from display file
     def delete_object(self):
@@ -95,7 +116,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
     # Update viewport
     def update_viewport(self):
         pass
-        # for obj in self.display_file.get_all():
+        for obj in self.display_file.get_all():
+            obj.draw(self.viewport, self.window)
+        self.viewport.update()
 
 if __name__ == "__main__":
     import sys
