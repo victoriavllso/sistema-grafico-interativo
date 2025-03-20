@@ -12,3 +12,4 @@ HEIGHT = 620
 
 # line
 BLACK_RGB = (0, 0, 0)
+LINE_COLOR = BLACK_RGB

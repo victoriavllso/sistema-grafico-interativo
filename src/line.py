@@ -2,14 +2,30 @@ from graphic_object import GraphicObject
 from point import Point
 from PyQt6.QtGui import QBrush
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsScene
+from PyQt6.QtWidgets import QGraphicsEllipseItem, QGraphicsScene, QGraphicsView
+from PyQt6.QtGui import QPen
+from PyQt6.QtWidgets import QGraphicsLineItem
 
 class Line(GraphicObject):
-	def __init__(self, point1: Point, point2: Point):
-		super().__init__()
+	def __init__(self, point1: Point, point2: Point, name: str =
+		"Line"):
+		super().__init__(name)
 		self.point1 = point1
 		self.point2 = point2
 
-	#TODO: Draw with API
-	def draw(self) -> None:
-		print(f"Drawing a line from ({self.points[0].x}, {self.points[0].y}) to ({self.points[1].x}, {self.points[1].y})")
+	def draw(self, scene: QGraphicsScene, viewport, window) -> None:
+		# Transforma os pontos para a viewport
+		transformed_p1 = viewport.transform(self.point1, window)
+		transformed_p2 = viewport.transform(self.point2, window)
+
+		# Cria um QGraphicsLineItem com os pontos transformados
+		line_item = QGraphicsLineItem(transformed_p1.x, transformed_p1.y,
+										transformed_p2.x, transformed_p2.y)
+
+		# Configura a caneta (QPen) para desenhar a linha em vermelho
+		pen = QPen(Qt.GlobalColor.red)
+		line_item.setPen(pen)
+
+		# Adiciona o item à cena
+		scene.addItem(line_item)
+		print("linha desenhada")

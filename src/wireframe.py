@@ -1,9 +1,11 @@
 from graphic_object import GraphicObject
 from point import Point
+from PyQt6.QtGui import QPen
+from PyQt6.QtCore import Qt
 
 class Wireframe(GraphicObject):
-    def __init__(self, points: list[Point]):
-        super().__init__()
+    def __init__(self, points: list[Point], name: str = "Wireframe"):
+        super().__init__(name)
         
         # Verify if the given points form a valid polygon
         if not self._is_valid_polygon(points):
@@ -13,9 +15,12 @@ class Wireframe(GraphicObject):
         # Check if the polygon is concave
         self.concave = self._is_concave()
 
-    #TODO: Draw with API
-    def draw(self):
-        pass
+    def draw(self, painter) -> None:
+        painter.setPen(QPen(Qt.GlobalColor.green, 2))
+        for i in range(len(self.points)):
+            p1 = self.points[i]
+            p2 = self.points[(i + 1) % len(self.points)]
+            painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
 
     @staticmethod
     def _is_valid_polygon(points: list[Point]) -> bool:

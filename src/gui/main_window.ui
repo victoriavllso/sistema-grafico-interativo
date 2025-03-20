@@ -66,17 +66,7 @@
      <string>Up</string>
     </property>
    </widget>
-   <widget class="QGraphicsView" name="graphicsView">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>680</width>
-      <height>620</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="in">
+   <widget class="QPushButton" name="z_in">
     <property name="geometry">
      <rect>
       <x>690</x>
@@ -89,7 +79,7 @@
      <string>In</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="out">
+   <widget class="QPushButton" name="z_out">
     <property name="geometry">
      <rect>
       <x>820</x>
@@ -102,21 +92,11 @@
      <string>Out</string>
     </property>
    </widget>
-   <widget class="QListView" name="listView">
-    <property name="geometry">
-     <rect>
-      <x>700</x>
-      <y>0</y>
-      <width>220</width>
-      <height>350</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="create_but">
     <property name="geometry">
      <rect>
       <x>690</x>
-      <y>380</y>
+      <y>430</y>
       <width>101</width>
       <height>32</height>
      </rect>
@@ -128,8 +108,8 @@
    <widget class="QPushButton" name="delete_but">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>380</y>
+      <x>810</x>
+      <y>430</y>
       <width>101</width>
       <height>32</height>
      </rect>
@@ -141,8 +121,8 @@
    <widget class="QLabel" name="objetc_lbl">
     <property name="geometry">
      <rect>
-      <x>780</x>
-      <y>360</y>
+      <x>770</x>
+      <y>350</y>
       <width>58</width>
       <height>16</height>
      </rect>
@@ -151,50 +131,79 @@
      <string>Object:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="create_line">
+   <widget class="QLineEdit" name="points_ln">
     <property name="geometry">
      <rect>
       <x>690</x>
-      <y>410</y>
-      <width>101</width>
+      <y>390</y>
+      <width>91</width>
       <height>21</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="delete_line">
-    <property name="geometry">
-     <rect>
-      <x>822</x>
-      <y>410</y>
-      <width>101</width>
-      <height>21</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="create_exp">
-    <property name="geometry">
-     <rect>
-      <x>700</x>
-      <y>440</y>
-      <width>71</width>
-      <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>(1, 2) , (2, 4)</string>
+     <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="delete_exp">
+   <widget class="QLineEdit" name="name_ln">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>440</y>
+      <x>810</x>
+      <y>390</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="name_lbl">
+    <property name="geometry">
+     <rect>
+      <x>810</x>
+      <y>370</y>
       <width>58</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>line1</string>
+     <string>name:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="viewport">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>670</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="display">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>10</y>
+      <width>210</width>
+      <height>331</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="points_lbl">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>370</y>
+      <width>58</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>points:</string>
     </property>
    </widget>
   </widget>
