@@ -1,5 +1,4 @@
 from point import Point
-from window import Window
 from utils import WIDTH, HEIGHT
 
 class Viewport:
@@ -7,7 +6,7 @@ class Viewport:
         self.width = width
         self.height = height
     
-    def transform(self, point: Point, window: Window) -> Point:
+    def transform(self, point, window) -> Point:
         x = (point.x - window.x_min) / (window.x_max - window.x_min) * self.width
         y = (1 - (point.y - window.y_min)) / (window.y_max - window.y_min) * self.height
         return Point(x, y)
