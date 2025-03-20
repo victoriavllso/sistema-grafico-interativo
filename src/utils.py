@@ -1,5 +1,5 @@
 # window
-STEP = 1
+STEP = 10
 PERCENTAGE = 10
 X_MIN = 0
 X_MAX = 1000
@@ -7,8 +7,8 @@ Y_MIN = 0
 Y_MAX = 1000
 
 # viewport
-WIDTH = 680
-HEIGHT = 620
+WIDTH = 670
+HEIGHT = 600
 
 # line
 BLACK_RGB = (0, 0, 0)

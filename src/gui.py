@@ -7,6 +7,7 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+from utils import HEIGHT, WIDTH
 
 
 class Ui_main(object):
@@ -53,7 +54,7 @@ class Ui_main(object):
         self.name_lbl.setGeometry(QtCore.QRect(810, 370, 58, 16))
         self.name_lbl.setObjectName("name_lbl")
         self.vp = QtWidgets.QLabel(parent=self.centralwidget)
-        self.vp.setGeometry(QtCore.QRect(10, 10, 670, 600))
+        self.vp.setGeometry(QtCore.QRect(0, 0, HEIGHT, WIDTH))
         self.vp.setText("")
         self.vp.setObjectName("vp")
         self.display = QtWidgets.QLabel(parent=self.centralwidget)

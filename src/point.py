@@ -1,5 +1,5 @@
-from PyQt6.QtCore import Qt
 from graphic_object import GraphicObject
+from PyQt6.QtGui import QPen, QColor
 
 
 class Point(GraphicObject):
@@ -9,10 +9,13 @@ class Point(GraphicObject):
         self.y = y
 
     def draw(self, painter, viewport, window):
-        """
-        Desenha o ponto na tela usando QPainter.
-        """
         # Aplica a transformação para obter a posição correta na viewport
         transformed_point = viewport.transform(self, window)
-        painter.drawPoint(transformed_point.x, transformed_point.y)
-        print("ponto desenhado")
+
+        x, y = int(transformed_point.x), int(transformed_point.y)
+
+        # Define a cor e desenha o ponto
+        painter.setPen(QPen(QColor(255, 0, 0), 5))  # Define espessura 5 para visibilidade
+        painter.drawPoint(x, y)
+        print(f"Ponto desenhado em ({x}, {y})")
+
