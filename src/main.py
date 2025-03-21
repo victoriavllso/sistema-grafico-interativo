@@ -24,7 +24,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.canvas = QPixmap(self.viewport.width, self.viewport.height)
         self.canvas.fill(QColor("white"))
         self.painter = QPainter(self.canvas)
-        self.vp.setPixmap(self.canvas) # atribui a imagem ao label
+        self.vp.setPixmap(self.canvas)
         
     # Connect signals to slots
     def initUI(self):
@@ -37,10 +37,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.z_in.clicked.connect(self.zoom_in)
         self.z_out.clicked.connect(self.zoom_out)
 
-    # Create object from input
     def create_object(self):
-        # Input
         text = self.points_ln.text().strip()
+        name = self.name_ln.text()
         if not text:
             return
         
@@ -48,14 +47,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
 
         # Decide which object to create
         if len(points) == 1:
-            obj = Point(*points[0])
+            x, y = points[0]
+            obj = Point(name=name, x=x, y=y)
         elif len(points) == 2:
-            point0 = Point(*points[0])
-            point1 = Point(*points[1])
-            obj = Line(point0, point1)
+            x1, y1 = points[0]
+            x2, y2 = points[1]
+            point0 = Point(x=x1, y=y1)
+            point1 = Point(x=x2, y=y2)
+            obj = Line(name= name, point1=point0, point2=point1)
         else:
             vet_points = [Point(*p) for p in points]
-            obj = Wireframe(vet_points)
+            obj = Wireframe(name=name, points=vet_points)
         print("Objeto criado")
     
         # Add object to display file and update viewport
@@ -67,16 +69,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         points = []
 
         try:
-            # Remove espaços extras e divide a string em pares de coordenadas
             pairs = input_text.strip().split("),")
             for pair in pairs:
-                # Remove os parênteses e espaços extras
                 pair = pair.strip("(), ")
                 if not pair:
-                    continue  # Ignora pares vazios
-                # Divide a string em componentes x e y
+                    continue
                 x, y = pair.split(",")
-                # Remove espaços extras e converte para float
                 x = float(x.strip())
                 y = float(y.strip())
                 points.append((x, y))
@@ -85,43 +83,35 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
             raise ValueError(f"Formato de coordenadas inválido: {input_text}. Certifique-se de usar o formato '(x1, y1), (x2, y2), ...'.")
         return points
 
-    # Delete object from display file
     def delete_object(self):
         obj_name = self.name_ln.text().strip()
         self.display_file.remove(obj_name)
         self.update_viewport()
 
-    # Move window up
     def move_window_up(self):
-        self.window.up(STEP)
+        self.window.up()
         self.update_viewport()
 
-    # Move window down
     def move_window_down(self):
-        self.window.down(STEP)
+        self.window.down()
         self.update_viewport()
 
-    # Move window left
     def move_window_left(self):
-        self.window.left(STEP)
+        self.window.left()
         self.update_viewport()
 
-    # Move window right
     def move_window_right(self):
-        self.window.right(STEP)
+        self.window.right()
         self.update_viewport()
 
-    # Zoom in
     def zoom_in(self):
-        self.window.z_in(PERCENTAGE)
+        self.window.z_in()
         self.update_viewport()
 
-    # Zoom out
     def zoom_out(self):
-        self.window.z_out(PERCENTAGE)
+        self.window.z_out()
         self.update_viewport()
 
-    # Update viewport
     def update_viewport(self):
         self.canvas.fill(QColor("white"))
         self.painter.begin(self.canvas)

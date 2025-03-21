@@ -2,9 +2,10 @@ from graphic_object import GraphicObject
 from point import Point
 from PyQt6.QtGui import QPen
 from PyQt6.QtCore import Qt
+from utils import LINE_THICKNESS
 
 class Wireframe(GraphicObject):
-    def __init__(self, points: list[Point], name: str = "Wireframe"):
+    def __init__(self, name, points: list[Point]):
         super().__init__(name)
         
         # Verify if the given points form a valid polygon
@@ -17,13 +18,29 @@ class Wireframe(GraphicObject):
         self.concave = self._is_concave()
 
     def draw(self, painter, viewport, window) -> None:
-        painter.setPen(QPen(Qt.GlobalColor.green, 2))
+        painter.setPen(QPen(Qt.GlobalColor.green, LINE_THICKNESS))
         for i in range(len(self.points)):
             p1 = self.points[i]
             p2 = self.points[(i + 1) % len(self.points)]
             p1 = viewport.transform(p1, window)
             p2 = viewport.transform(p2, window)
             painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
+
+    def _is_concave(self) -> bool:
+        def cross_product(p1: Point, p2: Point, p3: Point) -> float:
+            return (p2.x - p1.x) * (p3.y - p2.y) - (p2.y - p1.y) * (p3.x - p2.x)
+
+        signs = []
+        for i in range(len(self.points)):
+            p1, p2, p3 = self.points[i], self.points[(i + 1) % len(self.points)], self.points[(i + 2) % len(self.points)]
+            cross = cross_product(p1, p2, p3)
+            
+            if cross != 0:  # Ignore collinear points
+                signs.append(1 if cross > 0 else -1)
+
+        return len(set(signs)) > 1  # If there are more than one sign, the polygon is concave
+
+        # ---------- STATIC METHODS ---------- #
 
     @staticmethod
     def _is_valid_polygon(points: list[Point]) -> bool:
@@ -44,21 +61,6 @@ class Wireframe(GraphicObject):
 
         return True
 
-    def _is_concave(self) -> bool:
-        def cross_product(p1: Point, p2: Point, p3: Point) -> float:
-            return (p2.x - p1.x) * (p3.y - p2.y) - (p2.y - p1.y) * (p3.x - p2.x)
-
-        signs = []
-        for i in range(len(self.points)):
-            p1, p2, p3 = self.points[i], self.points[(i + 1) % len(self.points)], self.points[(i + 2) % len(self.points)]
-            cross = cross_product(p1, p2, p3)
-            
-            if cross != 0:  # Ignorar pontos colineares
-                signs.append(1 if cross > 0 else -1)
-
-        return len(set(signs)) > 1  # Se houver mais de um sinal, é côncavo
-
-
     @staticmethod
     def _lines_intersect(p1: Point, p2: Point, p3: Point, p4: Point) -> bool:
         def orientation(a: Point, b: Point, c: Point) -> int:
@@ -71,3 +73,7 @@ class Wireframe(GraphicObject):
         o4 = orientation(p3, p4, p2)
 
         return o1 != o2 and o3 != o4
+
+        # ---------- STATIC METHODS ---------- #
+
+            # ---------- DONE ---------- #

@@ -1,21 +1,24 @@
 from graphic_object import GraphicObject
-from PyQt6.QtGui import QPen, QColor
+from PyQt6.QtGui import QPen
+from PyQt6.QtCore import Qt
+
+from utils import POINT_THICKNESS
 
 
 class Point(GraphicObject):
-    def __init__(self, x: int, y: int):
-        super().__init__()
+    def __init__(self, x: int, y: int, name="default"):
+        super().__init__(name)
         self.x = x
         self.y = y
 
     def draw(self, painter, viewport, window):
-        # Aplica a transformação para obter a posição correta na viewport
+        # Apply the viewport transformation
         transformed_point = viewport.transform(self, window)
 
         x, y = int(transformed_point.x), int(transformed_point.y)
 
-        # Define a cor e desenha o ponto
-        painter.setPen(QPen(QColor(255, 0, 0), 5))  # Define espessura 5 para visibilidade
+        painter.setPen(QPen(Qt.GlobalColor.green, POINT_THICKNESS))
         painter.drawPoint(x, y)
         print(f"Ponto desenhado em ({x}, {y})")
 
+            # ---------- DONE ---------- #
