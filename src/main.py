@@ -8,6 +8,7 @@ from wireframe import Wireframe
 from PyQt6.QtGui import QPixmap
 from utils import *
 from gui import Ui_main, QtWidgets
+from PyQt6.QtWidgets import QListWidget, QMessageBox
 
 
 
@@ -25,6 +26,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.canvas.fill(QColor("white"))
         self.painter = QPainter(self.canvas)
         self.vp.setPixmap(self.canvas)
+
+        self.display = QListWidget()
+        self.display.setGeometry(self.display_file.x1, self.display_file.y1, self.display_file.x2, self.display_file.y2)
+        self.layout().addWidget(self.display)
         
     # Connect signals to slots
     def initUI(self):
@@ -45,20 +50,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         
         points = self.parse_coordinates(text)
 
+        if points == []:
+            return
+
         # Decide which object to create
         if len(points) == 1:
             x, y = points[0]
+            if not name:
+                name = f"ponto_{len(self.display_file.get_all())}"
             obj = Point(name=name, x=x, y=y)
-        elif len(points) == 2:
+        elif len(points) == 2 and name and name not in [obj.name for obj in self.display_file.get_all()]:
             x1, y1 = points[0]
             x2, y2 = points[1]
             point0 = Point(x=x1, y=y1)
             point1 = Point(x=x2, y=y2)
             obj = Line(name= name, point1=point0, point2=point1)
-        else:
+        elif len(points) > 2 and name and name not in [obj.name for obj in self.display_file.get_all()]:
             vet_points = [Point(*p) for p in points]
             obj = Wireframe(name=name, points=vet_points)
-        print("Objeto criado")
+        elif name in [obj.name for obj in self.display_file.get_all()]:
+            self.show_popup("Erro", "Nome de objeto já existente", QMessageBox.Icon.Critical)
+            return
+        elif name == "":
+            self.show_popup("Erro", "O nome desse objeto não pode ser vazio", QMessageBox.Icon.Critical)
+            return
+        else:
+            return
     
         # Add object to display file and update viewport
         self.display_file.add(obj)
@@ -80,7 +97,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
                 points.append((x, y))
 
         except ValueError:
-            raise ValueError(f"Formato de coordenadas inválido: {input_text}. Certifique-se de usar o formato '(x1, y1), (x2, y2), ...'.")
+            self.show_popup("Erro", "Coordenadas inválidas", QMessageBox.Icon.Critical)
+            return []
         return points
 
     def delete_object(self):
@@ -115,17 +133,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
     def update_viewport(self):
         self.canvas.fill(QColor("white"))
         self.painter.begin(self.canvas)
-        
         for obj in self.display_file.get_all():
             obj.draw(self.painter, self.viewport, self.window)
-
         self.painter.end()
         self.vp.setPixmap(self.canvas)
-    
-    def draw_objects(self):
-        for obj in self.objects:
-            if isinstance(obj, Point) or isinstance(obj, Line) or isinstance(obj, Wireframe):
-                obj.draw(self.painter, self.viewport, self.window)
+        self.update_display()
+
+    def update_display(self):
+        self.display.clear()
+        self.display.addItem("Objetos:")
+        for obj in self.display_file.get_all():
+            self.display.addItem(f"{obj.name} - {obj.__class__.__name__}")
+        self.display.show()
+
+    def show_popup(self, title:str = "standart", message:str = "standart", icon:QMessageBox.Icon = QMessageBox.Icon.Information):
+        msg = QMessageBox()
+        msg.setWindowTitle(title)
+        msg.setText(message)
+        msg.setIcon(QMessageBox.Icon.Information)
+        msg.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msg.exec()
 
 if __name__ == "__main__":
     import sys

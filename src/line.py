@@ -1,4 +1,4 @@
-from PyQt6.QtGui import QPainter, QPen
+from PyQt6.QtGui import QPen
 from PyQt6.QtCore import Qt
 from graphic_object import GraphicObject
 from point import Point

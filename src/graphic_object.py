@@ -1,10 +1,8 @@
 from abc import ABC, abstractmethod
-from utils import LINE_COLOR
 
 class GraphicObject(ABC):
-	def __init__(self, name: str, color: tuple[int, int, int] = LINE_COLOR):
+	def __init__(self, name: str):
 		self.name = name
-		self.color = color
 
 	@abstractmethod
 	def draw(self):
