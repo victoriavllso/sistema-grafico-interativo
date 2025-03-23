@@ -19,6 +19,5 @@ class Point(GraphicObject):
 
         painter.setPen(QPen(Qt.GlobalColor.green, POINT_THICKNESS))
         painter.drawPoint(x, y)
-        print(f"Ponto desenhado em ({x}, {y})")
 
             # ---------- DONE ---------- #

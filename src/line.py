@@ -12,7 +12,7 @@ class Line(GraphicObject):
         self.point2 = point2
 
     def draw(self, painter, viewport, window):
-        painter.setPen(QPen(Qt.GlobalColor.green, LINE_THICKNESS))
+        painter.setPen(QPen(Qt.GlobalColor.red, LINE_THICKNESS))
 
         # Transforma os pontos para a viewport
         transformed_p1 = (viewport.transform(self.point1, window))
