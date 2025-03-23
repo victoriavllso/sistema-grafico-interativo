@@ -30,6 +30,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.display = QListWidget()
         self.display.setGeometry(self.display_file.x_min, self.display_file.y_min, self.display_file.x_max, self.display_file.y_max)
         self.layout().addWidget(self.display)
+
+        # self.create_cartesian_plane()
         
     # Connect signals to slots
     def initUI(self):
@@ -43,43 +45,48 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.z_out.clicked.connect(self.zoom_out)
 
     def create_object(self):
-        text = self.points_ln.text().strip()
+        
+        points_input = self.points_ln.text().strip()
+
+        # points_input validation
+        if not points_input:
+            self.show_popup("Erro", "Coordenadas vazias", QMessageBox.Icon.Critical)
+            return
+
         name = self.name_ln.text()
-        if not text:
+
+        # name validation
+        if name in [obj.name for obj in self.display_file.get_all()]:
+            self.show_popup("Erro", "Nome de objeto : Nome ja está em uso", QMessageBox.Icon.Critical)
+            return
+
+        points = self.parse_coordinates(points_input)
+
+        # points validation
+        if points == []:
+            self.show_popup("Erro", "Coordenadas inválidas", QMessageBox.Icon.Critical)
             return
         
-        points = self.parse_coordinates(text)
-
-        if points == []:
+        if len(points) > 2 and not name:
+            self.show_popup("Erro", "Nome de objeto inválido: O objeto que você deseja criar precisa de um nome", QMessageBox.Icon.Critical)
             return
+        
+        if len(points) == 2 and not name:
+            name = f"obj_{len(self.display_file.get_all())}"
 
         # Decide which object to create
-        if len(points) == 1 and name not in [obj.name for obj in self.display_file.get_all()]:
-            x, y = points[0]
-            if not name:
-                name = f"ponto_{len(self.display_file.get_all())}"
+        if len(points) == 2 and all(isinstance(p, int) for p in points):
+            x, y = points[0], points[1]
             obj = Point(name=name, x=x, y=y)
-        elif len(points) == 2 and name and name not in [obj.name for obj in self.display_file.get_all()]:
-            x1, y1 = points[0]
-            x2, y2 = points[1]
-            point0 = Point(x=x1, y=y1)
-            point1 = Point(x=x2, y=y2)
+
+        elif len(points) == 2 and all(isinstance(p, tuple) for p in points):
+            x1, y1, x2, y2 = points[0][0], points[0][1], points[1][0], points[1][1]
+            point0, point1 = Point(x=x1, y=y1), Point(x=x2, y=y2)
             obj = Line(name= name, point1=point0, point2=point1)
-        elif len(points) > 2 and name and name not in [obj.name for obj in self.display_file.get_all()]:
-            try:
-                vet_points = [Point(*p) for p in points]
-                obj = Wireframe(name=name, points=vet_points)
-            except ValueError as e:
-                self.show_popup("Erro", str(e), QMessageBox.Icon.Critical)
-                return
-        elif name in [obj.name for obj in self.display_file.get_all()]:
-            self.show_popup("Erro", "Nome de objeto já existente", QMessageBox.Icon.Critical)
-            return
-        elif name == "":
-            self.show_popup("Erro", "O nome desse objeto não pode ser vazio", QMessageBox.Icon.Critical)
-            return
-        else:
-            return
+
+        elif len(points) > 2:
+            points = [Point(x=x, y=y) for x, y in points]
+            obj = Wireframe(name=name, points=points)
     
         # Add object to display file and update viewport
         self.display_file.add(obj)
@@ -87,23 +94,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
 
 
     def parse_coordinates(self, input_text: str) -> list:
-        points = []
-
         try:
-            pairs = input_text.strip().split("),")
-            for pair in pairs:
-                pair = pair.strip("(), ")
-                if not pair:
-                    continue
-                x, y = pair.split(",")
-                x = float(x.strip())
-                y = float(y.strip())
-                points.append((x, y))
-
-        except ValueError:
-            self.show_popup("Erro", "Coordenadas inválidas", QMessageBox.Icon.Critical)
+            pontos = list(eval(input_text))
+            return pontos
+        except Exception:
             return []
-        return points
 
     def delete_object(self):
         obj_name = self.name_ln.text().strip()
@@ -150,12 +145,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
             self.display.addItem(f"{obj.name} - {obj.__class__.__name__}")
         self.display.show()
 
+    def create_cartesian_plane(self, center_x = 500, center_y = -500, size = 1000):
+        # use center_x and center_y to create the cartesian plane
+        r1 = Line("x_axis", Point(center_x - size, center_y), Point(center_x + size, center_y))
+        r2 = Line("y_axis", Point(center_x, center_y - size), Point(center_x, center_y + size))
+
+        self.display_file.add(r1)
+        self.display_file.add(r2)
+        self.update_viewport()
+
     def show_popup(self, title:str = "standart", message:str = "standart", icon:QMessageBox.Icon = QMessageBox.Icon.Information):
         msg = QMessageBox()
         msg.setWindowTitle(title)
         msg.setText(message)
-        msg.setIcon(QMessageBox.Icon.Information)
+        msg.setIcon(icon)
         msg.setStandardButtons(QMessageBox.StandardButton.Ok)
         msg.exec()
-
-
