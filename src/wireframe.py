@@ -18,7 +18,7 @@ class Wireframe(GraphicObject):
         self.concave = self._is_concave()
 
     def draw(self, painter, viewport, window) -> None:
-        painter.setPen(QPen(Qt.GlobalColor.green, LINE_THICKNESS))
+        painter.setPen(QPen(Qt.GlobalColor.blue, LINE_THICKNESS))
         for i in range(len(self.points)):
             p1 = self.points[i]
             p2 = self.points[(i + 1) % len(self.points)]
