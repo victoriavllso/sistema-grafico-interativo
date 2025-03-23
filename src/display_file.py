@@ -1,12 +1,12 @@
 from graphic_object import GraphicObject
-from utils import DF_X1, DF_X2, DF_Y1, DF_Y2
+from utils import DF_X_MIN, DF_Y_MIN, DF_X_MAX, DF_Y_MAX
 class Display_File:
-    def __init__(self, x1 = DF_X1, y1 = DF_Y1, x2 = DF_X2, y2 = DF_Y2):
+    def __init__(self, x_min: int = DF_X_MIN, y_min: int = DF_Y_MIN, x_max: int = DF_X_MAX, y_max: int = DF_Y_MAX):
+        self.x_min = x_min
+        self.y_min = y_min
+        self.x_max = x_max
+        self.y_max = y_max
         self.list = []
-        self.x1 = x1
-        self.y1 = y1
-        self.x2 = x2
-        self.y2 = y2
 
     def add(self, graphic_object: GraphicObject) -> None:
         self.list.append(graphic_object)

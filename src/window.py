@@ -1,7 +1,7 @@
-from utils import STEP, PERCENTAGE, X_MIN, X_MAX, Y_MIN, Y_MAX
+from utils import STEP, PERCENTAGE, W_X_MIN, W_X_MAX, W_Y_MIN, W_Y_MAX
 
 class Window:
-    def __init__(self, x_min = X_MIN, x_max = X_MAX, y_min = Y_MIN, y_max = Y_MAX):
+    def __init__(self, x_min = W_X_MIN, x_max = W_X_MAX, y_min = W_Y_MIN, y_max = W_Y_MAX):
         self.x_min = x_min        
         self.x_max = x_max
         self.y_min = y_min        

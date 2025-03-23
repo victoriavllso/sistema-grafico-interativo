@@ -4,24 +4,27 @@
 # window
 STEP = 20
 PERCENTAGE = 20
-X_MIN = 0
-X_MAX = 1000
-Y_MIN = 0
-Y_MAX = 1000
+
+W_X_MIN = 0
+W_Y_MIN = 0
+W_X_MAX = 1000
+W_Y_MAX = 1000
 
 # viewport
-WIDTH = 670
-HEIGHT = 600
+VP_X_MIN = 0
+VP_Y_MIN = 0
+VP_X_MAX = 600
+VP_Y_MAX = 670
 
 # display_file
-DF_X1 = 700
-DF_Y1 = 10
-DF_X2 = 210
-DF_Y2 = 330
+DF_X_MIN = 700
+DF_Y_MIN = 10
+DF_X_MAX = 210
+DF_Y_MAX = 330
 
 # thickness
-POINT_THICKNESS = 3
-LINE_THICKNESS = 1
+POINT_THICKNESS = 5
+LINE_THICKNESS = 3
 
 # color
 BLACK_RGB = (0, 0, 0)

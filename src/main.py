@@ -22,13 +22,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.viewport = Viewport()
         self.window = Window()
 
-        self.canvas = QPixmap(self.viewport.width, self.viewport.height)
+        self.canvas = QPixmap(self.viewport.x_max - self.viewport.x_min, self.viewport.y_max - self.viewport.y_min)
         self.canvas.fill(QColor("white"))
         self.painter = QPainter(self.canvas)
         self.vp.setPixmap(self.canvas)
 
         self.display = QListWidget()
-        self.display.setGeometry(self.display_file.x1, self.display_file.y1, self.display_file.x2, self.display_file.y2)
+        self.display.setGeometry(self.display_file.x_min, self.display_file.y_min, self.display_file.x_max, self.display_file.y_max)
         self.layout().addWidget(self.display)
         
     # Connect signals to slots
@@ -54,7 +54,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
             return
 
         # Decide which object to create
-        if len(points) == 1:
+        if len(points) == 1 and name not in [obj.name for obj in self.display_file.get_all()]:
             x, y = points[0]
             if not name:
                 name = f"ponto_{len(self.display_file.get_all())}"
@@ -66,8 +66,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
             point1 = Point(x=x2, y=y2)
             obj = Line(name= name, point1=point0, point2=point1)
         elif len(points) > 2 and name and name not in [obj.name for obj in self.display_file.get_all()]:
-            vet_points = [Point(*p) for p in points]
-            obj = Wireframe(name=name, points=vet_points)
+            try:
+                vet_points = [Point(*p) for p in points]
+                obj = Wireframe(name=name, points=vet_points)
+            except ValueError as e:
+                self.show_popup("Erro", str(e), QMessageBox.Icon.Critical)
+                return
         elif name in [obj.name for obj in self.display_file.get_all()]:
             self.show_popup("Erro", "Nome de objeto já existente", QMessageBox.Icon.Critical)
             return

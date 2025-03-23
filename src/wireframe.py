@@ -51,6 +51,15 @@ class Wireframe(GraphicObject):
         if len(unique_points) != len(points):
             return False
 
+        # Verifica se os pontos são colineares
+        def are_collinear(p1: Point, p2: Point, p3: Point) -> bool:
+            return (p2.y - p1.y) * (p3.x - p2.x) == (p3.y - p2.y) * (p2.x - p1.x)
+
+        all_collinear = all(are_collinear(points[0], points[i], points[i + 1]) for i in range(1, len(points) - 1))
+        if all_collinear:
+            return False
+
+        # Verifica interseção entre arestas não adjacentes
         for i in range(len(points)):
             for j in range(i + 2, len(points) - (i == 0)):
                 if Wireframe._lines_intersect(

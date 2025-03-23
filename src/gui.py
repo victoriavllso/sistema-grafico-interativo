@@ -7,12 +7,12 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-
+from utils import VP_X_MAX, VP_X_MIN, VP_Y_MAX, VP_Y_MIN
 
 class Ui_main(object):
     def setupUi(self, main):
         main.setObjectName("main")
-        main.resize(925, 672)
+        main.resize(950, 720)
         self.centralwidget = QtWidgets.QWidget(parent=main)
         self.centralwidget.setObjectName("centralwidget")
         self.down = QtWidgets.QPushButton(parent=self.centralwidget)
@@ -53,13 +53,9 @@ class Ui_main(object):
         self.name_lbl.setGeometry(QtCore.QRect(810, 370, 58, 16))
         self.name_lbl.setObjectName("name_lbl")
         self.vp = QtWidgets.QLabel(parent=self.centralwidget)
-        self.vp.setGeometry(QtCore.QRect(0, 0, 600, 670))
+        self.vp.setGeometry(QtCore.QRect(VP_X_MIN, VP_Y_MIN, VP_X_MAX, VP_Y_MAX))
         self.vp.setText("")
         self.vp.setObjectName("vp")
-        self.display = QtWidgets.QLabel(parent=self.centralwidget)
-        self.display.setGeometry(QtCore.QRect(700, 10, 210, 331))
-        self.display.setText("")
-        self.display.setObjectName("display")
         self.points_lbl = QtWidgets.QLabel(parent=self.centralwidget)
         self.points_lbl.setGeometry(QtCore.QRect(690, 370, 58, 16))
         self.points_lbl.setObjectName("points_lbl")
