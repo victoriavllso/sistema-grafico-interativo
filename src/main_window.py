@@ -67,7 +67,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
             self.show_popup("Erro", "Coordenadas inválidas", QMessageBox.Icon.Critical)
             return
         
-        if len(points) > 2 and not name:
+        if (len(points) > 2 or len(points) == 2) and all(isinstance(p, tuple) for p in points) and not name:
             self.show_popup("Erro", "Nome de objeto inválido: O objeto que você deseja criar precisa de um nome", QMessageBox.Icon.Critical)
             return
         
