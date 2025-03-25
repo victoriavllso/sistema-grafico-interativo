@@ -13,10 +13,11 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(676, 579)
-        Dialog.setStyleSheet("background-color: rgb(0, 0, 10);")
+        Dialog.setStyleSheet("background-color: rgb(27, 30, 32);")
         self.tabWidget = QtWidgets.QTabWidget(parent=Dialog)
         self.tabWidget.setGeometry(QtCore.QRect(40, 50, 601, 481))
-        self.tabWidget.setStyleSheet("background-color: rgb(204, 204, 204);")
+        self.tabWidget.setStyleSheet("background-color: rgb(204, 204, 204);\n"
+"font-color: rgb(0,0,255);")
         self.tabWidget.setObjectName("tabWidget")
         self.translate_tab = QtWidgets.QWidget()
         self.translate_tab.setObjectName("translate_tab")
@@ -61,7 +62,7 @@ class Ui_Dialog(object):
         self.tabWidget.addTab(self.scaling_tab, "")
 
         self.retranslateUi(Dialog)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(2)
         self.buttonBox.accepted.connect(Dialog.accept) # type: ignore
         self.buttonBox.rejected.connect(Dialog.reject) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Dialog)
