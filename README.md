@@ -2,7 +2,7 @@
 
 ## Alunos
 Eduardo Achar - 23102448
-Victoria Rodrigues - 
+Victoria Rodrigues Veloso - 23100460
 
 ## Turma
 INE5420-05208 (20251) - Computação Gráfica
@@ -16,8 +16,23 @@ Abaixo está a interface inicial do sistema:
 
 ![Tela Inicial](assets/interface.png)
 
+## Instalação de dependências 
+
+Para a execução do código com as dependêcias necessárias, um requirements.txt foi disponibilizado e pode ser instalado através do comando: 
+
+```sh
+pip install -r requirements.txt
+```
+
 ## Como Executar  
-Para iniciar o programa, navegue até a pasta `cg/src` e execute o seguinte comando no terminal:  
+Para executar o programa, dentro da pasta raiz, é possível executar o makefile com o comando abaixo:
+
+
+```sh
+make
+```
+
+Ou, alternativamente, navegue até a pasta `src` e execute o seguinte comando no terminal:  
 
 ```sh
 python3 main.py
@@ -31,6 +46,10 @@ python3 main.py
   ```
   (x, y)
   ```
+Coordenadas de exemplo para a criação de um ponto:
+ ```
+ (500,-500)
+ ```
 
 - O nome do ponto é opcional. Caso queira nomeá-lo, preencha o campo **"name"** antes de selecionar **"Create"**.
 
@@ -43,6 +62,15 @@ python3 main.py
   (x1, y1), (x2, y2)
   ```
 
+Coordenadas de exemplo para a criação de uma reta:
+ ```
+(10000,1000), (900,1000) #(utilize o botão 'up' para visualizar)
+ ```
+ou 
+
+```
+(900,-600),(200,-600) 
+```
 - Clique em **"Create"** para adicionar a reta.
 
 ### **Adicionar um Polígono**  
@@ -53,6 +81,11 @@ python3 main.py
   ```
   (x1, y1), (x2, y2), (x3, y3), ..., (xn, yn)
   ```
+Coordenadas de exemplo para a criação de um polígono:
+
+ ```
+(100,-100), (200,-100), (200, -200), (100, -200)
+ ```
 
 - Após preencher os campos, selecione **"Create"**.
 
