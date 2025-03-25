@@ -9,7 +9,7 @@ from PyQt6.QtGui import QPixmap
 from utils import *
 from gui.gui import Ui_main, QtWidgets
 from PyQt6.QtWidgets import QListWidget, QMessageBox
-
+from transform_window import TransformWindow
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_main):
@@ -30,6 +30,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.display = QListWidget()
         self.display.setGeometry(self.display_file.x_min, self.display_file.y_min, self.display_file.x_max, self.display_file.y_max)
         self.layout().addWidget(self.display)
+        
+        # transform window
+        self.transform_window = None
 
         # self.create_cartesian_plane()
         
@@ -43,7 +46,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.right.clicked.connect(self.move_window_right)
         self.z_in.clicked.connect(self.zoom_in)
         self.z_out.clicked.connect(self.zoom_out)
-
+        self.tranform_button.clicked.connect(self.open_transform_window)
     def create_object(self):
         
         points_input = self.points_ln.text().strip()
@@ -161,3 +164,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         msg.setIcon(icon)
         msg.setStandardButtons(QMessageBox.StandardButton.Ok)
         msg.exec()
+
+    def open_transform_window(self):
+        if self.transform_window is None:
+            self.transform_window = TransformWindow()
+        self.transform_window.show()

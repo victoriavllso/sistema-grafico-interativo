@@ -17,7 +17,7 @@ class Transform:
 	
 	def rotate_around_point(self, angle,object):
 		if isinstance(object, Point):
-			return "Não é possível rotacionar um ponto em torno de outro ponto"
+			return "Não é possível rotacionar um ponto em torno de outro ponto" # acho que é possivel sim
 		
 		if isinstance(object, Line):
 			
