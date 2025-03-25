@@ -72,7 +72,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
             return
         
         if len(points) == 2 and not name:
-            name = f"obj_{len(self.display_file.get_all())}"
+            name = f"point_{len(self.display_file.get_all())}"
 
         # Decide which object to create
         if len(points) == 2 and all(isinstance(p, int) for p in points):
@@ -86,7 +86,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
 
         elif len(points) > 2:
             points = [Point(x=x, y=y) for x, y in points]
-            obj = Wireframe(name=name, points=points)
+            try:
+                obj = Wireframe(name=name, points=points)
+            except Exception:
+                self.show_popup("Erro", "O Objeto informado não é um polígono válido", QMessageBox.Icon.Critical)
+                return
     
         # Add object to display file and update viewport
         self.display_file.add(obj)
