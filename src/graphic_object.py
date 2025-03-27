@@ -9,3 +9,5 @@ class GraphicObject(ABC):
 		pass
 
 # ---------- DONE ---------- #
+	def geometric_center(self):
+		pass

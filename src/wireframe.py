@@ -86,3 +86,11 @@ class Wireframe(GraphicObject):
         # ---------- STATIC METHODS ---------- #
 
             # ---------- DONE ---------- #
+    def geometric_center(self):
+        
+        for p in self.points:
+            x_center += p.x
+            y_center += p.y
+        x_center /= len(self.points)
+        y_center /= len(self.points)
+        return x_center, y_center

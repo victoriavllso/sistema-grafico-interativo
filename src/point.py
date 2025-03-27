@@ -21,3 +21,5 @@ class Point(GraphicObject):
         painter.drawPoint(x, y)
 
             # ---------- DONE ---------- #
+    def geometric_center(self):
+        return self.x, self.y

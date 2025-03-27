@@ -8,16 +8,38 @@ class Transform:
 		pass
 
 	# homogeneous coordinates systems
+	def matrix_translate(self, dx, dy):
+		
+		matrix_translate = [[1, 0, 0],
+							[0, 1, 0],
+							[dx, dy, 1]]
+		return matrix_translate
+	
+	def matrix_scale(self,sx, sy):
+	
+		matrix_scale = [[sx, 0, 0],
+						[0, sy, 0],
+						[0, 0, 1]]
+		return matrix_scale
+	
 	def matrix_rotate(self, angle):
+		
 		matrix_rotate = [[np.cos(angle), -np.sin(angle), 0],
 						 [np.sin(angle), np.cos(angle), 0],
 						 [0, 0, 1]]
 		return matrix_rotate
 	
+	def multiply_matrix(self, matrix1, matrix2):
+		return np.dot(matrix1, matrix2)
 	
-	def rotate_around_point(self, angle,object):
-		if isinstance(object, Point):
-			return "Não é possível rotacionar um ponto em torno de outro ponto" # acho que é possivel sim
-		
-		if isinstance(object, Line):
-			
+	# methods to transform objects
+	def translate_object(self, vector_coordenate, dx ,dy):
+		matrix_result = self.multiply_matrix(self.matrix_translate(dx, dy),vector_coordenate)
+		print(f'matriz de translação: {matrix_result}')
+		return matrix_result
+
+	def scale_object(self, vector_coordenate, sx, sy):
+		pass
+	
+	def rotate_objet_center_word(self, vector_coordenate, angle):
+		pass

@@ -19,3 +19,7 @@ class Line(GraphicObject):
         transformed_p2 = (viewport.transform(self.point2, window))
         
         painter.drawLine(int(transformed_p1.x), int(transformed_p1.y), int(transformed_p2.x), int(transformed_p2.y))
+    def geometric_center(self):
+        x_center = (self.point1.x + self.point2.x) / 2
+        y_center = (self.point1.y + self.point2.y) / 2
+        return x_center, y_center
