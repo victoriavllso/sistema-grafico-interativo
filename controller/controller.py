@@ -20,6 +20,7 @@ class Controller:
         self.transform_window = None
         self.transform = Transform()
         self.selected_object = None
+
     def create_cartesian_plane(self, center_x = 500, center_y = -500, size = 1000):
         # use center_x and center_y to create the cartesian plane
         r1 = Line("x_axis", Point(center_x - size, center_y), Point(center_x + size, center_y))
@@ -32,7 +33,6 @@ class Controller:
     def create_object(self):
         
         points_input = self.ui.points_ln.text().strip()
-        print(f'pontos input: {points_input}')
     
         # points_input validation
         if not points_input:
@@ -142,29 +142,35 @@ class Controller:
         msg.exec()
   
 
-    def transform_object(self,tx,ty,type):
+    def transform_object(self,tx,ty,angle,type): # esse método é chamado quando o usuario clica em ok na transform window
         self.update_selected_object()
-        print(f'objeto selecionado: {self.selected_object}')
+        
+
         if not self.selected_object:
             self.show_popup("Erro", "Nenhum objeto selecionado para transformar!", QMessageBox.Icon.Critical)
             return
-        #tx, ty , type =self.transform_window.confirm_transform()
-
-        if not tx or not ty:
+        
+        if (tx is None or ty is None ) and ( type != "rotate_point"): 
             self.show_popup("Erro", "Valores de transformação inválidos", QMessageBox.Icon.Critical)
             return
 
         if type == "translate":
-            print(f'tranlação chamada no controller com tx: {tx} e ty: {ty}')
             self.transform.translate_object(self.selected_object,tx,ty)
-            print(f'coordenadas depois de transladar o objeto: x1:{self.selected_object.point1.x}, y1: {self.selected_object.point1.y} e x2: {self.selected_object.point2.x}, y2: {self.selected_object.point2.y}')
-            print('fim translação')
+        
         if type == "scale":
-            print(f'escalonamento chamado no controller com tx: {tx} e ty: {ty}')
             self.transform.scale_object(self.selected_object,tx,ty)
 
- 
+        if type == "rotate_origin": # rotaciona no centro do mundo
+            self.transform.rotate_origin(self.selected_object, angle,tx,ty)
+
+        if type == "rotate_center": # rotaciona no centro do objeto
+            self.transform.rotate_center(self.selected_object, angle)
+        
+        if type == "rotate_point":
+            self.transform.rotate_point(self.selected_object, angle, tx, ty)
+
         self.ui.update_viewport()
+
     def update_selected_object(self):
         obj_name = self.ui.name_ln.text().strip()
         self.selected_object = self.display_file.get_selected_object(obj_name)

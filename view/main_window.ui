@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1164</width>
-    <height>770</height>
+    <width>1109</width>
+    <height>879</height>
    </rect>
   </property>
   <property name="palette">
@@ -108,43 +108,11 @@
    <string notr="true">background-color: rgb(86, 43, 0);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="z_in">
-    <property name="geometry">
-     <rect>
-      <x>880</x>
-      <y>520</y>
-      <width>101</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(166, 83, 0);</string>
-    </property>
-    <property name="text">
-     <string>Zoom in</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="z_out">
-    <property name="geometry">
-     <rect>
-      <x>990</x>
-      <y>520</y>
-      <width>101</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(166, 83, 0);</string>
-    </property>
-    <property name="text">
-     <string>Zoom out</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="vp">
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>20</y>
+      <y>10</y>
       <width>621</width>
       <height>661</height>
      </rect>
@@ -153,59 +121,11 @@
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="transform_button">
-    <property name="geometry">
-     <rect>
-      <x>920</x>
-      <y>470</y>
-      <width>131</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(166, 83, 0);</string>
-    </property>
-    <property name="text">
-     <string>Transform object</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="delete_but">
-    <property name="geometry">
-     <rect>
-      <x>990</x>
-      <y>430</y>
-      <width>101</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(166, 83, 0);</string>
-    </property>
-    <property name="text">
-     <string>Delete</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="create_but">
-    <property name="geometry">
-     <rect>
-      <x>880</x>
-      <y>430</y>
-      <width>101</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(166, 83, 0);</string>
-    </property>
-    <property name="text">
-     <string>Create</string>
-    </property>
-   </widget>
    <widget class="QScrollArea" name="scrollArea">
     <property name="geometry">
      <rect>
-      <x>850</x>
-      <y>560</y>
+      <x>90</x>
+      <y>680</y>
       <width>271</width>
       <height>141</height>
      </rect>
@@ -230,7 +150,7 @@
        <rect>
         <x>90</x>
         <y>20</y>
-        <width>101</width>
+        <width>100</width>
         <height>32</height>
        </rect>
       </property>
@@ -279,21 +199,142 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>840</x>
-      <y>320</y>
+      <x>790</x>
+      <y>530</y>
       <width>271</width>
-      <height>71</height>
+      <height>131</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(62, 31, 0);</string>
     </property>
-    <property name="title">
-     <string/>
+    <widget class="QPushButton" name="create_but">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>10</y>
+       <width>101</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(166, 83, 0);</string>
+     </property>
+     <property name="text">
+      <string>Create</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="delete_but">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>10</y>
+       <width>101</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(166, 83, 0);</string>
+     </property>
+     <property name="text">
+      <string>Delete</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="transform_button">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>90</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(166, 83, 0);</string>
+     </property>
+     <property name="text">
+      <string>Transform object</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="z_in">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>50</y>
+       <width>101</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(166, 83, 0);</string>
+     </property>
+     <property name="text">
+      <string>Zoom in</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="z_out">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>50</y>
+       <width>101</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(166, 83, 0);</string>
+     </property>
+     <property name="text">
+      <string>Zoom out</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>31</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>2D</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget_2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>330</y>
+      <width>271</width>
+      <height>181</height>
+     </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(62, 31, 0);</string>
+    </property>
+    <widget class="QLineEdit" name="points_ln">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>231</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
     <widget class="QLabel" name="points_lbl">
      <property name="geometry">
       <rect>
@@ -310,8 +351,8 @@
     <widget class="QLabel" name="name_lbl">
      <property name="geometry">
       <rect>
-       <x>150</x>
-       <y>10</y>
+       <x>10</x>
+       <y>70</y>
        <width>58</width>
        <height>16</height>
       </rect>
@@ -320,27 +361,30 @@
       <string>name:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="points_ln">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>91</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
     <widget class="QLineEdit" name="name_ln">
      <property name="geometry">
       <rect>
-       <x>150</x>
-       <y>30</y>
-       <width>101</width>
-       <height>16</height>
+       <x>10</x>
+       <y>90</y>
+       <width>231</width>
+       <height>31</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="color_button">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>140</y>
+       <width>91</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(166, 83, 0);</string>
+     </property>
+     <property name="text">
+      <string>set color</string>
      </property>
     </widget>
    </widget>
@@ -350,7 +394,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1164</width>
+     <width>1109</width>
      <height>19</height>
     </rect>
    </property>

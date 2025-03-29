@@ -87,7 +87,8 @@ class Wireframe(GraphicObject):
 
             # ---------- DONE ---------- #
     def geometric_center(self):
-        
+        x_center = 0
+        y_center = 0
         for p in self.points:
             x_center += p.x
             y_center += p.y

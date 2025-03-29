@@ -35,4 +35,6 @@ class Window:
         self.y_min *= percentage/100 + 1
         self.y_max *= percentage/100 + 1
 
+    def get_center(self):
+        return self.x_min, self.y_min
         # ---------- DONE ---------- #

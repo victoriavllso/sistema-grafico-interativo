@@ -5,7 +5,7 @@ from PyQt6.QtGui import QPainter, QColor
 from PyQt6.QtGui import QPixmap
 from model.utils import *
 from view.gui import Ui_main, QtWidgets
-from PyQt6.QtWidgets import QListWidget
+from PyQt6.QtWidgets import QListWidget, QColorDialog
 from controller.controller import Controller
 
 class MainWindow(QtWidgets.QMainWindow, Ui_main):
@@ -36,6 +36,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.z_in.clicked.connect(lambda: self.controller.zoom("in"))
         self.z_out.clicked.connect(lambda: self.controller.zoom("out"))
         self.transform_button.clicked.connect(lambda: self.controller.open_transform_window())
+        self.color_button.clicked.connect(self.open_color_dialog)
+    
     def create_object(self):
         self.controller.create_object()
 
@@ -43,6 +45,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         obj_name = self.name_ln.text().strip()
         self.controller.delete_object(obj_name)
         self.update_viewport() # atualiza o viewport após a exclusão do objeto
+    
     def update_viewport(self):
        
         self.canvas.fill(QColor("white")) # limpa o canvas com a cor branca
@@ -53,7 +56,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         
         for obj in self.controller.display_file.get_all(): 
             obj.draw(self.painter, self.controller.viewport, self.controller.window)
-            print(f'objetos do display_file: {self.controller.display_file.get_all()}')
+       
         self.painter.end() # finaliza o painter
         self.vp.setPixmap(self.canvas) # atualiza o pixmap do viewport
         self.update_display() # atualiza a lista de objetos
@@ -64,7 +67,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         for obj in self.controller.display_file.get_all():
             self.display.addItem(f"{obj.name} - {obj.__class__.__name__}")
         self.display.show()
+    
     def get_selected_object(self):
         self.controller.update_selected_object()
+
+    def open_color_dialog(self):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            self.controller.set_color(color)
+            self.update_viewport()
+        else:
+            self.controller.show_popup("Erro", "Selecione uma cor válida!", QtWidgets.QMessageBox.Icon.Critical)
+        self.update_viewport()
 
 

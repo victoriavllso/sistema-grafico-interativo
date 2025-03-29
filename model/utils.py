@@ -26,7 +26,5 @@ DF_Y_MAX = 300
 POINT_THICKNESS = 5
 LINE_THICKNESS = 3
 
-# color
-BLACK_RGB = (0, 0, 0)
 
 # ---------- CONSTANTS ---------- #

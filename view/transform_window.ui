@@ -19,7 +19,7 @@
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>30</x>
      <y>50</y>
      <width>311</width>
      <height>301</height>
@@ -29,7 +29,7 @@
     <string notr="true">background-color: rgb(86, 43, 0);</string>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="translate_tab">
     <property name="toolTip">
@@ -41,8 +41,8 @@
     <widget class="QLineEdit" name="x_translate">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>180</y>
+       <x>60</x>
+       <y>130</y>
        <width>51</width>
        <height>41</height>
       </rect>
@@ -51,8 +51,8 @@
     <widget class="QLineEdit" name="y_translate">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>180</y>
+       <x>150</x>
+       <y>130</y>
        <width>51</width>
        <height>41</height>
       </rect>
@@ -61,8 +61,8 @@
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>150</y>
+       <x>80</x>
+       <y>90</y>
        <width>21</width>
        <height>20</height>
       </rect>
@@ -79,8 +79,8 @@
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>140</x>
-       <y>150</y>
+       <x>170</x>
+       <y>90</y>
        <width>21</width>
        <height>20</height>
       </rect>
@@ -94,27 +94,17 @@
       <string>y</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox_translate">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>40</y>
-       <width>191</width>
-       <height>22</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>221</width>
+       <x>30</x>
+       <y>30</y>
+       <width>171</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>Select the object for transform</string>
+      <string>inserir algum textinho para o usuario</string>
      </property>
     </widget>
    </widget>
@@ -138,7 +128,7 @@
       <string>Rotate about the origin</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="rotete_point_button">
+    <widget class="QRadioButton" name="rotate_point_button">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -156,7 +146,7 @@
       <rect>
        <x>30</x>
        <y>130</y>
-       <width>261</width>
+       <width>281</width>
        <height>20</height>
       </rect>
      </property>
@@ -304,6 +294,19 @@
       <string>y</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>50</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>inserir algum textinho para o usuario</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QDialogButtonBox" name="ok_cancel_transform">
@@ -325,27 +328,11 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QCommandLinkButton" name="button_add">
-   <property name="geometry">
-    <rect>
-     <x>420</x>
-     <y>10</y>
-     <width>41</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(170, 85, 0);</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_transform2d">
+  <widget class="QLabel" name="label_transform_2d">
    <property name="geometry">
     <rect>
      <x>370</x>
-     <y>60</y>
+     <y>90</y>
      <width>191</width>
      <height>221</height>
     </rect>
@@ -355,6 +342,19 @@
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="add_transform_button">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>30</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>add transformations</string>
    </property>
   </widget>
  </widget>

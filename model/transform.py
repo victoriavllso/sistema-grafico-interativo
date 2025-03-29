@@ -35,8 +35,7 @@ class Transform:
 	# methods to transform objects
 	def translate_object(self, object,dx ,dy):
 		result = self.matrix_translate(dx, dy)
-		print(f"Translation matrix: {result}")
-		print(f'os valores de dx e dy são: {dx} e {dy}')
+
 		if isinstance(object, Point):
 			object.x += dx
 			object.y += dy
@@ -59,7 +58,6 @@ class Transform:
 		matrix3 = self.matrix_translate(cx, cy)
 		result1 = self.multiply_matrix(matrix1, matrix2)
 		result2 = self.multiply_matrix(result1, matrix3)
-		print(f"Scale matrix: {result2}")
 		
 		# aplica a matriz de transformação
 		if isinstance(object, Point):
@@ -83,5 +81,92 @@ class Transform:
 				new_point = self.multiply_matrix(result2, point_matrix)
 				point.x = new_point[0][0]
 				point.y = new_point[1][0]
-	def rotate_objet_center_word(self, vector_coordenate, angle):
-		pass
+	
+	def rotate_origin(self, object, angle, cx, cy): # rotaciona em torno da origem da window
+		matrix1 = self.matrix_translate(-cx,-cy)
+		matrix2 = self.matrix_rotate(angle)
+		matrix3 = self.matrix_translate(cx, cy)
+		result1 = self.multiply_matrix(matrix1, matrix2)
+		result2 = self.multiply_matrix(result1, matrix3)
+		
+		if isinstance(object, Point):
+			point_matrix = np.array([[object.x], [object.y], [1]])
+			new_point = self.multiply_matrix(result2, point_matrix)
+			object.x = new_point[0][0]
+			object.y = new_point[1][0]
+		elif isinstance(object, Line):
+			point1_matrix = np.array([[object.point1.x], [object.point1.y], [1]])
+			new_point1 = self.multiply_matrix(result2, point1_matrix)
+			object.point1.x = new_point1[0][0]
+			object.point1.y = new_point1[1][0]
+
+			point2_matrix = np.array([[object.point2.x], [object.point2.y], [1]])
+			new_point2 = self.multiply_matrix(result2, point2_matrix)
+			object.point2.x = new_point2[0][0]
+			object.point2.y = new_point2[1][0]
+		elif isinstance(object, Wireframe):
+			for point in object.points:
+				point_matrix = np.array([[point.x], [point.y], [1]])
+				new_point = self.multiply_matrix(result2, point_matrix)
+				point.x = new_point[0][0]
+				point.y = new_point[1][0]
+
+		
+	def rotate_point(self, object, angle, x, y): # rotaciona em torno de um ponto
+		matrix1 = self.matrix_translate(-x,-y)
+		matrix2 = self.matrix_rotate(angle)
+		matrix3 = self.matrix_translate(x, y)
+		result1 = self.multiply_matrix(matrix1, matrix2)
+		result2 = self.multiply_matrix(result1, matrix3)
+		if isinstance(object, Point):
+			point_matrix = np.array([[object.x], [object.y], [1]])
+			new_point = self.multiply_matrix(result2, point_matrix)
+			object.x = new_point[0][0]
+			object.y = new_point[1][0]
+		elif isinstance(object, Line):
+			point1_matrix = np.array([[object.point1.x], [object.point1.y], [1]])
+			new_point1 = self.multiply_matrix(result2, point1_matrix)
+			object.point1.x = new_point1[0][0]
+			object.point1.y = new_point1[1][0]
+
+			point2_matrix = np.array([[object.point2.x], [object.point2.y], [1]])
+			new_point2 = self.multiply_matrix(result2, point2_matrix)
+			object.point2.x = new_point2[0][0]
+			object.point2.y = new_point2[1][0]
+		elif isinstance(object, Wireframe):
+			for point in object.points:
+				point_matrix = np.array([[point.x], [point.y], [1]])
+				new_point = self.multiply_matrix(result2, point_matrix)
+				point.x = new_point[0][0]
+				point.y = new_point[1][0]
+
+	def rotate_center(self, object, angle):
+		cx,cy = object.geometric_center()
+		matrix1 = self.matrix_translate(-cx,-cy)
+		matrix2 = self.matrix_rotate(angle)
+		matrix3 = self.matrix_translate(cx, cy)
+		result1 = self.multiply_matrix(matrix1, matrix2)
+		result2 = self.multiply_matrix(result1, matrix3)
+
+		if isinstance(object, Point):
+			point_matrix = np.array([[object.x], [object.y], [1]])
+			new_point = self.multiply_matrix(result2, point_matrix)
+			object.x = new_point[0][0]
+			object.y = new_point[1][0]
+		elif isinstance(object, Line):
+			point1_matrix = np.array([[object.point1.x], [object.point1.y], [1]])
+			new_point1 = self.multiply_matrix(result2, point1_matrix)
+			object.point1.x = new_point1[0][0]
+			object.point1.y = new_point1[1][0]
+
+			point2_matrix = np.array([[object.point2.x], [object.point2.y], [1]])
+			new_point2 = self.multiply_matrix(result2, point2_matrix)
+			object.point2.x = new_point2[0][0]
+			object.point2.y = new_point2[1][0]
+		elif isinstance(object, Wireframe):
+			for point in object.points:
+				point_matrix = np.array([[point.x], [point.y], [1]])
+				new_point = self.multiply_matrix(result2, point_matrix)
+				point.x = new_point[0][0]
+				point.y = new_point[1][0]
+
