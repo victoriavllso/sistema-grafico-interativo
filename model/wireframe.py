@@ -1,8 +1,8 @@
-from graphic_object import GraphicObject
-from point import Point
+from model.graphic_object import GraphicObject
+from model.point import Point
 from PyQt6.QtGui import QPen
 from PyQt6.QtCore import Qt
-from utils import LINE_THICKNESS
+from model.utils import LINE_THICKNESS
 
 class Wireframe(GraphicObject):
     def __init__(self, name, points: list[Point]):

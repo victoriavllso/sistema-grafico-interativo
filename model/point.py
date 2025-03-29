@@ -1,8 +1,7 @@
-from graphic_object import GraphicObject
+from model.graphic_object import GraphicObject
 from PyQt6.QtGui import QPen
 from PyQt6.QtCore import Qt
-
-from utils import POINT_THICKNESS
+from model.utils import POINT_THICKNESS
 
 
 class Point(GraphicObject):
@@ -19,7 +18,6 @@ class Point(GraphicObject):
 
         painter.setPen(QPen(Qt.GlobalColor.green, POINT_THICKNESS))
         painter.drawPoint(x, y)
-
             # ---------- DONE ---------- #
     def geometric_center(self):
         return self.x, self.y

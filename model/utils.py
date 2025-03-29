@@ -17,10 +17,10 @@ VP_X_MAX = 600
 VP_Y_MAX = 670
 
 # display_file
-DF_X_MIN = 700
-DF_Y_MIN = 10
-DF_X_MAX = 210
-DF_Y_MAX = 330
+DF_X_MIN = 850
+DF_Y_MIN = 20
+DF_X_MAX = 250
+DF_Y_MAX = 300
 
 # thickness
 POINT_THICKNESS = 5
