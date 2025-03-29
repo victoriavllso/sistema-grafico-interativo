@@ -23,7 +23,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.display = QListWidget()
         self.display.setGeometry(self.controller.display_file.x_min, self.controller.display_file.y_min, self.controller.display_file.x_max, self.controller.display_file.y_max)
         self.layout().addWidget(self.display)
-        
+        self.controller.create_cartesian_plane() # cria o plano cartesiano
 
     # Connect signals to slots
     def initUI(self):
@@ -66,3 +66,5 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.display.show()
     def get_selected_object(self):
         self.controller.update_selected_object()
+
+

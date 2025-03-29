@@ -20,7 +20,14 @@ class Controller:
         self.transform_window = None
         self.transform = Transform()
         self.selected_object = None
+    def create_cartesian_plane(self, center_x = 500, center_y = -500, size = 1000):
+        # use center_x and center_y to create the cartesian plane
+        r1 = Line("x_axis", Point(center_x - size, center_y), Point(center_x + size, center_y))
+        r2 = Line("y_axis", Point(center_x, center_y - size), Point(center_x, center_y + size))
 
+        self.display_file.add(r1)
+        self.display_file.add(r2)
+        self.ui.update_viewport()
   
     def create_object(self):
         
