@@ -58,7 +58,7 @@ class Controller:
             return
         
         if len(points) == 2 and not name:
-            name = f"point_{len(self.display_file.get_all())}"
+            name = f"point_{self.display_file.get_num_points() + 1}"
 
         # Decide which object to create
         if len(points) == 2 and all(isinstance(p, int) for p in points):
@@ -161,13 +161,13 @@ class Controller:
             self.transform.scale_object(self.selected_object,tx,ty)
 
         if type == "rotate_origin": # rotaciona no centro do mundo
-            self.transform.rotate_origin(self.selected_object, angle,tx,ty)
+            self.transform.rotate_origin(self.selected_object, angle, 0, 0)
 
         if type == "rotate_center": # rotaciona no centro do objeto
             self.transform.rotate_center(self.selected_object, angle)
         
         if type == "rotate_point":
-            self.transform.rotate_point(self.selected_object, angle, tx, ty)
+            self.transform.rotate_point(self.selected_object, angle, int(tx), int(ty))
 
         self.ui.update_viewport()
 

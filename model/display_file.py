@@ -23,5 +23,13 @@ class DisplayFile:
         for obj in self.list:
             if obj.name == name:
                 return obj
+            
+    def get_num_points(self) -> int:
+        cont = 0
+        for obj in self.list:
+            if obj.name.startswith("point_"):
+                cont += 1
+        return cont
+
             # ---------- DONE ---------- #
 #562b00

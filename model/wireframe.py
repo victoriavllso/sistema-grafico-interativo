@@ -94,4 +94,5 @@ class Wireframe(GraphicObject):
             y_center += p.y
         x_center /= len(self.points)
         y_center /= len(self.points)
-        return x_center, y_center
+        print(f'geometric center: {x_center}, {y_center}')
+        return int(x_center), int(y_center)

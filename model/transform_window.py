@@ -53,6 +53,7 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
 			return sx, sy, None, "scale"
 	
 	def add_transform_display(self):
+		text = None
 		print(f'add transform chamado')
 		if self.tabWidget.currentIndex() == 0:
 			text = "Translação"
@@ -63,11 +64,11 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
 				text = "Rotação em torno do centro do objeto"
 			
 			elif self.rotate_point_button.isChecked():
-				texto = "Rotação em torno de um ponto qualquer"
+				text = "Rotação em torno de um ponto qualquer"
 		elif self.tabWidget.currentIndex() == 2:
 			text = "Escalonamento"
 			
-		if text:
+		if text is not None:
 			self.label_transform_2d.setText(text)
 			self.label_transform_2d.repaint()
 			return True
