@@ -1,9 +1,8 @@
-# para arrumar:
+# para arrumar neste entrega:
 
-1 - esta permitindo criar 1 ponto sem inserir o nome, além disso, esse ponto não está sendo deletado
-
-2 - delete não está apagandp tudo
-
-
-(900,-600),(200,-600)  (translação no ponto 10,10)
-(910,- 590), (210,-590)
+1 - atualziar o resquirements.txt e readme
+2 - cor
+3 -  rotação
+4 - função para evitar código repetido na transform.py
+5 - passar main_window.py e transform_window pro diretório view
+6 - botão add transformation precisa ser acionado antes de clicar em 'ok'
