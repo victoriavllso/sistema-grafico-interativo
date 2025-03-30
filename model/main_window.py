@@ -1,12 +1,10 @@
-from model.display_file import DisplayFile
-from model.window import Window
-from model.viewport import Viewport
 from PyQt6.QtGui import QPainter, QColor
 from PyQt6.QtGui import QPixmap
 from model.utils import *
 from view.gui import Ui_main, QtWidgets
 from PyQt6.QtWidgets import QListWidget, QColorDialog
 from controller.controller import Controller
+from PyQt6.QtCore import Qt
 
 class MainWindow(QtWidgets.QMainWindow, Ui_main):
     def __init__(self):
@@ -20,9 +18,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.painter = QPainter(self.canvas)
         self.vp.setPixmap(self.canvas)
 
+        # cria o display
         self.display = QListWidget()
         self.display.setGeometry(self.controller.display_file.x_min, self.controller.display_file.y_min, self.controller.display_file.x_max, self.controller.display_file.y_max)
+    
+        # ativa rolagem no display
+        self.display.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.display.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+
+        self.display.setMinimumHeight(150)
+        self.display.setMinimumWidth(200)
+        
+        
         self.layout().addWidget(self.display)
+    
         self.controller.create_cartesian_plane() # cria o plano cartesiano
 
     # Connect signals to slots

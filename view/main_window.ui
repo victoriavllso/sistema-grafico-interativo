@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1109</width>
-    <height>879</height>
+    <width>1096</width>
+    <height>760</height>
    </rect>
   </property>
   <property name="palette">
@@ -111,7 +111,7 @@
    <widget class="QLabel" name="vp">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>100</x>
       <y>10</y>
       <width>621</width>
       <height>661</height>
@@ -124,10 +124,10 @@
    <widget class="QScrollArea" name="scrollArea">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>680</y>
+      <x>770</x>
+      <y>540</y>
       <width>271</width>
-      <height>141</height>
+      <height>171</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -142,7 +142,7 @@
        <x>0</x>
        <y>0</y>
        <width>269</width>
-       <height>139</height>
+       <height>169</height>
       </rect>
      </property>
      <widget class="QPushButton" name="up">
@@ -197,15 +197,47 @@
        <string>Down</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="z_out">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>130</y>
+        <width>101</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Zoom out</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="z_in">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>130</y>
+        <width>101</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Zoom in</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>790</x>
-      <y>530</y>
+      <x>770</x>
+      <y>420</y>
       <width>271</width>
-      <height>131</height>
+      <height>101</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -215,7 +247,7 @@
      <property name="geometry">
       <rect>
        <x>150</x>
-       <y>10</y>
+       <y>20</y>
        <width>101</width>
        <height>32</height>
       </rect>
@@ -231,7 +263,7 @@
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>10</y>
+       <y>20</y>
        <width>101</width>
        <height>32</height>
       </rect>
@@ -247,7 +279,7 @@
      <property name="geometry">
       <rect>
        <x>80</x>
-       <y>90</y>
+       <y>60</y>
        <width>131</width>
        <height>31</height>
       </rect>
@@ -257,38 +289,6 @@
      </property>
      <property name="text">
       <string>Transform object</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="z_in">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>50</y>
-       <width>101</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(166, 83, 0);</string>
-     </property>
-     <property name="text">
-      <string>Zoom in</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="z_out">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>50</y>
-       <width>101</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(166, 83, 0);</string>
-     </property>
-     <property name="text">
-      <string>Zoom out</string>
      </property>
     </widget>
     <widget class="QLabel" name="label">
@@ -309,12 +309,16 @@
       <string>2D</string>
      </property>
     </widget>
+    <zorder>create_but</zorder>
+    <zorder>transform_button</zorder>
+    <zorder>label</zorder>
+    <zorder>delete_but</zorder>
    </widget>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
      <rect>
-      <x>790</x>
-      <y>330</y>
+      <x>770</x>
+      <y>220</y>
       <width>271</width>
       <height>181</height>
      </rect>
@@ -381,7 +385,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(166, 83, 0);</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>set color</string>
@@ -394,7 +398,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1109</width>
+     <width>1096</width>
      <height>19</height>
     </rect>
    </property>
