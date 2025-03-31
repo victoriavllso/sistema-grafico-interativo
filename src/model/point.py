@@ -1,7 +1,8 @@
-from model.graphic_object import GraphicObject
+from src.model.graphic_object import GraphicObject
 from PyQt6.QtGui import QPen
 from PyQt6.QtCore import Qt
-from model.utils import POINT_THICKNESS
+from src.model.utils import POINT_THICKNESS
+import numpy as np
 
 
 class Point(GraphicObject):
@@ -11,13 +12,16 @@ class Point(GraphicObject):
         self.y = y
 
     def draw(self, painter, viewport, window):
-        # Apply the viewport transformation
         transformed_point = viewport.transform(self, window)
-
         x, y = int(transformed_point.x), int(transformed_point.y)
-
         painter.setPen(QPen(Qt.GlobalColor.green, POINT_THICKNESS))
         painter.drawPoint(x, y)
-            # ---------- DONE ---------- #
+
     def geometric_center(self):
         return self.x, self.y
+
+    def receive_transform(self, matrix) -> None:
+        point_matrix = np.array([self.x, self.y, 1])
+        new_point = point_matrix @ matrix
+        self.x = new_point[0]
+        self.y = new_point[1]

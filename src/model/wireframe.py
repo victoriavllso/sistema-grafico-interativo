@@ -1,20 +1,16 @@
-from model.graphic_object import GraphicObject
-from model.point import Point
+from src.model.graphic_object import GraphicObject
+from src.model.point import Point
 from PyQt6.QtGui import QPen
 from PyQt6.QtCore import Qt
-from model.utils import LINE_THICKNESS
+from src.model.utils import LINE_THICKNESS
+import numpy as np
 
 class Wireframe(GraphicObject):
     def __init__(self, name, points: list[Point]):
         super().__init__(name)
-        
-        # Verify if the given points form a valid polygon
         if not self._is_valid_polygon(points):
             raise ValueError("Invalid polygon: The given points do not form a valid shape.")
-
         self.points = points
-
-        # Check if the polygon is concave
         self.concave = self._is_concave()
 
     def draw(self, painter, viewport, window) -> None:
@@ -27,6 +23,7 @@ class Wireframe(GraphicObject):
             painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
 
     def _is_concave(self) -> bool:
+
         def cross_product(p1: Point, p2: Point, p3: Point) -> float:
             return (p2.x - p1.x) * (p3.y - p2.y) - (p2.y - p1.y) * (p3.x - p2.x)
 
@@ -34,11 +31,27 @@ class Wireframe(GraphicObject):
         for i in range(len(self.points)):
             p1, p2, p3 = self.points[i], self.points[(i + 1) % len(self.points)], self.points[(i + 2) % len(self.points)]
             cross = cross_product(p1, p2, p3)
-            
-            if cross != 0:  # Ignore collinear points
+            if cross != 0:
                 signs.append(1 if cross > 0 else -1)
 
-        return len(set(signs)) > 1  # If there are more than one sign, the polygon is concave
+        return len(set(signs)) > 1
+
+    def geometric_center(self):
+        x_center = 0
+        y_center = 0
+        for p in self.points:
+            x_center += p.x
+            y_center += p.y
+        x_center /= len(self.points)
+        y_center /= len(self.points)
+        return int(x_center), int(y_center)
+    
+    def receive_transform(self, matrix):
+        for i in range(len(self.points)):
+            point_matrix = np.array([self.points[i].x, self.points[i].y, 1])
+            new_point = point_matrix @ matrix
+            self.points[i].x = new_point[0]
+            self.points[i].y = new_point[1]
 
         # ---------- STATIC METHODS ---------- #
 
@@ -46,20 +59,16 @@ class Wireframe(GraphicObject):
     def _is_valid_polygon(points: list[Point]) -> bool:
         if len(points) < 3:
             return False
-
         unique_points = set((p.x, p.y) for p in points)
         if len(unique_points) != len(points):
             return False
 
-        # Verifica se os pontos são colineares
         def are_collinear(p1: Point, p2: Point, p3: Point) -> bool:
             return (p2.y - p1.y) * (p3.x - p2.x) == (p3.y - p2.y) * (p2.x - p1.x)
 
         all_collinear = all(are_collinear(points[0], points[i], points[i + 1]) for i in range(1, len(points) - 1))
         if all_collinear:
             return False
-
-        # Verifica interseção entre arestas não adjacentes
         for i in range(len(points)):
             for j in range(i + 2, len(points) - (i == 0)):
                 if Wireframe._lines_intersect(
@@ -67,7 +76,6 @@ class Wireframe(GraphicObject):
                     points[j], points[(j + 1) % len(points)]
                 ):
                     return False
-
         return True
 
     @staticmethod
@@ -84,15 +92,3 @@ class Wireframe(GraphicObject):
         return o1 != o2 and o3 != o4
 
         # ---------- STATIC METHODS ---------- #
-
-            # ---------- DONE ---------- #
-    def geometric_center(self):
-        x_center = 0
-        y_center = 0
-        for p in self.points:
-            x_center += p.x
-            y_center += p.y
-        x_center /= len(self.points)
-        y_center /= len(self.points)
-        print(f'geometric center: {x_center}, {y_center}')
-        return int(x_center), int(y_center)

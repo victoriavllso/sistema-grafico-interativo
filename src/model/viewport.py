@@ -1,5 +1,5 @@
-from model.point import Point
-from model.utils import VP_X_MAX, VP_X_MIN, VP_Y_MAX, VP_Y_MIN
+from src.model.point import Point
+from src.model.utils import VP_X_MAX, VP_X_MIN, VP_Y_MAX, VP_Y_MIN
 
 class Viewport:
     def __init__(self, x_min = VP_X_MIN, x_max = VP_X_MAX, y_min = VP_Y_MIN, y_max = VP_Y_MAX):
@@ -15,5 +15,3 @@ class Viewport:
         if name != "default":
             return Point(x, y, name)
         return Point(x, y)
-
-    # ---------- DONE ---------- #

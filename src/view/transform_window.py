@@ -1,4 +1,4 @@
-from view.gui_transform import Ui_Dialog, QtWidgets
+from src.view.gui_transform import Ui_Dialog, QtWidgets
 
 class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
 	def __init__(self,controller):
@@ -9,52 +9,48 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
 
 		# configuração do display
 		font = self.label_transform_2d.font()
-		font.setPointSize(9)  # Altere para o tamanho desejado
+		font.setPointSize(9)
 		self.label_transform_2d.setFont(font)
-		self.label_transform_2d.setStyleSheet("color: black; background-color: white;") # cor do texto e fundo
-
+		self.label_transform_2d.setStyleSheet("color: black; background-color: white;")
 
 	def initUI(self):
-
-		self.ok_cancel_transform.accepted.connect(self.confirm_transform_and_transform) # conecta o botão de ok com o método de confirmação
-		self.ok_cancel_transform.rejected.connect(self.reject) # fecha a janela de transformação
+		self.ok_cancel_transform.accepted.connect(self.confirm_transform_and_transform)
+		self.ok_cancel_transform.rejected.connect(self.reject)
 		self.add_transform_button.clicked.connect(self.add_transform_display) 
 	
 	def confirm_transform(self):
-
-		if self.tabWidget.currentIndex() == 0: # pega os dados de translação e envia para o controller
+		if self.tabWidget.currentIndex() == 0:
 			dx = self.get_x_translate()
 			dy = self.get_y_translate()
 			return dx, dy, None,"translate"
 		
-		if self.tabWidget.currentIndex() == 1: # pega os dados de rotação e envia para o controller
+		if self.tabWidget.currentIndex() == 1:
 			angle = self.get_angle()
-			angle = angle * (3.14 / 180) # converte para radianos (verificar se realmente convertemos para inteiro)
+			angle = angle * (3.14 / 180)
 
 			if self.rotate_origin_button.isChecked():
-				x, y = 0 , 0 # centro da janela
+				x, y = 0 , 0
 				if self.x_rotate.text() != "" or self.y_rotate.text() != "":
 					self.controller.show_popup("Erro", "Para rotacionar em torno da origem, não é necessário informar as coordenadas x e y", QtWidgets.QMessageBox.Icon.Critical)	
 				return x, y, angle, "rotate_origin"
 
-			elif self.rotate_center_button.isChecked(): # rotaciona em torno do centro do objeto
+			elif self.rotate_center_button.isChecked():
 				if self.x_rotate.text() != "" or self.y_rotate.text() != "":
 					self.controller.show_popup("Erro", "Para rotacionar em torno do seu centro, não é necessário informar as coordenadas x e y", QtWidgets.QMessageBox.Icon.Critical)
 				return 0,0, angle, "rotate_center"
 			
-			elif self.rotate_point_button.isChecked(): # rotaciona em torno de um ponto qualquer
+			elif self.rotate_point_button.isChecked():
 				x = self.x_rotate.text().strip()
 				y = self.y_rotate.text().strip()
 				return x, y, angle, "rotate_point"
 			
-		elif self.tabWidget.currentIndex() == 2: # pega os dados de escalonamento e envia para o controller
+		elif self.tabWidget.currentIndex() == 2:
 			sx = self.get_x_scale() 
 			sy = self.get_y_scale()
 			return sx, sy, None, "scale"
 	
 	def add_transform_display(self):
 		text = None
-		print(f'add transform chamado')
 		if self.tabWidget.currentIndex() == 0:
 			text = "Translação"
 		elif self.tabWidget.currentIndex() == 1:
@@ -79,9 +75,9 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
 		if self.add_transform_display:
 			tx,ty,angle, type = self.confirm_transform()
 			self.controller.transform_object(tx,ty,angle,type)
-	
 		else:
 			self.controller.show_popup("Erro", "É necessário adicioanar as transformações antes de prosseguir !", QtWidgets.QMessageBox.Icon.Critical)
+
 	def get_x_translate(self):
 		x = float(self.x_translate.text().strip())
 		return x

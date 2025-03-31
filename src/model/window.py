@@ -1,4 +1,4 @@
-from model.utils import STEP, PERCENTAGE, W_X_MIN, W_X_MAX, W_Y_MIN, W_Y_MAX
+from src.model.utils import STEP, PERCENTAGE, W_X_MIN, W_X_MAX, W_Y_MIN, W_Y_MAX
 
 class Window:
     def __init__(self, x_min = W_X_MIN, x_max = W_X_MAX, y_min = W_Y_MIN, y_max = W_Y_MAX):
@@ -37,4 +37,3 @@ class Window:
 
     def get_center(self):
         return self.x_min, self.y_min
-        # ---------- DONE ---------- #

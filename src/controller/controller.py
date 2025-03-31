@@ -1,15 +1,16 @@
-from model.window import Window
-from model.window import Window
-from model.viewport import Viewport
-from model.point import Point
-from model.line import Line
-from model.wireframe import Wireframe
-from model.transform_window import TransformWindow
-from model.transform import Transform
-from model.display_file import DisplayFile
-from model.utils import *
+from src.model.window import Window
+from src.model.window import Window
+from src.model.viewport import Viewport
+from src.model.point import Point
+from src.model.line import Line
+from src.model.wireframe import Wireframe
+from src.view.transform_window import TransformWindow
+from src.model.transform import Transform
+from src.model.display_file import DisplayFile
+from src.model.utils import *
 
 from PyQt6.QtWidgets import QMessageBox
+from PyQt6.QtGui import QPainter
 
 class Controller:
     def __init__(self, ui):
@@ -105,14 +106,12 @@ class Controller:
         }
         move_function = move_actions.get(direction)
         if move_function is None:
-            print("acao invalida")
             return
         move_function()
         self.ui.update_viewport()
 
     def zoom(self, action):
         if not self.window:
-            print("window nao inicializada")
             return
         zoom_actions = {
             "in": self.window.z_in,
@@ -120,7 +119,6 @@ class Controller:
         }
         zoom_function = zoom_actions.get(action)
         if zoom_function is None:
-            print("acao invalida")
             return
         zoom_function()
         self.ui.update_viewport()
@@ -132,7 +130,6 @@ class Controller:
         except Exception:
             return []
         
-
     def show_popup(self, title:str = "standart", message:str = "standart", icon:QMessageBox.Icon = QMessageBox.Icon.Information):
         msg = QMessageBox()
         msg.setWindowTitle(title)
@@ -141,10 +138,8 @@ class Controller:
         msg.setStandardButtons(QMessageBox.StandardButton.Ok)
         msg.exec()
   
-
-    def transform_object(self,tx,ty,angle,type): # esse método é chamado quando o usuario clica em ok na transform window
+    def transform_object(self,tx,ty,angle,type):
         self.update_selected_object()
-        
 
         if not self.selected_object:
             self.show_popup("Erro", "Nenhum objeto selecionado para transformar!", QMessageBox.Icon.Critical)
@@ -160,17 +155,21 @@ class Controller:
         if type == "scale":
             self.transform.scale_object(self.selected_object,tx,ty)
 
-        if type == "rotate_origin": # rotaciona no centro do mundo
-            self.transform.rotate_origin(self.selected_object, angle, 0, 0)
+        if type == "rotate_origin":
+            self.transform.rotate_object(self.selected_object, angle, True)
 
-        if type == "rotate_center": # rotaciona no centro do objeto
-            self.transform.rotate_center(self.selected_object, angle)
-        
         if type == "rotate_point":
-            self.transform.rotate_point(self.selected_object, angle, int(tx), int(ty))
+            self.transform.rotate_object(self.selected_object, angle, True, int(tx), int(ty))
+
+        if type == "rotate_center":
+            self.transform.rotate_object(self.selected_object, angle, False)
 
         self.ui.update_viewport()
 
     def update_selected_object(self):
         obj_name = self.ui.name_ln.text().strip()
-        self.selected_object = self.display_file.get_selected_object(obj_name)
+        self.selected_object = self.display_file.get_object(obj_name)
+
+    def draw_objects(self, painter: QPainter) -> None:
+        for obj in self.display_file.get_all(): 
+            obj.draw(painter, self.viewport, self.window)
