@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-
+from PyQt6.QtCore import Qt
 class GraphicObject(ABC):
-	def __init__(self, name: str):
+	def __init__(self, name: str, color: Qt.GlobalColor = Qt.GlobalColor.black):
 		self.name = name
+		self.color = color
 
 	@abstractmethod
 	def draw(self):

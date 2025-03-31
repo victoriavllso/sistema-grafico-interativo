@@ -6,15 +6,15 @@ import numpy as np
 
 
 class Point(GraphicObject):
-    def __init__(self, x: int, y: int, name="default"):
-        super().__init__(name)
+    def __init__(self, x: int, y: int, name="default", color=Qt.GlobalColor.green):
+        super().__init__(name, color)
         self.x = x
         self.y = y
 
     def draw(self, painter, viewport, window):
         transformed_point = viewport.transform(self, window)
         x, y = int(transformed_point.x), int(transformed_point.y)
-        painter.setPen(QPen(Qt.GlobalColor.green, POINT_THICKNESS))
+        painter.setPen(QPen(self.color, POINT_THICKNESS))
         painter.drawPoint(x, y)
 
     def geometric_center(self):

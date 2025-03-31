@@ -34,7 +34,8 @@ class Controller:
     def create_object(self):
         
         points_input = self.ui.points_ln.text().strip()
-    
+        color = self.ui.color
+
         # points_input validation
         if not points_input:
             self.show_popup("Erro", "Coordenadas vazias", QMessageBox.Icon.Critical)
@@ -64,17 +65,17 @@ class Controller:
         # Decide which object to create
         if len(points) == 2 and all(isinstance(p, int) for p in points):
             x, y = points[0], points[1]
-            obj = Point(name=name, x=x, y=y)
+            obj = Point(name=name, x=x, y=y, color=color)
 
         elif len(points) == 2 and all(isinstance(p, tuple) for p in points):
             x1, y1, x2, y2 = points[0][0], points[0][1], points[1][0], points[1][1]
             point0, point1 = Point(x=x1, y=y1), Point(x=x2, y=y2)
-            obj = Line(name= name, point1=point0, point2=point1)
+            obj = Line(name= name, point1=point0, point2=point1, color=color)
 
         elif len(points) > 2:
             points = [Point(x=x, y=y) for x, y in points]
             try:
-                obj = Wireframe(name=name, points=points)
+                obj = Wireframe(name=name, points=points, color=color)
             except Exception:
                 self.show_popup("Erro", "O Objeto informado não é um polígono válido", QMessageBox.Icon.Critical)
                 return

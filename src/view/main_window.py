@@ -18,6 +18,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.painter = QPainter(self.canvas)
         self.vp.setPixmap(self.canvas)
 
+        self.color = QColor("black")
+
         # Display
         self.display = QListWidget()
         self.display.setGeometry(self.controller.display_file.x_min, self.controller.display_file.y_min, self.controller.display_file.x_max, self.controller.display_file.y_max)
@@ -70,10 +72,5 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.controller.update_selected_object()
 
     def open_color_dialog(self):
-        color = QColorDialog.getColor()
-        if color.isValid():
-            self.controller.set_color(color)
-            self.update_viewport()
-        else:
-            self.controller.show_popup("Erro", "Selecione uma cor válida!", QtWidgets.QMessageBox.Icon.Critical)
-        self.update_viewport()
+        self.color = QColorDialog.getColor()
+        

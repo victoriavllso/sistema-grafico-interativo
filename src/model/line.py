@@ -7,13 +7,13 @@ import numpy as np
 
 
 class Line(GraphicObject):
-    def __init__(self, name, point1: Point, point2: Point):
-        super().__init__(name)
+    def __init__(self, name, point1: Point, point2: Point, color=Qt.GlobalColor.red):
+        super().__init__(name, color)
         self.point1 = point1
         self.point2 = point2
 
     def draw(self, painter, viewport, window):
-        painter.setPen(QPen(Qt.GlobalColor.red, LINE_THICKNESS))
+        painter.setPen(QPen(self.color, LINE_THICKNESS))
         transformed_p1 = (viewport.transform(self.point1, window))
         transformed_p2 = (viewport.transform(self.point2, window))
         painter.drawLine(int(transformed_p1.x), int(transformed_p1.y), int(transformed_p2.x), int(transformed_p2.y))
