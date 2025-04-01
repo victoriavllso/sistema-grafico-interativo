@@ -151,22 +151,26 @@ class Controller:
             self.show_popup("Erro", "Valores de transformação inválidos", QMessageBox.Icon.Critical)
             return
 
-        if type == "translate":
-            self.transform.translate_object(self.selected_object,tx,ty)
-        
-        if type == "scale":
-            self.transform.scale_object(self.selected_object,tx,ty)
+        try:
+            if type == "translate":
+                self.transform.translate_object(self.selected_object,tx,ty)
+            
+            if type == "scale":
+                self.transform.scale_object(self.selected_object,tx,ty)
 
-        if type == "rotate_origin":
-            self.transform.rotate_object(self.selected_object, angle, True)
+            if type == "rotate_origin":
+                self.transform.rotate_object(self.selected_object, angle, True)
 
-        if type == "rotate_point":
-            self.transform.rotate_object(self.selected_object, angle, True, int(tx), int(ty))
+            if type == "rotate_point":
+                self.transform.rotate_object(self.selected_object, angle, True, int(tx), int(ty))
 
-        if type == "rotate_center":
-            self.transform.rotate_object(self.selected_object, angle, False)
+            if type == "rotate_center":
+                self.transform.rotate_object(self.selected_object, angle, False)
 
-        self.main_window.update_viewport()
+            self.main_window.update_viewport()
+        except:
+            self.show_popup("Erro", "Valores de transformação inválidos", QMessageBox.Icon.Critical)
+            return
 
     def update_selected_object(self):
         obj_name = self.main_window.name_ln.text().strip()
