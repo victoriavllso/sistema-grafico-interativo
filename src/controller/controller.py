@@ -8,19 +8,20 @@ from src.view.transform_window import TransformWindow
 from src.model.transform import Transform
 from src.model.display_file import DisplayFile
 from src.model.utils import *
-
+from src.view.main_window import MainWindow
 from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtGui import QPainter
 
 class Controller:
-    def __init__(self, ui):
-        self.ui = ui
+    def __init__(self):
         self.display_file = DisplayFile()
         self.viewport = Viewport()
         self.window = Window()
         self.transform_window = None
         self.transform = Transform()
         self.selected_object = None
+        self.main_window = MainWindow(self)
+        self.main_window.show()
 
     def create_cartesian_plane(self, center_x = 500, center_y = -500, size = 1000):
         # use center_x and center_y to create the cartesian plane
@@ -29,19 +30,19 @@ class Controller:
 
         self.display_file.add(r1)
         self.display_file.add(r2)
-        self.ui.update_viewport()
+        self.main_window.update_viewport()
   
     def create_object(self):
         
-        points_input = self.ui.points_ln.text().strip()
-        color = self.ui.color
+        points_input = self.main_window.points_ln.text().strip()
+        color = self.main_window.color
 
         # points_input validation
         if not points_input:
             self.show_popup("Erro", "Coordenadas vazias", QMessageBox.Icon.Critical)
             return
 
-        name = self.ui.name_ln.text()
+        name = self.main_window.name_ln.text()
 
         # name validation
         if name in [obj.name for obj in self.display_file.get_all()]:
@@ -82,7 +83,7 @@ class Controller:
     
         # Add object to display file and update viewport
         self.display_file.add(obj)
-        self.ui.update_viewport()
+        self.main_window.update_viewport()
 
     def open_transform_window(self):
         self.update_selected_object()
@@ -96,7 +97,7 @@ class Controller:
     
     def delete_object(self, obj_name):
         self.display_file.remove(obj_name)
-        self.ui.update_viewport()
+        self.main_window.update_viewport()
     
     def move_window(self, direction):
         move_actions = {
@@ -109,7 +110,7 @@ class Controller:
         if move_function is None:
             return
         move_function()
-        self.ui.update_viewport()
+        self.main_window.update_viewport()
 
     def zoom(self, action):
         if not self.window:
@@ -122,7 +123,7 @@ class Controller:
         if zoom_function is None:
             return
         zoom_function()
-        self.ui.update_viewport()
+        self.main_window.update_viewport()
 
     def parse_coordinates(self, input_text: str) -> list:
         try:
@@ -165,10 +166,10 @@ class Controller:
         if type == "rotate_center":
             self.transform.rotate_object(self.selected_object, angle, False)
 
-        self.ui.update_viewport()
+        self.main_window.update_viewport()
 
     def update_selected_object(self):
-        obj_name = self.ui.name_ln.text().strip()
+        obj_name = self.main_window.name_ln.text().strip()
         self.selected_object = self.display_file.get_object(obj_name)
 
     def draw_objects(self, painter: QPainter) -> None:

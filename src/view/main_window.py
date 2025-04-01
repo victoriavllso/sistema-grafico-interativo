@@ -3,16 +3,15 @@ from PyQt6.QtGui import QPixmap
 from src.model.utils import *
 from src.view.gui import Ui_main, QtWidgets
 from PyQt6.QtWidgets import QListWidget, QColorDialog
-from src.controller.controller import Controller
 from PyQt6.QtCore import Qt
 
 class MainWindow(QtWidgets.QMainWindow, Ui_main):
-    def __init__(self):
+    def __init__(self, controller):
         super().__init__()
         self.setupUi(self)
         self.initUI()
 
-        self.controller = Controller(self)
+        self.controller = controller
         self.canvas = QPixmap(self.controller.viewport.x_max - self.controller.viewport.x_min, self.controller.viewport.y_max - self.controller.viewport.y_min)
         self.canvas.fill(QColor("white"))
         self.painter = QPainter(self.canvas)

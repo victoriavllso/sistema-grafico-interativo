@@ -1,4 +1,4 @@
-from src.view.main_window import MainWindow
+from src.controller.controller import Controller
 from PyQt6 import QtWidgets
 import os
 import atexit
@@ -13,6 +13,5 @@ atexit.register(clean_cache)
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
+    controller = Controller()
     sys.exit(app.exec())

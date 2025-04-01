@@ -13,6 +13,8 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
 		self.label_transform_2d.setFont(font)
 		self.label_transform_2d.setStyleSheet("color: black; background-color: white;")
 
+		self.transform_added = False
+
 	def initUI(self):
 		self.ok_cancel_transform.accepted.connect(self.confirm_transform_and_transform)
 		self.ok_cancel_transform.rejected.connect(self.reject)
@@ -67,16 +69,16 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
 		if text is not None:
 			self.label_transform_2d.setText(text)
 			self.label_transform_2d.repaint()
-			return True
+			self.transform_added = True
 		else:
-			return False
+			self.transform_added = False
 	
 	def confirm_transform_and_transform(self):
-		if self.add_transform_display:
+		if self.transform_added:
 			tx,ty,angle, type = self.confirm_transform()
 			self.controller.transform_object(tx,ty,angle,type)
 		else:
-			self.controller.show_popup("Erro", "É necessário adicioanar as transformações antes de prosseguir !", QtWidgets.QMessageBox.Icon.Critical)
+			self.controller.show_popup("Erro", "É necessário adicionar as transformações antes de prosseguir !", QtWidgets.QMessageBox.Icon.Critical)
 
 	def get_x_translate(self):
 		x = float(self.x_translate.text().strip())
