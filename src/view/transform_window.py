@@ -8,13 +8,8 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
         self.initUI()
         self.controller = controller
         
-        self.display_transform = QListWidget()
-        self.display_transform.setGeometry(
-            self.controller.display_file.x_min, 
-            self.controller.display_file.y_min, 
-            self.controller.display_file.x_max, 
-            self.controller.display_file.y_max
-        )
+        self.display_transform = QListWidget(self)
+        self.display_transform.setGeometry(370, 90, 190, 220)
         
         self.transform_added = False
         self.transform_list_display = []
@@ -88,45 +83,61 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
         return self.transform_list
 
     def add_transform_display(self):
-        text = None
-        if self.tabWidget.currentIndex() == 0:
-            text = f"Translação nos pontos {int(self.get_x_translate())} {int(self.get_y_translate())}"
-            self.transform_list_display.append(text)
-            self.confirm_transform()
-              
-        elif self.tabWidget.currentIndex() == 1:
-            if self.rotate_origin_button.isChecked():
-                text = f"Rotação em torno da origem com {int(self.get_angle())} graus"
-                self.transform_list_display.append(text)
-                self.confirm_transform()  # Apenas adiciona na lista
-                
-            elif self.rotate_center_button.isChecked():
-                text = f"Rotação em torno do centro do objeto {int(self.get_angle())} graus"
-                self.transform_list_display.append(text)
-                self.confirm_transform()  # Apenas adiciona na lista
-                
-            elif self.rotate_point_button.isChecked():
-                text = f"Rotação em torno do ponto: ({int(self.get_x_rotate())}, {int(self.get_y_rotate())}) com {int(self.get_angle())} graus"
+        try:
+            text = None
+            if self.tabWidget.currentIndex() == 0:
+                text = f"Translação nos pontos {int(self.get_x_translate())} {int(self.get_y_translate())}"
                 self.transform_list_display.append(text)
                 self.confirm_transform()
                 
-        elif self.tabWidget.currentIndex() == 2:
-            text = f"Escalonamento no ponto: ({int(self.get_x_scale())}, {int(self.get_y_scale())})"
-            self.transform_list_display.append(text)
-            self.confirm_transform()  # Apenas adiciona na lista
-            
-        if text is not None:
-            self.transform_added = True
-        else:
-            self.transform_added = False
-        self.update_display_transform()
+            elif self.tabWidget.currentIndex() == 1:
+                if self.rotate_origin_button.isChecked():
+                    text = f"Rotação em torno da origem com {int(self.get_angle())} graus"
+                    self.transform_list_display.append(text)
+                    self.confirm_transform()  # Apenas adiciona na lista
+                    
+                elif self.rotate_center_button.isChecked():
+                    text = f"Rotação em torno do centro do objeto {int(self.get_angle())} graus"
+                    self.transform_list_display.append(text)
+                    self.confirm_transform()  # Apenas adiciona na lista
+                    
+                elif self.rotate_point_button.isChecked():
+                    text = f"Rotação em torno do ponto: ({int(self.get_x_rotate())}, {int(self.get_y_rotate())}) com {int(self.get_angle())} graus"
+                    self.transform_list_display.append(text)
+                    self.confirm_transform()
+                    
+            elif self.tabWidget.currentIndex() == 2:
+                text = f"Escalonamento no ponto: ({int(self.get_x_scale())}, {int(self.get_y_scale())})"
+                self.transform_list_display.append(text)
+                self.confirm_transform()  # Apenas adiciona na lista
+                
+            if text is not None:
+                self.transform_added = True
+            else:
+                self.transform_added = False
+            self.update_display_transform()
+
+        except ValueError:
+            self.controller.show_popup(
+                "Erro", "Erro ao adicionar transformação. Verifique os valores informados.",
+                QtWidgets.QMessageBox.Icon.Critical
+            )
     
     def confirm_transform_and_transform(self):
-        if self.transform_added:
-            self.controller.transform_object(self.transform_list)  # Chama a função sem parâmetros (ela busca na lista)
-        else:
+        try:
+            if self.transform_added:
+                self.controller.transform_object(self.transform_list)  # Chama a função sem parâmetros (ela busca na lista)
+                self.transform_added = False
+                self.transform_list_display = []
+                self.transform_list = []
+            else:
+                self.controller.show_popup(
+                    "Erro", "É necessário adicionar as transformações antes de prosseguir!",
+                    QtWidgets.QMessageBox.Icon.Critical
+                )
+        except Exception as e:
             self.controller.show_popup(
-                "Erro", "É necessário adicionar as transformações antes de prosseguir!",
+                "Erro", f"Erro ao aplicar a transformação: {str(e)}",
                 QtWidgets.QMessageBox.Icon.Critical
             )
 
@@ -143,9 +154,7 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
         return float(self.y_scaling.text().strip())
 
     def get_angle(self):
-        angle = float(self.angulo_input.text().strip())
-        print(f'angle: {angle}')
-        return angle
+        return float(self.angulo_input.text().strip())
     
     def get_x_rotate(self):
         return float(self.x_rotate.text().strip())
@@ -157,5 +166,4 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
         self.display_transform.clear()
         for transform in self.transform_list_display:
             self.display_transform.addItem(transform)
-            print(transform)
         self.display_transform.show()
