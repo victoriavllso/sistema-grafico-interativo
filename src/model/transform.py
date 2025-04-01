@@ -1,7 +1,5 @@
 import numpy as np
-from src.model.point import Point
-from src.model.line import Line
-from src.model.wireframe import Wireframe
+
 
 class Transform:
     def __init__(self):
