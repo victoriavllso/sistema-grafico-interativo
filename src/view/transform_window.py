@@ -86,28 +86,28 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
         try:
             text = None
             if self.tabWidget.currentIndex() == 0:
-                text = f"Translação nos pontos {int(self.get_x_translate())} {int(self.get_y_translate())}"
+                text = f"Translação nos pontos {float(self.get_x_translate())} {float(self.get_y_translate())}"
                 self.transform_list_display.append(text)
                 self.confirm_transform()
                 
             elif self.tabWidget.currentIndex() == 1:
                 if self.rotate_origin_button.isChecked():
-                    text = f"Rotação em torno da origem com {int(self.get_angle())} graus"
+                    text = f"Rotação em torno da origem com {float(self.get_angle())} graus"
                     self.transform_list_display.append(text)
                     self.confirm_transform()  # Apenas adiciona na lista
                     
                 elif self.rotate_center_button.isChecked():
-                    text = f"Rotação em torno do centro do objeto {int(self.get_angle())} graus"
+                    text = f"Rotação em torno do centro do objeto {float(self.get_angle())} graus"
                     self.transform_list_display.append(text)
                     self.confirm_transform()  # Apenas adiciona na lista
                     
                 elif self.rotate_point_button.isChecked():
-                    text = f"Rotação em torno do ponto: ({int(self.get_x_rotate())}, {int(self.get_y_rotate())}) com {int(self.get_angle())} graus"
+                    text = f"Rotação em torno do ponto: ({float(self.get_x_rotate())}, {float(self.get_y_rotate())}) com {float(self.get_angle())} graus"
                     self.transform_list_display.append(text)
                     self.confirm_transform()
                     
             elif self.tabWidget.currentIndex() == 2:
-                text = f"Escalonamento no ponto: ({int(self.get_x_scale())}, {int(self.get_y_scale())})"
+                text = f"Escalonamento no ponto: ({float(self.get_x_scale())}, {float(self.get_y_scale())})"
                 self.transform_list_display.append(text)
                 self.confirm_transform()  # Apenas adiciona na lista
                 
