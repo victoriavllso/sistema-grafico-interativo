@@ -1,7 +1,6 @@
 from src.view.gui_transform import Ui_Dialog, QtWidgets
 from PyQt6.QtWidgets import QListWidget
 
-class TransformData:
 
 class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
     def __init__(self, controller):
