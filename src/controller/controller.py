@@ -19,12 +19,10 @@ class Controller:
         self.window = Window()
         self.transform_window = None
         self.transform = Transform()
-        self.selected_object = None
         self.main_window = MainWindow(self)
         self.main_window.show()
 
     def create_cartesian_plane(self, center_x = 500, center_y = -500, size = 1000):
-        # use center_x and center_y to create the cartesian plane
         r1 = Line("x_axis", Point(center_x - size, center_y), Point(center_x + size, center_y))
         r2 = Line("y_axis", Point(center_x, center_y - size), Point(center_x, center_y + size))
 
@@ -86,9 +84,9 @@ class Controller:
         self.main_window.update_viewport()
 
     def open_transform_window(self):
-        self.update_selected_object()
+        selected_object = self.get_object_from_display()
 
-        if self.selected_object is None:
+        if selected_object is None:
             self.show_popup("Erro", "Nenhum objeto selecionado para transformar!", QMessageBox.Icon.Critical)
             return
         if self.transform_window is None:
@@ -141,9 +139,9 @@ class Controller:
         msg.exec()
   
     def transform_object(self,transform_list):
-        self.update_selected_object()
+        selected_object = self.get_object_from_display()
 
-        if not self.selected_object:
+        if not selected_object:
             self.show_popup("Erro", "Nenhum objeto selecionado para transformar!", QMessageBox.Icon.Critical)
             return
         
@@ -159,28 +157,27 @@ class Controller:
 
             try:
                 if tr_type == "translate":
-                    self.transform.translate_object(self.selected_object,tx,ty)
+                    self.transform.translate_object(selected_object,tx,ty)
                 
                 if tr_type == "scale":
-                    self.transform.scale_object(self.selected_object,tx,ty)
+                    self.transform.scale_object(selected_object,tx,ty)
 
                 if tr_type == "rotate_origin":
-                    self.transform.rotate_object(self.selected_object, angle, True)
+                    self.transform.rotate_object(selected_object, angle, True)
 
                 if tr_type == "rotate_point":
-                    self.transform.rotate_object(self.selected_object, angle, True, int(tx), int(ty))
+                    self.transform.rotate_object(selected_object, angle, True, int(tx), int(ty))
 
                 if tr_type == "rotate_center":
-                    self.transform.rotate_object(self.selected_object, angle, False)
+                    self.transform.rotate_object(selected_object, angle, False)
 
                 self.main_window.update_viewport()
             except:
                 self.show_popup("Erro", "Valores de transformação inválidos", QMessageBox.Icon.Critical)
                 return
 
-    def update_selected_object(self):
-        obj_name = self.main_window.name_ln.text().strip()
-        self.selected_object = self.display_file.get_object(obj_name)
+    def get_object_from_display(self) -> None:
+        return self.display_file.get_object(self.main_window.name_ln.text().strip())
 
     def draw_objects(self, painter: QPainter) -> None:
         for obj in self.display_file.get_all(): 
