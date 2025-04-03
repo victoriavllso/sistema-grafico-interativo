@@ -1,7 +1,7 @@
-from src.model.graphic_object import GraphicObject
+from src.model.graphic_objects.graphic_object import GraphicObject
 from PyQt6.QtGui import QPen
 from PyQt6.QtCore import Qt
-from src.model.utils import POINT_THICKNESS
+from src.utils.utils import POINT_THICKNESS
 import numpy as np
 
 
@@ -25,3 +25,6 @@ class Point(GraphicObject):
         new_point = point_matrix @ matrix
         self.x = new_point[0]
         self.y = new_point[1]
+    
+    def __str__(self):
+        return f"Point({self.name}, {self.x}, {self.y}, color={self.color.name()})"

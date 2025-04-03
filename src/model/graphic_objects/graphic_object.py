@@ -16,3 +16,7 @@ class GraphicObject(ABC):
 	@abstractmethod
 	def receive_transform(self, matrix) -> None:
 		pass
+
+	@abstractmethod
+	def __str__(self):
+		pass

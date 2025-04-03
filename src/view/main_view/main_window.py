@@ -1,7 +1,7 @@
 from PyQt6.QtGui import QPainter, QColor
 from PyQt6.QtGui import QPixmap
-from src.model.utils import *
-from src.view.gui import Ui_main, QtWidgets
+from src.utils.utils import *
+from src.view.main_view.gui_main import Ui_main, QtWidgets
 from PyQt6.QtWidgets import QListWidget, QColorDialog
 from PyQt6.QtCore import Qt
 
@@ -47,7 +47,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.controller.create_object()
 
     def delete_object(self):
-        obj_name = self.name_ln.text().strip()
+        obj_name = self.get_name()
         self.controller.delete_object(obj_name)
     
     def update_viewport(self):
@@ -66,10 +66,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         for obj in self.controller.display_file.get_all():
             self.display.addItem(f"{obj.name} - {obj.__class__.__name__}")
         self.display.show()
-    
-    def get_object(self):
-        self.controller.update_selected_object()
 
     def open_color_dialog(self):
         self.color = QColorDialog.getColor()
-        
+
+    def get_name(self):
+        return self.name_ln.text().strip()

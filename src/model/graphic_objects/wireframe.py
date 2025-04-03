@@ -1,8 +1,8 @@
-from src.model.graphic_object import GraphicObject
-from src.model.point import Point
+from src.model.graphic_objects.graphic_object import GraphicObject
+from src.model.graphic_objects.point import Point
 from PyQt6.QtGui import QPen
 from PyQt6.QtCore import Qt
-from src.model.utils import LINE_THICKNESS
+from src.utils.utils import LINE_THICKNESS
 import numpy as np
 
 class Wireframe(GraphicObject):
@@ -53,8 +53,6 @@ class Wireframe(GraphicObject):
             self.points[i].x = new_point[0]
             self.points[i].y = new_point[1]
 
-        # ---------- STATIC METHODS ---------- #
-
     @staticmethod
     def _is_valid_polygon(points: list[Point]) -> bool:
         if len(points) < 3:
@@ -91,4 +89,6 @@ class Wireframe(GraphicObject):
 
         return o1 != o2 and o3 != o4
 
-        # ---------- STATIC METHODS ---------- #
+
+    def __str__(self):
+        return f"{self.name}: Wireframe with {len(self.points)} points"
