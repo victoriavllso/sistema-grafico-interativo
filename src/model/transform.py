@@ -19,6 +19,7 @@ class Transform:
     @staticmethod
     def matrix_rotate(angle):
         """Matriz de rotação"""
+        angle = np.radians(angle)
         cos_a, sin_a = np.cos(angle), np.sin(angle)
         return np.array([[cos_a, -sin_a, 0],
                          [sin_a, cos_a, 0],
@@ -42,20 +43,12 @@ class Transform:
             obj.receive_transform(matrix)
 
     @staticmethod
-    def rotate_object(obj, angle, around_Point:bool, px=0, py=0):
-        """Rotaciona um objeto gráfico em torno de um ponto (ou seu centro geométrico por padrão)"""
-        if around_Point:
-            matrixs = [
-                Transform.matrix_translate(-px, -py),
-                Transform.matrix_rotate(angle),
-                Transform.matrix_translate(px, py)
-            ]
-        else:
-            cx, cy = obj.geometric_center()
-            matrixs = [
-                Transform.matrix_translate(-cx, -cy),
-                Transform.matrix_rotate(angle),
-                Transform.matrix_translate(cx, cy)
-            ]
+    def rotate_object(obj, angle, px=0, py=0):
+        """Rotaciona um objeto gráfico em torno de um ponto"""
+        matrixs = [
+            Transform.matrix_translate(-px, -py),
+            Transform.matrix_rotate(angle),
+            Transform.matrix_translate(px, py)
+        ]
         for matrix in matrixs:
             obj.receive_transform(matrix)

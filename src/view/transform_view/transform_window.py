@@ -15,73 +15,31 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
         self.display.setGeometry(DT_X_MIN, DT_Y_MIN, DT_X_MAX, DT_Y_MAX)
 
     def initUI(self):
-        self.ok_cancel_transform.accepted.connect(self.confirm_transform_and_transform)
+        self.ok_cancel_transform.accepted.connect(self.confirm_transform)
         self.ok_cancel_transform.rejected.connect(self.reject)
-        self.add_transform_button.clicked.connect(self.add_transform_display)
+        self.add_transform_button.clicked.connect(self.get_transform)
     
-    def add_transform_display(self) -> dict:
-        """Retorna um dicionário com os dados da transformação."""
-        transform_data = None
-        
-        # Translação
-        if self.tabWidget.currentIndex() == 0:
-            transform_data = {
-                "type": "translate",
-                "tx": self.get_x_translate(),
-                "ty": self.get_y_translate(),
-                "angle": None,
-                "text": f"Translação nos pontos {float(self.get_x_translate())} {float(self.get_y_translate())}"
-            }
-
-        # Rotação
-        elif self.tabWidget.currentIndex() == 1:
-            angle = self.get_angle() * (3.14 / 180)
-
-            if self.rotate_origin_button.isChecked():
-                transform_data = {
-                    "type": "rotate_origin",
-                    "tx": 0, "ty": 0,
-                    "angle": angle,
-                    "text": f"Rotação em torno da origem com {float(self.get_angle())} graus"
-                }
-            elif self.rotate_center_button.isChecked():
-                transform_data = {
-                    "type": "rotate_center",
-                    "tx": 0, "ty": 0,
-                    "angle": angle,
-                    "text": f"Rotação em torno do centro do objeto {float(self.get_angle())} graus"
-                }
-            elif self.rotate_point_button.isChecked():
-                transform_data = {
-                    "type": "rotate_point",
-                    "tx": self.get_x_rotate(),
-                    "ty": self.get_y_rotate(),
-                    "angle": angle,
-                    "text": f"Rotação em torno do ponto: ({float(self.get_x_rotate())}, {float(self.get_y_rotate())}) com {float(self.get_angle())} graus"
-                }
-            
-        elif self.tabWidget.currentIndex() == 2:  # Escalonamento
-            transform_data = {
-                "type": "scale",
-                "tx": self.get_x_scale(),
-                "ty": self.get_y_scale(),
-                "angle": None,
-                "text": f"Escalonamento no ponto: ({float(self.get_x_scale())}, {float(self.get_y_scale())})"
-            }
-
-
-        if transform_data is None:
-            self.controller.show_popup(
-                "Erro", "Selecione uma transformação válida.",
-                QtWidgets.QMessageBox.Icon.Critical
-            )
-            return None
-        else:
-            self.controller.display_transform.add(transform_data)
-            self.update_display()
-            return transform_data
+    def get_transform(self):
+        """Envia um dicionário com os dados da transformação."""
+        self.controller.append_transform( {
+            "type": self.tabWidget.currentIndex(),
+            "type_rotate": (
+                "rotate_origin" if self.rotate_origin_button.isChecked() else
+                "rotate_center" if self.rotate_center_button.isChecked() else
+                "rotate_point" if self.rotate_point_button.isChecked() else None
+            ),
+            "name": self.get_name(),
+            "x_translate": self.get_x_translate(),
+            "y_translate": self.get_y_translate(),
+            "x_scale": self.get_x_scale(),
+            "y_scale": self.get_y_scale(),
+            "angle": self.get_angle(),
+            "x_rotate": self.get_x_rotate(),
+            "y_rotate": self.get_y_rotate(),
+            "text": f"Transformação: {self.tabWidget.tabText(self.tabWidget.currentIndex())} "
+        } )
     
-    def confirm_transform_and_transform(self):
+    def confirm_transform(self):
         """Aplica as transformações."""
         self.controller.transform_object()
 
@@ -115,7 +73,7 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
         return self._parse_float(self.y_rotate.text())
 
     def get_name(self) -> str:
-        return self.name_ln.text().strip()
+        return self.controller.main_window.name_ln.text().strip()
 
     @staticmethod
     def _parse_float(value: str) -> float:
@@ -124,4 +82,3 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
             return float(value.strip())
         except ValueError:
             return 0.0  # Ou None, dependendo da lógica
-

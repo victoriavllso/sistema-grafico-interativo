@@ -129,6 +129,16 @@ class Controller:
             return
         zoom_function()
         self.main_window.update_viewport()
+
+    def append_transform(self, transform: dict):
+        """Adiciona uma transformação à lista de transformações a serem aplicadas."""
+        if not transform:
+            GUIUtils.show_popup("Erro", "Nenhuma transformação selecionada!", QMessageBox.Icon.Critical)
+            return
+
+        self.display_transform.add(transform)
+        self.transform_window.update_display()
+        self.main_window.update_viewport()
   
     def transform_object(self):
         """Aplica a transformação ao objeto selecionado."""
@@ -138,33 +148,31 @@ class Controller:
             GUIUtils.show_popup("Erro", "Nenhum objeto selecionado para transformar!", QMessageBox.Icon.Critical)
             return
 
+        transform_types = {0: "translate", 1: "rotate", 2: "scale"}
+        
         for transform in self.display_transform.get_all():
-            tr_type = transform.get("type")
-            tx = transform.get("tx")
-            ty = transform.get("ty")
-            angle = transform.get("angle")
-
-            if tr_type not in {"translate", "scale", "rotate_origin", "rotate_point", "rotate_center"}:
-                GUIUtils.show_popup("Erro", "Tipo de transformação inválido", QMessageBox.Icon.Critical)
-
-            if (tx is None or ty is None) and tr_type != "rotate_point":
-                GUIUtils.show_popup("Erro", "Valores de transformação inválidos", QMessageBox.Icon.Critical)
-                return
+            tr_type = transform_types.get(transform.get("type"))
 
             if tr_type == "translate":
-                self.transform.translate_object(selected_object, tx, ty)
-            
+                dx = transform.get("x_translate")
+                dy = transform.get("y_translate")
+                self.transform.translate_object(selected_object, dx, dy)
             elif tr_type == "scale":
-                self.transform.scale_object(selected_object, tx, ty)
-
-            elif tr_type == "rotate_origin":
-                self.transform.rotate_object(selected_object, angle, True)
-
-            elif tr_type == "rotate_point":
-                self.transform.rotate_object(selected_object, angle, True, int(tx), int(ty))
-
-            elif tr_type == "rotate_center":
-                self.transform.rotate_object(selected_object, angle, False)
+                sx = transform.get("x_scale")
+                sy = transform.get("y_scale")
+                self.transform.scale_object(selected_object, sx, sy)
+            elif tr_type == "rotate":
+                angle = transform.get("angle")
+                if transform.get("type_rotate") == "rotate_origin":
+                    self.transform.rotate_object(selected_object, angle)
+                elif transform.get("type_rotate") == "rotate_point":
+                    x = transform.get("x_rotate")
+                    y = transform.get("y_rotate")
+                    self.transform.rotate_object(selected_object, angle, x, y)
+                elif transform.get("type_rotate") == "rotate_center":
+                    x = selected_object.geometric_center()[0]
+                    y = selected_object.geometric_center()[1]
+                    self.transform.rotate_object(selected_object, angle, x, y)
 
         self.display_transform.clear()
         self.transform_window.update_display()
