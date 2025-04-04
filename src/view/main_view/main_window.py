@@ -4,6 +4,7 @@ from src.utils.utils import *
 from src.view.main_view.gui_main import Ui_main, QtWidgets
 from PyQt6.QtWidgets import QListWidget, QColorDialog
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPen
 
 class MainWindow(QtWidgets.QMainWindow, Ui_main):
     def __init__(self, controller):
@@ -30,8 +31,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.display.setMinimumWidth(200)
         self.layout().addWidget(self.display)
 
+        # desenha o subcanvas (borda)
+        self.update_viewport()
+
     # Connect signals to slots
     def initUI(self):
+        # colocando botões com desenho
+        self.up.setText("\u2191")
+        self.left.setText("\u2190")
+        self.down.setText("\u2193")
+        self.right.setText("\u2192")
+        self.z_in.setText("\u2795")
+        self.z_out.setText("\u2796")
+        self.button_turn_window_left.setText("\u2934")
+        self.button_turn_window_right.setText("\u2935")
         self.create_but.clicked.connect(self.create_object)
         self.delete_but.clicked.connect(self.delete_object)
         self.up.clicked.connect(lambda: self.controller.move_window("up"))
@@ -51,11 +64,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.controller.delete_object(obj_name)
     
     def update_viewport(self):
+
         self.canvas.fill(QColor("white"))
+
         if self.painter.isActive():
             self.painter.end()
+
         self.painter.begin(self.canvas)
+        self.draw_subcanvas()
         self.controller.draw_objects(self.painter)
+
         self.painter.end()
         self.vp.setPixmap(self.canvas)
         self.update_display()
@@ -72,3 +90,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
 
     def get_name(self):
         return self.name_ln.text().strip()
+
+    def draw_subcanvas(self):
+        margin_factor = 0.03
+
+        pen = QPen(QColor("red"))
+        pen.setWidth(LINE_THICKNESS)
+
+        margin_x = int(VP_X_MAX * margin_factor)
+        margin_y = int(VP_Y_MAX * margin_factor)
+
+        aux = self.vp.rect().adjusted(margin_x, margin_y, VP_X_MIN - 2 *margin_x, VP_Y_MIN-2 *margin_y)
+        
+        self.painter.setPen(pen)
+        self.painter.drawRect(aux)
+        
