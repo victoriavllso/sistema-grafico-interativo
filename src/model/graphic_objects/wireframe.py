@@ -6,20 +6,24 @@ from src.utils.utils import LINE_THICKNESS
 import numpy as np
 
 class Wireframe(GraphicObject):
-    def __init__(self, name, points: list[Point], color=Qt.GlobalColor.blue):
+    def __init__(self,window, name, points: list[Point], color=Qt.GlobalColor.blue):
         super().__init__(name, color)
         if not self._is_valid_polygon(points):
             raise ValueError("Invalid polygon: The given points do not form a valid shape.")
         self.points = points
         self.concave = self._is_concave()
+        self.window = window
 
-    def draw(self, painter, viewport, window) -> None:
+    def draw(self, painter, viewport) -> None:
         painter.setPen(QPen(self.color, LINE_THICKNESS))
         for i in range(len(self.points)):
             p1 = self.points[i]
             p2 = self.points[(i + 1) % len(self.points)]
-            p1 = viewport.transform(p1, window)
-            p2 = viewport.transform(p2, window)
+            p1.convert_coordinates()
+            p2.convert_coordinates()
+            p1 = viewport.transform(p1, self.window)
+            p2 = viewport.transform(p2, self.window)
+            print(f'Wireframe drawn from: {p1.x}, {p1.y} -> {p2.x}, {p2.y}')
             painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
 
     def _is_concave(self) -> bool:

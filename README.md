@@ -22,25 +22,14 @@ Para a segunda entrega do SGI, foram realizadas pequenas melhorias na interface 
 
 ## Novas funcionalidades
 
-Nesta etapa, o sistema gráfico incorpora as seguintes transformações 2D:  
 
-- **Translação**  
-- **Escalonamento** “natural” em torno do centro do objeto  
-- **Rotações**, que podem ocorrer em:  
-  - Torno do centro do mundo  
-  - Torno do centro do objeto  
-  - Torno de um ponto arbitrário  
-
-Essas funcionalidades estão demonstradas na figura abaixo:
 
 <div style="text-align: center;">
     <img src="./assets/transformwindow.png">
     <p style="font-style: italic; font-size: 12px;"></p>
 </div>
 
-Para aplicar uma transformação a um objeto, é necessário inserir seu nome na caixa **"Name"** da tela inicial e, em seguida, selecionar o botão **"Transform Object"**.  
 
-Além disso, foi adicionada a opção de selecionar uma cor para o objeto gráfico. Ao acionar o botão **"Set Color"**, a interface exibida abaixo será apresentada ao usuário.
 
 <div style="text-align: center;">
     <img src="./assets/colorwindow.png">
@@ -77,11 +66,11 @@ Coordenadas de exemplo para a criação de uma reta:
 
 
 ```
-(900,-600),(200,-600) 
+(900,600),(200,600) 
 ```
 
 Coordenadas de exemplo para a criação de um polígono:
 
  ```
-(100,-100), (200,-100), (200, -200), (100, -200)
+(100,100), (200,100), (200, 200), (100, 200)
  ```

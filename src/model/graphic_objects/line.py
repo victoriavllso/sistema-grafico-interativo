@@ -7,15 +7,22 @@ import numpy as np
 
 
 class Line(GraphicObject):
-    def __init__(self, name, point1: Point, point2: Point, color=Qt.GlobalColor.red):
+    def __init__(self,window, name, point1: Point, point2: Point, color=Qt.GlobalColor.red):
         super().__init__(name, color)
         self.points = [point1, point2]
+        self.window = window
 
-    def draw(self, painter, viewport, window):
+
+    def draw(self, painter, viewport):
         """Desenha a linha no viewport."""
         painter.setPen(QPen(self.color, LINE_THICKNESS))
-        transformed_p1 = viewport.transform(self.points[0], window)
-        transformed_p2 = viewport.transform(self.points[1], window)
+
+        for points in self.points:
+            points.convert_coordinates()
+
+        transformed_p1 = viewport.transform(self.points[0], self.window)
+        transformed_p2 = viewport.transform(self.points[1], self.window)
+        print(f'reta desenhada nos pontos: {transformed_p1.x}, {transformed_p1.y} -> {transformed_p2.x}, {transformed_p2.y}')
         painter.drawLine(int(transformed_p1.x), int(transformed_p1.y), int(transformed_p2.x), int(transformed_p2.y))
 
     def geometric_center(self) -> tuple[float, float]:

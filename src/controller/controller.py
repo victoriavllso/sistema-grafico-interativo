@@ -66,15 +66,15 @@ class Controller:
 
             if len(points) == 2 and all(isinstance(p, int) for p in points):
                 x, y = points[0], points[1]
-                obj = Point(name=name, x=x, y=y, color=color)
+                obj = Point(window=self.window, name=name, x=x, y=y, color=color)
             elif len(points) == 2 and all(isinstance(p, tuple) for p in points):
                 x1, y1, x2, y2 = points[0][0], points[0][1], points[1][0], points[1][1]
-                point0, point1 = Point(x=x1, y=y1), Point(x=x2, y=y2)
-                obj = Line(name=name, point1=point0, point2=point1, color=color)
+                point0, point1 = Point(window=self.window, x=x1, y=y1), Point(window=self.window,x=x2, y=y2)
+                obj = Line(window = self.window,name=name, point1=point0, point2=point1, color=color)
             elif len(points) > 2:
-                points = [Point(x=x, y=y) for x, y in points]
+                points = [Point(window=self.window,x=x, y=y) for x, y in points]
                 try:
-                    obj = Wireframe(name=name, points=points, color=color)
+                    obj = Wireframe(window = self.window,name=name, points=points, color=color)
                 except Exception:
                     GUIUtils.show_popup("Erro", "Wireframe inválido!", QMessageBox.Icon.Critical)
                     return
@@ -185,4 +185,22 @@ class Controller:
     def draw_objects(self, painter: QPainter) -> None:
         """Desenha os objetos na área de visualização."""
         for obj in self.display_file.get_all(): 
-            obj.draw(painter, self.viewport, self.window)
+            obj.draw(painter, self.viewport)
+    
+    def rotate_window(self, direction):
+        direction_actions = {
+            "left": self.window.rotate_window_left,
+            "right": self.window.rotate_window_right
+        }
+        rotate_function = direction_actions.get(direction)
+        if rotate_function is None:
+            return
+        angle = self.main_window.get_angle_rotation()
+
+        if angle is None:
+            GUIUtils.show_popup("Erro", "Ângulo inválido!", QMessageBox.Icon.Critical)
+            return
+
+        rotate_function(angle)
+        print(f"Rotating window chamado {direction}")
+        self.main_window.update_viewport()

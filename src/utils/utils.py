@@ -17,9 +17,9 @@ VP_Y_MAX = 670
 
 # Display File
 DF_X_MIN = 780
-DF_Y_MIN = 20
+DF_Y_MIN = 10
 DF_X_MAX = 260
-DF_Y_MAX = 200
+DF_Y_MAX = 100
 
 # Display Transform
 DT_X_MIN = 370

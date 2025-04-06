@@ -9,9 +9,12 @@ class Viewport:
         self.y_max = y_max
     
     def transform(self, point, window) -> Point:
-        x = (point.x - window.x_min) / (window.x_max - window.x_min) * (self.x_max - self.x_min)
-        y = (1 - (point.y - window.y_min)) / (window.y_max - window.y_min) * (self.y_max - self.y_min)
+        #x = (point.x - window.x_min) / (window.x_max - window.x_min) * (self.x_max - self.x_min)
+        #y = (1 - (point.y - window.y_min)) / (window.y_max - window.y_min) * (self.y_max - self.y_min)
+       
+        x = ((point.scn_x - -1)/(1- -1)) * (VP_X_MAX)
+        y = (1 - (point.scn_y - -1)/(1- -1)) * (VP_Y_MAX)
         name = point.name
         if name != "default":
-            return Point(x, y, name)
-        return Point(x, y)
+            return Point(window=window,x = x, y= y,name= name)
+        return Point(window = window, x = x,y =  y)

@@ -43,8 +43,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.right.setText("\u2192")
         self.z_in.setText("\u2795")
         self.z_out.setText("\u2796")
-        self.button_turn_window_left.setText("\u2934")
-        self.button_turn_window_right.setText("\u2935")
+        self.button_turn_window_left.setText("\u21b6")
+        self.button_turn_window_right.setText("\u21b7")
         self.create_but.clicked.connect(self.create_object)
         self.delete_but.clicked.connect(self.delete_object)
         self.up.clicked.connect(lambda: self.controller.move_window("up"))
@@ -55,7 +55,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.z_out.clicked.connect(lambda: self.controller.zoom("out"))
         self.transform_button.clicked.connect(lambda: self.controller.open_transform_window())
         self.color_button.clicked.connect(self.open_color_dialog)
-    
+        self.button_turn_window_left.clicked.connect(lambda: self.controller.rotate_window("left"))
+        self.button_turn_window_right.clicked.connect(lambda: self.controller.rotate_window("right"))
     def create_object(self):
         self.controller.create_object()
 
@@ -105,3 +106,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.painter.setPen(pen)
         self.painter.drawRect(aux)
         
+
+    def get_angle_rotation(self):
+        # converte o texto do campo de entrada para float
+        try:
+            angle = float(self.input_angle_window.text())
+        except ValueError:
+            return None
+        return angle

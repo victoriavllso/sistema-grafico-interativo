@@ -52,3 +52,11 @@ class Transform:
         ]
         for matrix in matrixs:
             obj.receive_transform(matrix)
+
+    def convert_scn(self, point, window) -> Point:
+        x = (point.scn_x - -1) / (1 - -1) * (window.x_max)
+        y =  (point.scn_y - -1) / (1 - -1) * (window.y_max)
+        name = point.name
+        if name != "default":
+            return Point(x, y, name)
+        return Point(x, y)
