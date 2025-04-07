@@ -464,7 +464,7 @@
      <x>0</x>
      <y>0</y>
      <width>1119</width>
-     <height>19</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
@@ -472,6 +472,7 @@
      <string>Options</string>
     </property>
     <addaction name="actionRestart"/>
+    <addaction name="actionObject_Files"/>
    </widget>
    <addaction name="menuOptions"/>
   </widget>
@@ -479,6 +480,11 @@
   <action name="actionRestart">
    <property name="text">
     <string>Restart</string>
+   </property>
+  </action>
+  <action name="actionObject_Files">
+   <property name="text">
+    <string>Object Files</string>
    </property>
   </action>
  </widget>

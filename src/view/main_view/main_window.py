@@ -45,8 +45,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.z_out.setText("\u2796")
         self.button_turn_window_left.setText("\u21b6")
         self.button_turn_window_right.setText("\u21b7")
-        self.create_but.clicked.connect(self.create_object)
-        self.delete_but.clicked.connect(self.delete_object)
+        self.create_but.clicked.connect(lambda: self.controller.create_object(name=self.get_name(), color=self.color, points_input=self.get_points_input()))
+        self.delete_but.clicked.connect(lambda: self.controller.delete_object(self.get_name()))
         self.up.clicked.connect(lambda: self.controller.move_window("up"))
         self.down.clicked.connect(lambda: self.controller.move_window("down"))
         self.left.clicked.connect(lambda: self.controller.move_window("left"))
@@ -57,13 +57,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.color_button.clicked.connect(self.open_color_dialog)
         self.button_turn_window_left.clicked.connect(lambda: self.controller.rotate_window("left"))
         self.button_turn_window_right.clicked.connect(lambda: self.controller.rotate_window("right"))
-    def create_object(self):
-        self.controller.create_object()
+        self.actionObject_Files.triggered.connect(lambda: self.controller.open_obj_window())
 
-    def delete_object(self):
-        obj_name = self.get_name()
-        self.controller.delete_object(obj_name)
-    
     def update_viewport(self):
 
         self.canvas.fill(QColor("white"))
@@ -105,7 +100,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         
         self.painter.setPen(pen)
         self.painter.drawRect(aux)
-        
 
     def get_angle_rotation(self):
         # converte o texto do campo de entrada para float
@@ -114,3 +108,31 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         except ValueError:
             return None
         return angle
+    
+
+    def get_selected_name_in_display(self):
+        """Retorna o nome do objeto selecionado na lista de exibição."""
+        selected_items = self.display.selectedItems()
+        if selected_items:
+            return selected_items[0].text()
+        return None
+    
+    def get_points_input(self):
+        """Retorna os pontos de entrada do usuário."""
+        return self.parse_coordinates(self.points_ln.text().strip())
+    
+    def get_name_display(self):
+        """Retorna o nome do objeto selecionado na lista de exibição."""
+        selected_items = self.display.selectedItems()
+        if selected_items:
+            return selected_items[0].text()
+        return None
+
+    @staticmethod
+    def parse_coordinates(input_text: str) -> list:
+        """Converte uma string de coordenadas em uma lista de pontos."""
+        try:
+            pontos = list(eval(input_text))
+            return pontos
+        except Exception:
+            return []

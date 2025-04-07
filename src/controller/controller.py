@@ -13,6 +13,13 @@ from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtGui import QPainter
 from src.model.display.display_transform import DisplayTransform
 from src.utils.gui_utils import GUIUtils
+from src.model.descritor_obj import DescritorOBJ
+from src.view.obj_view.obj_window import OBJDialog
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor
+
+
+
 
 class Controller:
     def __init__(self):
@@ -22,7 +29,9 @@ class Controller:
         self.viewport = Viewport()
         self.window = Window()
         self.transform_window = None
+        self.obj_window = None
         self.transform = Transform()
+        self.descritor_obj = DescritorOBJ()
         self.main_window = MainWindow(self)
         self.main_window.show()
 
@@ -35,55 +44,39 @@ class Controller:
         except Exception:
             return []
 
-    def create_object(self):
-        """Cria um objeto gráfico com base nas informações fornecidas pelo usuário."""
-        try:
-            points_input = self.main_window.points_ln.text().strip()
-            color = self.main_window.color
+    def create_object(self, points_input, color, name=None):
+        """Cria um objeto"""
+        if name in [obj.name for obj in self.display_file.get_all()]:
+            GUIUtils.show_popup("Erro", "Nome de objeto inválido: O nome do objeto já existe", QMessageBox.Icon.Critical)
+            return
 
-            if not points_input:
-                GUIUtils.show_popup("Erro", "Coordenadas inválidas", QMessageBox.Icon.Critical)
+        obj = None
+        if len(points_input) == 2 and all(isinstance(p, int) for p in points_input):
+            if name is None or name == "":
+                name = f"point_{self.display_file.get_object_count(Point) + 1}"
+            x, y = points_input[0], points_input[1]
+            obj = Point(window=self.window, name=name, x=x, y=y, color=color)
+        elif len(points_input) == 2 and all(isinstance(p, tuple) for p in points_input):
+            if name is None or name == "":
+                name = f"line_{self.display_file.get_object_count(Point) + 1}"
+            x1, y1, x2, y2 = points_input[0][0], points_input[0][1], points_input[1][0], points_input[1][1]
+            point0, point1 = Point(window=self.window, x=x1, y=y1), Point(window=self.window, x=x2, y=y2)
+            obj = Line(window=self.window, name=name, point1=point0, point2=point1, color=color)
+        elif len(points_input) > 2:
+            if name is None or name == "":
+                name = f"wireframe_{self.display_file.get_object_count(Wireframe) + 1}"
+            points_input = [Point(window=self.window, x=x, y=y) for x, y in points_input]
+            try:
+                obj = Wireframe(window=self.window,name=name, points=points_input, color=color)
+            except Exception:
+                GUIUtils.show_popup("Erro", "Wireframe inválido!", QMessageBox.Icon.Critical)
                 return
+        else:
+            GUIUtils.show_popup("Erro", "Entrada inválida!", QMessageBox.Icon.Critical)
+            return
 
-            name = self.main_window.name_ln.text()
-
-            if name in [obj.name for obj in self.display_file.get_all()]:
-                GUIUtils.show_popup("Erro", "Nome de objeto inválido: O nome do objeto já existe", QMessageBox.Icon.Critical)
-                return
-
-            points = self.parse_coordinates(points_input)
-
-            if points == []:
-                GUIUtils.show_popup("Erro", "Coordenadas inválidas", QMessageBox.Icon.Critical)
-                return
-            
-            if (len(points) > 2 or len(points) == 2) and all(isinstance(p, tuple) for p in points) and not name:
-                GUIUtils.show_popup("Erro", "Nome inválido: O nome do objeto não pode ser vazio", QMessageBox.Icon.Critical)
-                return
-
-            if len(points) == 2 and not name:
-                name = f"point_{self.display_file.get_num_points() + 1}"
-
-            if len(points) == 2 and all(isinstance(p, int) for p in points):
-                x, y = points[0], points[1]
-                obj = Point(window=self.window, name=name, x=x, y=y, color=color)
-            elif len(points) == 2 and all(isinstance(p, tuple) for p in points):
-                x1, y1, x2, y2 = points[0][0], points[0][1], points[1][0], points[1][1]
-                point0, point1 = Point(window=self.window, x=x1, y=y1), Point(window=self.window,x=x2, y=y2)
-                obj = Line(window = self.window,name=name, point1=point0, point2=point1, color=color)
-            elif len(points) > 2:
-                points = [Point(window=self.window,x=x, y=y) for x, y in points]
-                try:
-                    obj = Wireframe(window = self.window,name=name, points=points, color=color)
-                except Exception:
-                    GUIUtils.show_popup("Erro", "Wireframe inválido!", QMessageBox.Icon.Critical)
-                    return
-
-            self.display_file.add(obj)
-            self.main_window.update_viewport()
-
-        except ValueError as e:
-            GUIUtils.show_popup("Erro", str(e), QMessageBox.Icon.Critical)
+        self.display_file.add(obj)
+        self.main_window.update_viewport()
 
     def delete_object(self, obj_name):
         """Remove o objeto selecionado do arquivo de exibição."""
@@ -204,3 +197,36 @@ class Controller:
         rotate_function(angle)
         print(f"Rotating window chamado {direction}")
         self.main_window.update_viewport()
+
+    def open_obj_window(self):
+        self.obj_window = OBJDialog(self)
+        self.obj_window.show()
+
+    def import_obj(self):
+        file_name = self.obj_window.select_file()
+        if not file_name:
+            return
+        objs = self.descritor_obj.from_obj_file(file_name)
+        for obj in objs:
+            if obj["material"] is not None:
+                r, g, b = obj["material"]
+                color = QColor(int(r * 255), int(g * 255), int(b * 255))
+                self.create_object(points_input=obj["points"], color=color, name=obj["name"])
+            else:
+                self.create_object(points_input=obj["points"], color=Qt.GlobalColor.red, name=obj["name"])
+
+    def export_obj(self):
+        file_name = self.obj_window.select_file()
+        if not file_name:
+            return
+        try:
+            selected_objects = self.display_file.get_all()
+            if selected_objects == []:
+                GUIUtils.show_popup("Erro", "Nenhum objeto selecionado para exportar!", QMessageBox.Icon.Critical)
+                return
+            for selected_object in selected_objects:
+                self.descritor_obj.objString_file([selected_object], file_name)
+            GUIUtils.show_popup("Sucesso", "Arquivo exportado com sucesso!", QMessageBox.Icon.Information)
+        except Exception as e:
+            GUIUtils.show_popup("Erro", str(e), QMessageBox.Icon.Critical)
+            return

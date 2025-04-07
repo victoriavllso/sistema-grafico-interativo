@@ -96,3 +96,10 @@ class Wireframe(GraphicObject):
 
     def __str__(self):
         return f"{self.name}: Wireframe with {len(self.points)} points"
+
+    def get_points_obj(self):
+        points_str = "\n".join(f"v {p.x}, {p.y}" for p in self.points)
+        return f"{points_str}\n"
+    
+    def get_type_obj(self):
+        return 'w'

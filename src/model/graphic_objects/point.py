@@ -73,3 +73,9 @@ class Point(GraphicObject):
         x = result[0]
         y = result[1]
         return x, y
+    
+    def get_points_obj(self):
+        return f'v {self.x} {self.y} 0\n'
+    
+    def get_type_obj(self):
+        return 'p'

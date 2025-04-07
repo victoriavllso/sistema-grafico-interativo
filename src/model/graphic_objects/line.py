@@ -45,3 +45,9 @@ class Line(GraphicObject):
 
     def __str__(self):
         return f"Line({self.name}, {self.points[0]}, {self.points[1]}, color={self.color.name()})"
+
+    def get_points_obj(self):
+        return f'v {self.points[0].x}, {self.points[0].y} \nv {self.points[1].x}, {self.points[1].y} \n'
+    
+    def get_type_obj(self):
+        return 'l'
