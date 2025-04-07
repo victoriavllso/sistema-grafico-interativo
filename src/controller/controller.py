@@ -51,7 +51,7 @@ class Controller:
             return
 
         obj = None
-        if len(points_input) == 2 and all(isinstance(p, int) for p in points_input):
+        if len(points_input) == 2 and all(isinstance(p, int) for p in points_input) or all(isinstance(p, float) for p in points_input):
             if name is None or name == "":
                 name = f"point_{self.display_file.get_object_count(Point) + 1}"
             x, y = points_input[0], points_input[1]
@@ -72,7 +72,7 @@ class Controller:
                 GUIUtils.show_popup("Erro", "Wireframe inválido!", QMessageBox.Icon.Critical)
                 return
         else:
-            GUIUtils.show_popup("Erro", "Entrada inválida!", QMessageBox.Icon.Critical)
+            GUIUtils.show_popup("Erro", "Não foi possível criar o objeto", QMessageBox.Icon.Critical)
             return
 
         self.display_file.add(obj)
@@ -166,13 +166,14 @@ class Controller:
                     x = selected_object.geometric_center()[0]
                     y = selected_object.geometric_center()[1]
                     self.transform.rotate_object(selected_object, angle, x, y)
+                    
 
         self.display_transform.clear()
         self.transform_window.update_display()
         self.main_window.update_viewport()
 
     def get_object_from_display(self) -> object:
-        """Retorna o objeto selecionado na lista de exibição."""
+        """Retorna o objeto selecionado pelo nome."""
         return self.display_file.get_object(self.main_window.get_name())
 
     def draw_objects(self, painter: QPainter) -> None:
@@ -181,6 +182,7 @@ class Controller:
             obj.draw(painter, self.viewport)
     
     def rotate_window(self, direction):
+        """Rotaciona a janela de visualização na direção especificada."""
         direction_actions = {
             "left": self.window.rotate_window_left,
             "right": self.window.rotate_window_right
@@ -199,21 +201,31 @@ class Controller:
         self.main_window.update_viewport()
 
     def open_obj_window(self):
+        """Abre a janela de importação/exportação de arquivos OBJ."""
         self.obj_window = OBJDialog(self)
         self.obj_window.show()
 
     def import_obj(self):
+        """Importa um arquivo OBJ e adiciona os objetos à exibição."""
         file_name = self.obj_window.select_file()
         if not file_name:
             return
         objs = self.descritor_obj.from_obj_file(file_name)
         for obj in objs:
+
             if obj["material"] is not None:
                 r, g, b = obj["material"]
-                color = QColor(int(r * 255), int(g * 255), int(b * 255))
-                self.create_object(points_input=obj["points"], color=color, name=obj["name"])
+                obj["material"] = QColor(int(r * 255), int(g * 255), int(b * 255))
             else:
-                self.create_object(points_input=obj["points"], color=Qt.GlobalColor.red, name=obj["name"])
+                obj["material"] = QColor(255, 0, 0)
+
+            if obj["name"] is None or obj["name"] == "":
+                dic = {
+                    "p": Point,
+                    "l": Wireframe}
+                obj["name"] = f"{obj['type']}_{self.display_file.get_object_count(dic[obj['type']]) + 1}"
+
+            self.create_object(points_input=obj["points"], color=obj["material"], name=obj["name"])
 
     def export_obj(self):
         file_name = self.obj_window.select_file()
@@ -230,3 +242,4 @@ class Controller:
         except Exception as e:
             GUIUtils.show_popup("Erro", str(e), QMessageBox.Icon.Critical)
             return
+

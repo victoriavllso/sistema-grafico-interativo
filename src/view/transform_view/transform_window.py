@@ -10,7 +10,7 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
         self.setupUi(self)
         self.initUI()
         self.controller = controller
-        
+
         self.display = QListWidget(self)
         self.display.setGeometry(DT_X_MIN, DT_Y_MIN, DT_X_MAX, DT_Y_MAX)
 

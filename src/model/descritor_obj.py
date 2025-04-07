@@ -42,17 +42,20 @@ class DescritorOBJ:
                     _, current_material = line.split()
                     if current_material in materials:
                         current_material = materials[current_material]['color']
-                elif line[0] in ['w', 'l', 'f', 'l']:
+                elif line[0] in ['w', 'l', 'f', 'p']:
                     tokens = line.split()
                     current_type = tokens[0]
                     indices = list(map(int, tokens[1:]))
                     current_points = [points[i] for i in indices]
+                    if len(current_points) == 1:
+                        current_points = current_points[0]
                     current_object = {
                         "name": current_name,
                         "type": current_type,
                         "points": current_points,
                         "material": current_material
                     }
+                    print(f"Object: {current_object}, Type: {current_type}, Points: {current_points}, Material: {current_material}")
                     objects.append(current_object)
                     current_object = None
                     current_type = None

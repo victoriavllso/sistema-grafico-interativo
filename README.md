@@ -13,7 +13,7 @@ Para a segunda entrega do SGI, foram realizadas pequenas melhorias na interface 
 
 
 <div style="text-align: center;">
-    <img src="./assets/novamain.png">
+    <img src="./assets/images/novamain.png">
     <p style="font-style: italic; font-size: 12px;"></p>
 </div>
 
@@ -25,14 +25,14 @@ Para a segunda entrega do SGI, foram realizadas pequenas melhorias na interface 
 
 
 <div style="text-align: center;">
-    <img src="./assets/transformwindow.png">
+    <img src="./assets/images/transformwindow.png">
     <p style="font-style: italic; font-size: 12px;"></p>
 </div>
 
 
 
 <div style="text-align: center;">
-    <img src="./assets/colorwindow.png">
+    <img src="./assets/images/colorwindow.png">
     <p style="font-style: italic; font-size: 12px;"></p>
 </div>
 
