@@ -32,8 +32,10 @@ class GraphicObject(ABC):
 		return
 
 	def get_name_obj(self):
+		"""Retorna o nome para .obj"""
 		return f'o {self.name}'
 	
 	def get_color_obj(self):
+		"""Retorna a cor para .obj"""
 		qcolor = QColor(self.color)
 		return (qcolor.red(), qcolor.green(), qcolor.blue())

@@ -7,6 +7,7 @@ from PyQt6.QtGui import QColor
 class DescritorOBJ:
     @staticmethod
     def from_obj_file(filename) -> list:
+        """Lê um arquivo .obj e retorna uma lista de objetos gráficos."""
         with open(filename, 'r') as file:
             lines = file.readlines()
             objects = []
@@ -44,7 +45,7 @@ class DescritorOBJ:
                     _, current_material = line.split()
                     if current_material in materials:
                         current_material = materials[current_material]['color']
-                elif line[0] in ['w', 'l', 'f', 'p']:
+                elif line and line[0] in ['w', 'l', 'f', 'p']:
                     tokens = line.split()
                     current_type = tokens[0]
                     indices = list(map(int, tokens[1:]))
@@ -57,7 +58,6 @@ class DescritorOBJ:
                         "points": current_points,
                         "material": current_material
                     }
-                    print(f"Object: {current_object}, Type: {current_type}, Points: {current_points}, Material: {current_material}")
                     objects.append(current_object)
                     current_object = None
                     current_type = None
@@ -127,6 +127,7 @@ class DescritorOBJ:
     
     @staticmethod
     def write_material_library(mtl_path, materials):
+        """Escreve uma biblioteca de materiais .mtl a partir de um dicionário de materiais."""
         with open(mtl_path, 'w') as mtl_file:
             for name, color in materials.items():
                 qcolor = QColor(color)  # Isso aceita tanto Qt.GlobalColor quanto QColor

@@ -8,21 +8,26 @@ class Display(ABC):
         self.y_max = y_max
         self.list = []
     
-    def add(self, object) -> None:
+    def add(self, object:object) -> None:
+        """Add an object to the display list"""
         self.list.append(object)
 
     def remove(self, name: str) -> None:
+        """Remove an object from the display list by name"""
         for obj in self.list:
             if obj.name == name:
                 self.list.remove(obj)
     
     def get_all(self) -> list:
+        """Get all objects in the display list"""
         return self.list
 
     def get_object(self, name: str) -> object:
+        """Get an object from the display list by name"""
         for obj in self.list:
             if obj.name == name:
                 return obj
             
     def clear(self) -> None:
-            self.list.clear()
+        """Clear the display list"""
+        self.list.clear()

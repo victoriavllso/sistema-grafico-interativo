@@ -20,7 +20,6 @@ class Point(GraphicObject):
         transformed_point = viewport.transform(self, self.window)
         x, y = int(transformed_point.x), int(transformed_point.y)
         painter.setPen(QPen(self.color, POINT_THICKNESS))
-        print(f"DRAWING POINT AT: ({x}, {y})")
 
         painter.drawPoint(x, y)
 

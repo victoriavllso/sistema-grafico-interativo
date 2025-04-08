@@ -21,6 +21,7 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
     
     def get_transform(self):
         """Envia um dicionário com os dados da transformação."""
+        text = self.generate_text()
         self.controller.append_transform( {
             "type": self.tabWidget.currentIndex(),
             "type_rotate": (
@@ -36,7 +37,7 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
             "angle": self.get_angle(),
             "x_rotate": self.get_x_rotate(),
             "y_rotate": self.get_y_rotate(),
-            "text": f"Transformação: {self.tabWidget.tabText(self.tabWidget.currentIndex())} "
+            "text": text
         } )
     
     def confirm_transform(self):
@@ -50,7 +51,23 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
         for transform in self.controller.display_transform.get_all():
             self.display.addItem(transform["text"])
         self.display.show()
-    
+
+    def generate_text(self) -> str:
+        """Gera o texto da transformação."""
+        transform_text = ""
+        if self.tabWidget.currentIndex() == 0:
+            transform_text += f"Translação: ({self.get_x_translate()}, {self.get_y_translate()})"
+        elif self.tabWidget.currentIndex() == 1:
+            if self.rotate_origin_button.isChecked():
+                transform_text += f"Rotação em torno da origem em {self.get_angle()} graus"
+            elif self.rotate_center_button.isChecked():
+                transform_text += f"Rotação em torno do ponto ({self.get_x_rotate()}, {self.get_y_rotate()}) em {self.get_angle()} graus"
+            elif self.rotate_point_button.isChecked():
+                transform_text += f"Rotação em torno do centro do objeto em {self.get_angle()} graus"
+        elif self.tabWidget.currentIndex() == 2:
+            transform_text += f"Escalonamento: ({self.get_x_scale()},{self.get_y_scale()})"
+        return transform_text
+
     def get_x_translate(self) -> float:
         return self._parse_float(self.x_translate.text())
 

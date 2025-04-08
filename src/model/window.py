@@ -7,6 +7,7 @@ class Window:
         self.y_min = y_min        
         self.y_max = y_max
         self.direction = (0,1) # x = 0, y = 1
+
         """
         Antes da rotação:
         ↑   (viewup = (0, 1))
@@ -18,64 +19,68 @@ class Window:
         ←   (viewup = (-1, 0))
         """
 
-    def up(self, step = STEP):
+    def up(self, step:int = STEP) -> None:
+        """Move the window up by a given step size."""
         self.y_min += step
         self.y_max += step
     
-    def down(self, step = STEP):
+    def down(self, step:int = STEP) -> None:
+        """Move the window down by a given step size."""
         self.y_min -= step
         self.y_max -= step
     
-    def left(self, step = STEP):
+    def left(self, step:int = STEP) -> None:
+        """Move the window left by a given step size."""
         self.x_min -= step
         self.x_max -= step
 
-    def right(self, step = STEP):
+    def right(self, step:int = STEP) -> None:
+        """Move the window right by a given step size."""
         self.x_min += step
         self.x_max += step
 
-    def z_in(self, percentage = PERCENTAGE):
+    def z_in(self, percentage:int = PERCENTAGE) -> None:
+        """Zoom in the window by a given percentage."""
         self.x_min /= percentage/100 + 1
         self.x_max /= percentage/100 + 1
         self.y_min /= percentage/100 + 1
         self.y_max /= percentage/100 + 1
 
-    def z_out(self, percentage = PERCENTAGE):
+    def z_out(self, percentage:int = PERCENTAGE) -> None:
+        """Zoom out the window by a given percentage."""
         self.x_min *= percentage/100 + 1
         self.x_max *= percentage/100 + 1
         self.y_min *= percentage/100 + 1
         self.y_max *= percentage/100 + 1
 
-    def get_center(self):
+    def get_center(self) -> tuple:
+        """Calculate the center of the window."""
         return self.x_min, self.y_min
 
-    def transform_vector(self, actual_direction, rotarion_matrix):
+    def transform_vector(self, actual_direction:np.ndarray, rotarion_matrix:np.ndarray) -> np.ndarray:
+        """Transform the direction vector using a rotation matrix."""
         aux = actual_direction/ np.linalg.norm(actual_direction)
         result = np.dot(rotarion_matrix, aux)
         return result
 
-    def rotate_window_left(self, angle): # inserir campo para o angulo de rotação da window
-        angle *= -1 # gira no sentido anti horário
-
+    def rotate_window_left(self, angle:int) -> None:
+        """Rotate the window to the left by a given angle."""
+        angle *= -1
         actual_direction = np.array(self.direction)
-
         radians = angle * np.pi / 180
-
         cos = np.cos(radians)
         sin = np.sin(radians)
         rotation_matrix = [[cos, -sin], 
                            [sin, cos]]
-
         rotate = self.transform_vector(actual_direction, rotation_matrix)
         self.direction = (rotate[0], rotate[1])
 
-    def rotate_window_right(self, angle): 
+    def rotate_window_right(self, angle:int) -> None:
+        """Rotate the window to the right by a given angle.""" 
         actual_direction = np.array(self.direction)
-
         radians = angle * np.pi / 180
         cos = np.cos(radians)
         sin = np.sin(radians)
-
         rotation_matrix = [[cos, -sin], 
                            [sin, cos]]
         rotate = self.transform_vector(actual_direction, rotation_matrix)

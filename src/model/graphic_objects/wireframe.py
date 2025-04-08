@@ -23,7 +23,6 @@ class Wireframe(GraphicObject):
             p2.convert_coordinates()
             p1 = viewport.transform(p1, self.window)
             p2 = viewport.transform(p2, self.window)
-            print(f'Wireframe drawn from: {p1.x}, {p1.y} -> {p2.x}, {p2.y}')
             painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
 
     def _is_concave(self) -> bool:
