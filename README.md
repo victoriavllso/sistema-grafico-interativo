@@ -12,7 +12,7 @@ INE5420-05208 (20251) - Computação Gráfica
 Para a terceira entrega do SGI, foram implementadas duas novas funcionalidades. A rotação da window por meio do uso do sistema de coordenadas normalizadas (SCN), e um módulo de manipulação de arquivos .obj, que pode importar e exportar mundos .obj através da leitura e geração automática de arquivos .mtl para estilização
 
 
-## ela principal com nova funcionalidade
+## Tela principal com nova funcionalidade
 <!-- TODO: Atualizar imagem da nova interface -->
 
 <div style="text-align: center;">
@@ -22,6 +22,18 @@ Para a terceira entrega do SGI, foram implementadas duas novas funcionalidades. 
 
 
 ## Novas funcionalidades
+
+### Rotação da window
+
+Para realizar a rotação da window, basta inserir o angulo de rotação desejado e clicar no botão correspondente a direção desejada.
+
+
+<div style="text-align: center;">
+    <img src="./assets/images/rotatewin.png">
+    <p style="font-style: italic; font-size: 12px;"></p>
+</div>
+
+
 
 <div style="text-align: center;">
     <img src="./assets/images/manipulador_obj.png">
