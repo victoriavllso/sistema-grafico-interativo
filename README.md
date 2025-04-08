@@ -9,10 +9,10 @@ INE5420-05208 (20251) - Computação Gráfica
 
 ## Mudanças efetuadas
 
-Para a terceira entrega do SGI, foram implementadas duas novas funcionalidades. A rotação de tela por meio do uso de coordenadas normalizadas, e um módulo de manipulação de arquivos .obj, que podem importar e exportar mundos .obj com leitura e geração automática de arquivos .mtl para estilização
+Para a terceira entrega do SGI, foram implementadas duas novas funcionalidades. A rotação da window por meio do uso do sistema de coordenadas normalizadas (SCN), e um módulo de manipulação de arquivos .obj, que pode importar e exportar mundos .obj através da leitura e geração automática de arquivos .mtl para estilização
 
 
-## Nova tela principal com nova funcionalidade
+## ela principal com nova funcionalidade
 <!-- TODO: Atualizar imagem da nova interface -->
 
 <div style="text-align: center;">

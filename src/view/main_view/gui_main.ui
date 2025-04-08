@@ -299,9 +299,9 @@
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>770</x>
-      <y>340</y>
-      <width>271</width>
+      <x>760</x>
+      <y>370</y>
+      <width>281</width>
       <height>101</height>
      </rect>
     </property>
@@ -382,9 +382,9 @@
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
      <rect>
-      <x>770</x>
-      <y>140</y>
-      <width>271</width>
+      <x>760</x>
+      <y>180</y>
+      <width>281</width>
       <height>181</height>
      </rect>
     </property>
@@ -464,7 +464,7 @@
      <x>0</x>
      <y>0</y>
      <width>1119</width>
-     <height>24</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
