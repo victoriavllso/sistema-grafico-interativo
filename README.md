@@ -9,8 +9,11 @@ INE5420-05208 (20251) - Computação Gráfica
 
 ## Mudanças efetuadas
 
-Para a segunda entrega do SGI, foram realizadas pequenas melhorias na interface gráfica, conforme ilustrado na imagem abaixo. Entre as alterações, além da atualização das cores, foi adicionada uma barra de rolagem para facilitar a navegação no display.
+Para a terceira entrega do SGI, foram implementadas duas novas funcionalidades. A rotação de tela por meio do uso de coordenadas normalizadas, e um módulo de manipulação de arquivos .obj, que podem importar e exportar mundos .obj com leitura e geração automática de arquivos .mtl para estilização
 
+
+## Nova tela principal com nova funcionalidade
+<!-- TODO: Atualizar imagem da nova interface -->
 
 <div style="text-align: center;">
     <img src="./assets/images/novamain.png">
@@ -18,23 +21,13 @@ Para a segunda entrega do SGI, foram realizadas pequenas melhorias na interface 
 </div>
 
 
-
-
 ## Novas funcionalidades
 
-
-
 <div style="text-align: center;">
-    <img src="./assets/images/transformwindow.png">
+    <img src="./assets/images/manipulador_obj.png">
     <p style="font-style: italic; font-size: 12px;"></p>
 </div>
 
-
-
-<div style="text-align: center;">
-    <img src="./assets/images/colorwindow.png">
-    <p style="font-style: italic; font-size: 12px;"></p>
-</div>
 
 ## Instalação de dependências 
 
@@ -53,14 +46,13 @@ make
 ```
 
 
-
 ## Exemplos de entrada
 
 
 
 Coordenadas de exemplo para a criação de um ponto:
  ```
- (500,-500)
+ (500,500)
  ```
 Coordenadas de exemplo para a criação de uma reta:
 
