@@ -352,23 +352,36 @@
     <string notr="true">background-color: rgb(86, 43, 0);</string>
    </property>
    <property name="orientation">
-    <enum>Qt::Horizontal</enum>
+    <enum>Qt::Orientation::Horizontal</enum>
    </property>
    <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+    <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
    </property>
   </widget>
   <widget class="QPushButton" name="add_transform_button">
    <property name="geometry">
     <rect>
      <x>390</x>
-     <y>30</y>
+     <y>50</y>
      <width>161</width>
-     <height>41</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>add transformations</string>
+    <string>add transformation</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="add_transform_button_2">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>20</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>remove transformation</string>
    </property>
   </widget>
  </widget>

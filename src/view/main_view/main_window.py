@@ -46,7 +46,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.button_turn_window_left.setText("\u21b6")
         self.button_turn_window_right.setText("\u21b7")
         self.create_but.clicked.connect(lambda: self.controller.create_object(name=self.get_name(), color=self.color, points_input=self.get_points_input()))
-        self.delete_but.clicked.connect(lambda: self.controller.delete_object(self.get_name()))
+        self.delete_but.clicked.connect(lambda: self.controller.delete_object(self.get_selected_name_in_display()))
         self.up.clicked.connect(lambda: self.controller.move_window("up"))
         self.down.clicked.connect(lambda: self.controller.move_window("down"))
         self.left.clicked.connect(lambda: self.controller.move_window("left"))
@@ -59,7 +59,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.button_turn_window_right.clicked.connect(lambda: self.controller.rotate_window("right"))
         self.actionObject_Files.triggered.connect(lambda: self.controller.open_obj_window())
 
-    def update_viewport(self):
+    def update_viewport(self) -> None:
+        """Atualiza a área de visualização."""
 
         self.canvas.fill(QColor("white"))
 
@@ -74,20 +75,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.vp.setPixmap(self.canvas)
         self.update_display()
 
-    def update_display(self):
+    def update_display(self) -> None:
+        """Atualiza a lista de exibição com os objetos atuais."""
         self.display.clear()
         self.display.addItem("Objetos: \n")
         for obj in self.controller.display_file.get_all():
             self.display.addItem(f"{obj.name} - {obj.__class__.__name__}")
         self.display.show()
 
-    def open_color_dialog(self):
+    def open_color_dialog(self) -> None:
+        """Abre o diálogo de seleção de cor."""
         self.color = QColorDialog.getColor()
 
-    def get_name(self):
+    def get_name(self) -> str:
+        """Retorna o nome que o usuário deu de entrada."""
         return self.name_ln.text().strip()
 
-    def draw_subcanvas(self):
+    def draw_subcanvas(self) -> None:
+        """Desenha o subcanvas (borda) na área de visualização."""
         margin_factor = 0.03
 
         pen = QPen(QColor("red"))
@@ -101,32 +106,27 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.painter.setPen(pen)
         self.painter.drawRect(aux)
 
-    def get_angle_rotation(self):
-        # converte o texto do campo de entrada para float
+    def get_angle_rotation(self) -> float:
+        """Retorna o ângulo de rotação do campo de entrada."""
         try:
             angle = float(self.input_angle_window.text())
         except ValueError:
             return None
         return angle
     
-
-    def get_selected_name_in_display(self):
+    def get_selected_name_in_display(self) -> str:
         """Retorna o nome do objeto selecionado na lista de exibição."""
         selected_items = self.display.selectedItems()
         if selected_items:
-            return selected_items[0].text()
+            full_text = selected_items[0].text()
+            name_part = full_text.split(' - ')[0]
+            print(name_part)
+            return name_part
         return None
     
-    def get_points_input(self):
+    def get_points_input(self) -> list:
         """Retorna os pontos de entrada do usuário."""
         return self.parse_coordinates(self.points_ln.text().strip())
-    
-    def get_name_display(self):
-        """Retorna o nome do objeto selecionado na lista de exibição."""
-        selected_items = self.display.selectedItems()
-        if selected_items:
-            return selected_items[0].text()
-        return None
 
     @staticmethod
     def parse_coordinates(input_text: str) -> list:
