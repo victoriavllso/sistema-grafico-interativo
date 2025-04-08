@@ -2,6 +2,8 @@ from src.model.graphic_objects.point import Point
 from src.model.graphic_objects.line import Line
 from src.model.graphic_objects.wireframe import Wireframe
 
+from PyQt6.QtGui import QColor
+
 class DescritorOBJ:
     @staticmethod
     def from_obj_file(filename) -> list:
@@ -66,59 +68,41 @@ class DescritorOBJ:
 
     @staticmethod
     def objString_file(objects, filename) -> None:
-        """Escreve uma lista de objetos em um arquivo .obj."""
+        """Escreve uma lista de objetos em um arquivo .obj e gera um .mtl associado."""
+        import os
+        base_name = os.path.splitext(os.path.basename(filename))[0]
+        mtl_name = f"{base_name}.mtl"
+        mtl_path = os.path.join(os.path.dirname(filename), mtl_name)
+
         with open(filename, 'w') as file:
             file.write("# Exported .obj file\n")
+            file.write(f"mtllib {mtl_name}\n\n")
 
-            vertex_list = []
-            index_map = {}  # Map: object -> index in vertex_list
-            current_index = 1  # OBJ indices start at 1
-
-            # Categorizar os objetos por tipo
-            pontos = []
-            retas = []
-            wireframes = []
-
+            materials = {}
+            points = {}
             for obj in objects:
                 if isinstance(obj, Point):
-                    pontos.append(obj)
+                    points[(obj.x, obj.y)] = len(points) + 1
                 elif isinstance(obj, Line):
-                    retas.append(obj)
+                    points[(obj.x1(), obj.y1())] = len(points) + 1
+                    points[(obj.x2(), obj.y2())] = len(points) + 1
                 elif isinstance(obj, Wireframe):
-                    wireframes.append(obj)
-
-            # Escreve os pontos
-            if pontos:
-                for p in pontos:
-                    file.write(f"v {p.x} {p.y} 0.0\n")
-                    index_map[p] = current_index
-                    file.write(f"l {current_index}\n")
-                    current_index += 1
-
-            # Escreve as retas
-            if retas:
-                for r in retas:
-                    p1, p2 = r.points[0], r.points[1]
-                    for p in (p1, p2):
-                        if p not in index_map:
-                            file.write(f"v {p.x} {p.y} 0.0\n")
-                            index_map[p] = current_index
-                            current_index += 1
-                    i1 = index_map[p1]
-                    i2 = index_map[p2]
-                    file.write(f"l {i1} {i2}\n")
-
-            # Escreve os wireframes
-            if wireframes:
-                for wf in wireframes:
-                    indices = []
-                    for p in wf.points:
-                        if p not in index_map:
-                            file.write(f"v {p.x} {p.y} 0.0\n")
-                            index_map[p] = current_index
-                            current_index += 1
-                        indices.append(index_map[p])
-                    file.write("l " + " ".join(map(str, indices)) + "\n")
+                    for point in obj.points:
+                        points[(point.x, point.y)] = len(points) + 1
+                materials[obj.name] = obj.color
+            for point, index in points.items():
+                file.write(f"v {point[0]} {point[1]} 0\n")
+            file.write("\n")
+            DescritorOBJ.write_material_library(mtl_path, materials)
+            for obj in objects:
+                file.write(f"o {obj.name}\n")
+                file.write(f"usemtl {obj.name}\n")
+                if isinstance(obj, Point):
+                    file.write(f"p {points[(obj.x, obj.y)]}\n")
+                elif isinstance(obj, Line):
+                    file.write(f"l {points[(obj.x1(), obj.y1())]} {points[(obj.x2(), obj.y2())]}\n")
+                elif isinstance(obj, Wireframe):
+                    file.write(f"l {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
 
     @staticmethod
     def read_material_library(lib_name):
@@ -141,16 +125,11 @@ class DescritorOBJ:
                         materials[current_material]['color'] = (float(r), float(g), float(b))
         return materials
     
-    def write_material_library(lib_name, materials):
-        """Escreve uma biblioteca de materiais .mtl."""
-        with open(lib_name, 'w') as file:
-            for material_name, properties in materials.items():
-                file.write(f"newmtl {material_name}\n")
-                if 'color' in properties:
-                    r, g, b = properties['color']
-                    file.write(f"Kd {r} {g} {b}\n")
-                if 'texture' in properties:
-                    file.write(f"map_Kd {properties['texture']}\n")
-        file.write("\n")
-        file.write(f"# End of material library {lib_name}\n")
-
+    @staticmethod
+    def write_material_library(mtl_path, materials):
+        with open(mtl_path, 'w') as mtl_file:
+            for name, color in materials.items():
+                qcolor = QColor(color)  # Isso aceita tanto Qt.GlobalColor quanto QColor
+                r, g, b = qcolor.redF(), qcolor.greenF(), qcolor.blueF()
+                mtl_file.write(f"newmtl {name}\n")
+                mtl_file.write(f"Kd {r:.4f} {g:.4f} {b:.4f}\n\n")  # Difuse color

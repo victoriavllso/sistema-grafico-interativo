@@ -12,6 +12,18 @@ class Line(GraphicObject):
         self.points = [point1, point2]
         self.window = window
 
+    def x1(self):
+        return self.points[0].x
+    
+    def y1(self):
+        return self.points[0].y
+    
+    def x2(self):
+        return self.points[1].x
+    
+    def y2(self):
+        return self.points[1].y
+
 
     def draw(self, painter, viewport):
         """Desenha a linha no viewport."""

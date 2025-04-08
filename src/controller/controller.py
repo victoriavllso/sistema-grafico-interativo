@@ -236,8 +236,7 @@ class Controller:
             if selected_objects == []:
                 GUIUtils.show_popup("Erro", "Nenhum objeto selecionado para exportar!", QMessageBox.Icon.Critical)
                 return
-            for selected_object in selected_objects:
-                self.descritor_obj.objString_file([selected_object], file_name)
+            self.descritor_obj.objString_file(selected_objects, file_name)
             GUIUtils.show_popup("Sucesso", "Arquivo exportado com sucesso!", QMessageBox.Icon.Information)
         except Exception as e:
             GUIUtils.show_popup("Erro", str(e), QMessageBox.Icon.Critical)

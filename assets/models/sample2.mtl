@@ -1,0 +1,12 @@
+newmtl window
+Kd 1.0000 0.0000 0.0000
+
+newmtl meu_ponto
+Kd 1.0000 0.0000 0.0000
+
+newmtl minha_linha
+Kd 1.0000 0.0000 0.0000
+
+newmtl triangulo
+Kd 0.8000 0.8000 0.8000
+

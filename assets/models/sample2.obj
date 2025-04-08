@@ -1,6 +1,22 @@
 # Exported .obj file
-v 0 0 0.0
-v 0 200 0.0
-v 200 200 0.0
-v 200 0 0.0
-l 1 2 3 4
+mtllib sample2.mtl
+
+v 0.0 0.0 0
+v 50.0 50.0 0
+v 1.0 1.0 0
+v -10.0 0.0 0
+v 10.0 0.0 0
+v -10.0 20.0 0
+
+o window
+usemtl window
+l 3 4
+o meu_ponto
+usemtl meu_ponto
+p 3
+o minha_linha
+usemtl minha_linha
+l 3 4
+o triangulo
+usemtl triangulo
+l 4 5 6
