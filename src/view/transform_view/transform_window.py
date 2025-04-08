@@ -18,6 +18,7 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
         self.ok_cancel_transform.accepted.connect(self.confirm_transform)
         self.ok_cancel_transform.rejected.connect(self.reject)
         self.add_transform_button.clicked.connect(self.get_transform)
+        self.add_transform_button_2.clicked.connect(lambda: self.controller.delete_transform())
     
     def get_transform(self):
         """Envia um dicionário com os dados da transformação."""
@@ -91,6 +92,13 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
 
     def get_name(self) -> str:
         return self.controller.main_window.name_ln.text().strip()
+    
+    def get_selected_in_display(self) -> str:
+        "Retorna a transformada selecionada no display"
+        selected_items = self.display.selectedItems()
+        if selected_items:
+            return selected_items[0].text()
+        return None
 
     @staticmethod
     def _parse_float(value: str) -> float:

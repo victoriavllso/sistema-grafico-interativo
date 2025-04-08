@@ -12,11 +12,9 @@ class Display(ABC):
         """Add an object to the display list"""
         self.list.append(object)
 
+    @abstractmethod
     def remove(self, name: str) -> None:
-        """Remove an object from the display list by name"""
-        for obj in self.list:
-            if obj.name == name:
-                self.list.remove(obj)
+        pass
     
     def get_all(self) -> list:
         """Get all objects in the display list"""

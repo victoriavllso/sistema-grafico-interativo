@@ -110,6 +110,11 @@ class Controller:
         self.display_transform.add(transform)
         self.transform_window.update_display()
         self.main_window.update_viewport()
+
+    def delete_transform(self):
+        """Remove a transformada selecionada no display"""
+        self.display_transform.remove(self.transform_window.get_selected_in_display())
+        self.transform_window.update_display()
   
     def transform_object(self) -> None:
         """Aplica a transformação ao objeto selecionado."""

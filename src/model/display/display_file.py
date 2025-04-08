@@ -14,3 +14,9 @@ class DisplayFile(Display):
             if isinstance(obj, object_type):
                 count += 1
         return count
+    
+    def remove(self, name: str) -> None:
+        """Remove an object from the display list by name"""
+        for obj in self.list:
+            if obj.name == name:
+                self.list.remove(obj)
