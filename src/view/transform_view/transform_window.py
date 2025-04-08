@@ -5,11 +5,12 @@ from PyQt6.QtCore import Qt
 
 
 class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
-    def __init__(self, controller):
+    def __init__(self, controller, object):
         super().__init__()
         self.setupUi(self)
         self.initUI()
         self.controller = controller
+        self.object = object
 
         self.display = QListWidget(self)
         self.display.setGeometry(DT_X_MIN, DT_Y_MIN, DT_X_MAX, DT_Y_MAX)
@@ -43,7 +44,7 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
     
     def confirm_transform(self):
         """Aplica as transformações."""
-        self.controller.transform_object()
+        self.controller.transform_object(self.object)
 
     def update_display(self):
         """Atualiza o display de transformações."""

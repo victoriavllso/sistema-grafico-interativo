@@ -85,7 +85,7 @@ class Controller:
 
     def get_object_from_display(self) -> object:
         """Retorna o objeto selecionado pelo nome."""
-        return self.display_file.get_object(self.main_window.get_name())
+        return self.display_file.get_object(self.main_window.get_selected_name_in_display())
 
     #---------- Métodos de Transformação ----------#
 
@@ -96,8 +96,8 @@ class Controller:
         if selected_object is None:
             GUIUtils.show_popup("Erro", "Nenhum objeto selecionado!", QMessageBox.Icon.Critical)
             return
-        if self.transform_window is None:
-            self.transform_window = TransformWindow(self)
+
+        self.transform_window = TransformWindow(self, selected_object)
 
         self.transform_window.show()
 
@@ -116,9 +116,8 @@ class Controller:
         self.display_transform.remove(self.transform_window.get_selected_in_display())
         self.transform_window.update_display()
   
-    def transform_object(self) -> None:
+    def transform_object(self, selected_object) -> None:
         """Aplica a transformação ao objeto selecionado."""
-        selected_object = self.get_object_from_display()
 
         if not selected_object:
             GUIUtils.show_popup("Erro", "Nenhum objeto selecionado para transformar!", QMessageBox.Icon.Critical)
