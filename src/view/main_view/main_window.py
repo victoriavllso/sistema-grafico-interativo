@@ -27,7 +27,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         # Display properties
         self.display.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.display.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.display.setMinimumHeight(150)
+        self.display.setMinimumHeight(50)
         self.display.setMinimumWidth(200)
         self.layout().addWidget(self.display)
 
