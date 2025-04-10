@@ -43,20 +43,18 @@ class Controller:
         """Cria um objeto gráfico"""
 
         obj = None
+        name = name or self.display_file.get_next_possible_name()
 
         if len(points_input) == 2:
             
             if isinstance(points_input[0], (int, float)) and isinstance(points_input[1], (int, float)):
-                name = name or f"point_{self.display_file.get_object_count(Point) + 1}"
                 obj = Point(window=self.window, name=name, x=points_input[0], y=points_input[1], color=color)
 
             else:
-                name = name or f"line_{self.display_file.get_object_count(Point) + 1}"
                 point0, point1 = Point(window=self.window, x=points_input[0][0], y=points_input[0][1]), Point(window=self.window, x=points_input[1][0], y=points_input[1][1])
                 obj = Line(window=self.window, name=name, point1=point0, point2=point1, color=color)
 
         elif len(points_input) > 2:
-            name = name or f"wireframe_{self.display_file.get_object_count(Wireframe) + 1}"
             try:
                 points = [Point(window=self.window, x=x, y=y) for x, y in points_input]
                 obj = Wireframe(window=self.window, name=name, points=points, color=color)
