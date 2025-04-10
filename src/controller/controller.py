@@ -40,34 +40,36 @@ class Controller:
     #---------- Graphic Objects ----------#
 
     def create_object(self, points_input, color, name=None) -> None:
-        """Cria um objeto"""
-        if name in [obj.name for obj in self.display_file.get_all()]:
-            GUIUtils.show_popup("Erro", "Nome de objeto inválido: O nome do objeto já existe", QMessageBox.Icon.Critical)
-            return
+        """Cria um objeto gráfico"""
 
         obj = None
-        if len(points_input) == 2 and all(isinstance(p, int) for p in points_input) or all(isinstance(p, float) for p in points_input):
-            if name is None or name == "":
-                name = f"point_{self.display_file.get_object_count(Point) + 1}"
-            x, y = points_input[0], points_input[1]
-            obj = Point(window=self.window, name=name, x=x, y=y, color=color)
-        elif len(points_input) == 2 and all(isinstance(p, tuple) for p in points_input):
-            if name is None or name == "":
-                name = f"line_{self.display_file.get_object_count(Point) + 1}"
-            x1, y1, x2, y2 = points_input[0][0], points_input[0][1], points_input[1][0], points_input[1][1]
-            point0, point1 = Point(window=self.window, x=x1, y=y1), Point(window=self.window, x=x2, y=y2)
-            obj = Line(window=self.window, name=name, point1=point0, point2=point1, color=color)
+
+        if len(points_input) == 2:
+            
+            if isinstance(points_input[0], (int, float)) and isinstance(points_input[1], (int, float)):
+                name = name or f"point_{self.display_file.get_object_count(Point) + 1}"
+                obj = Point(window=self.window, name=name, x=points_input[0], y=points_input[1], color=color)
+
+            else:
+                name = name or f"line_{self.display_file.get_object_count(Point) + 1}"
+                point0, point1 = Point(window=self.window, x=points_input[0][0], y=points_input[0][1]), Point(window=self.window, x=points_input[1][0], y=points_input[1][1])
+                obj = Line(window=self.window, name=name, point1=point0, point2=point1, color=color)
+
         elif len(points_input) > 2:
-            if name is None or name == "":
-                name = f"wireframe_{self.display_file.get_object_count(Wireframe) + 1}"
-            points_input = [Point(window=self.window, x=x, y=y) for x, y in points_input]
+            name = name or f"wireframe_{self.display_file.get_object_count(Wireframe) + 1}"
             try:
-                obj = Wireframe(window=self.window,name=name, points=points_input, color=color)
+                points = [Point(window=self.window, x=x, y=y) for x, y in points_input]
+                obj = Wireframe(window=self.window, name=name, points=points, color=color)
             except Exception:
                 GUIUtils.show_popup("Erro", "Wireframe inválido!", QMessageBox.Icon.Critical)
                 return
-        else:
+
+        if obj is None:
             GUIUtils.show_popup("Erro", "Não foi possível criar o objeto", QMessageBox.Icon.Critical)
+            return
+
+        if self.display_file.verify_name(obj.name):
+            GUIUtils.show_popup("Erro", "Nome de objeto inválido: O nome do objeto já existe", QMessageBox.Icon.Critical)
             return
 
         self.display_file.add(obj)
@@ -98,7 +100,6 @@ class Controller:
             return
 
         self.transform_window = TransformWindow(self, selected_object)
-
         self.transform_window.show()
 
     def append_transform(self, transform: dict) -> None:
@@ -148,7 +149,6 @@ class Controller:
                     x = selected_object.geometric_center()[0]
                     y = selected_object.geometric_center()[1]
                     self.transform.rotate_object(selected_object, angle, x, y)
-                    
 
         self.display_transform.clear()
         self.transform_window.update_display()

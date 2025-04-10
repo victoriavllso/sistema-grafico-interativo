@@ -20,3 +20,10 @@ class DisplayFile(Display):
         for obj in self.list:
             if obj.name == name:
                 self.list.remove(obj)
+
+    def verify_name(self, name: str) -> bool:
+        """Verifica se o nome já existe na lista de objetos gráficos"""
+        for obj in self.list:
+            if obj.name == name:
+                return True
+        return False

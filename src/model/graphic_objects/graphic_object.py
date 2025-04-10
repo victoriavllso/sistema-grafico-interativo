@@ -8,15 +8,18 @@ class GraphicObject(ABC):
 		self.color = color
 
 	@abstractmethod
-	def draw(self):
+	def draw(self) -> None:
+		"""Desenha o objeto gráfico na tela"""
 		pass
 
 	@abstractmethod
-	def geometric_center(self):
+	def geometric_center(self) -> tuple[float, float]:
+		"""Retorna o centro geométrico do objeto gráfico"""
 		pass
 
 	@abstractmethod
 	def receive_transform(self, matrix) -> None:
+		"""Aplica a transformação da matriz de transformação ao objeto gráfico"""
 		pass
 
 	@abstractmethod
@@ -25,10 +28,12 @@ class GraphicObject(ABC):
 
 	@abstractmethod
 	def get_points_obj(self):
+		"""Retorna os pontos do objeto gráfico em formato .obj"""
 		return
 	
 	@abstractmethod
 	def get_type_obj(self):
+		"""Retorna o tipo do objeto gráfico"""
 		return
 
 	def get_name_obj(self):

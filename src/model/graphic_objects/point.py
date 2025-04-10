@@ -3,6 +3,7 @@ from PyQt6.QtGui import QPen
 from PyQt6.QtCore import Qt
 from src.utils.utils import POINT_THICKNESS
 import numpy as np
+from src.model.transform import Transform
 
 
 class Point(GraphicObject):
@@ -34,45 +35,25 @@ class Point(GraphicObject):
     
     def __str__(self):
         return f"Point({self.name}, {self.x}, {self.y}, color={self.color.name()})"
-    
-    def convert_coordinates(self):
-        translation = (-self.window.get_center()[0], -self.window.get_center()[1])
 
-        matrix_homogenous = [self.x, self.y, 1]
-        matrix_translate = [
-            [1, 0, 0],
-            [0, 1, 0],
-            [translation[0], translation[1], 1]
-        ]
-        result = np.dot(matrix_homogenous, matrix_translate)
-        x = result[0]
-        y = result[1]
-        angle = self.calculate_angle((0,1),self.window.direction)/(np.pi/180)
+    def convert_coordinates(self) -> None:
+        """Converte as coordenadas do ponto do espaço da janela para o espaço da cena"""
+        center_x, center_y = self.window.get_center()
+
+        # Translação para centralizar no (0, 0)
+        translated = np.dot([self.x, self.y, 1], Transform.matrix_translate(-center_x, -center_y))
+        x, y = translated[0], translated[1]
+
+        # Rotaciona conforme a direção da janela
+        angle = Transform.calculate_angle((0, 1), self.window.direction) * (180 / np.pi)
+        if self.window.direction[0] < 0:
+            angle = 360 - angle
         if angle != 0:
-            if self.window.direction[0] < 0:
-                angle = 360 - angle
-            x, y = self.rotate_point_origin(x, y, angle)
-        self.scn_x = -1 + 2 * (x - (self.window.x_min -self.window.get_center()[0])) / ((self.window.x_max -self.window.get_center()[0]) - (self.window.x_min -self.window.get_center()[0]))
-        self.scn_y = -1 + 2 * (y - (self.window.y_min -self.window.get_center()[1])) / ((self.window.y_max -self.window.get_center()[1]) - (self.window.y_min -self.window.get_center()[1]))
+            x, y = Transform.rotate_point_origin(x, y, angle)
 
-    def calculate_angle(self, vector1, vector2):
-        v1 = vector1 / np.linalg.norm(vector1)
-        v2 = vector2 / np.linalg.norm(vector2)
-        result = np.arccos(np.clip(np.dot(v1, v2), -1.0, 1.0))
-        return result
-    def rotate_point_origin(self,x, y, angle):
-        angle *= (np.pi / 180)
-        matrix_rotate = [
-            [np.cos(angle), -np.sin(angle), 0],
-            [np.sin(angle), np.cos(angle), 0],
-            [0, 0, 1]
-        ]
-        matrix_homogenous= np.array([x, y, 1])
-        result = np.dot(matrix_homogenous, matrix_rotate)
-        x = result[0]
-        y = result[1]
-        return x, y
-    
+        # Converte para coordenadas da cena
+        self.scn_x, self.scn_y = Transform.to_screen_coordinates(x, y, self.window)
+
     def get_points_obj(self):
         return f'v {self.x} {self.y} 0\n'
     

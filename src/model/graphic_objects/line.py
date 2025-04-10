@@ -7,21 +7,25 @@ import numpy as np
 
 
 class Line(GraphicObject):
-    def __init__(self,window, name, point1: Point, point2: Point, color=Qt.GlobalColor.red):
+    def __init__(self, window, name, point1: Point, point2: Point, color=Qt.GlobalColor.red):
         super().__init__(name, color)
         self.points = [point1, point2]
         self.window = window
 
-    def x1(self):
+    def x1(self) -> float:
+        """Retorna a coordenada x do primeiro ponto da linha."""
         return self.points[0].x
     
-    def y1(self):
+    def y1(self) -> float:
+        """Retorna a coordenada y do primeiro ponto da linha."""
         return self.points[0].y
     
-    def x2(self):
+    def x2(self) -> float:
+        """Retorna a coordenada x do segundo ponto da linha."""
         return self.points[1].x
     
-    def y2(self):
+    def y2(self) -> float:
+        """Retorna a coordenada y do segundo ponto da linha."""
         return self.points[1].y
 
     def draw(self, painter, viewport):
@@ -57,8 +61,8 @@ class Line(GraphicObject):
     def __str__(self):
         return f"Line({self.name}, {self.points[0]}, {self.points[1]}, color={self.color.name()})"
 
-    def get_points_obj(self):
+    def get_points_obj(self) -> str:
         return f'v {self.points[0].x}, {self.points[0].y} \nv {self.points[1].x}, {self.points[1].y} \n'
     
-    def get_type_obj(self):
+    def get_type_obj(self) -> str:
         return 'l'

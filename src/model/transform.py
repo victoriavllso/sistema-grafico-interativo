@@ -1,5 +1,4 @@
 import numpy as np
-from src.model.graphic_objects.point import Point
 from src.model.graphic_objects.graphic_object import GraphicObject
 from src.model.window import Window
 
@@ -56,11 +55,39 @@ class Transform:
             obj.receive_transform(matrix)
 
     @staticmethod
-    def convert_scn(point:Point, window:Window) -> Point:
-        """Converte um ponto do espaço de cena para o espaço da janela"""
-        x = (point.scn_x - -1) / (1 - -1) * (window.x_max)
-        y =  (point.scn_y - -1) / (1 - -1) * (window.y_max)
-        name = point.name
-        if name != "default":
-            return Point(x, y, name)
-        return Point(x, y)
+    def convert_scn_coords(scn_x: float, scn_y: float, window: Window) -> tuple[float, float]:
+        """Converte coordenadas da cena para coordenadas da janela"""
+        x = (scn_x + 1) / 2 * (window.x_max - window.x_min) + window.x_min
+        y = (scn_y + 1) / 2 * (window.y_max - window.y_min) + window.y_min
+        return x, y
+    
+    @staticmethod
+    def calculate_angle(vector1, vector2) -> float:
+        """Calcula o ângulo entre dois vetores"""
+        v1 = vector1 / np.linalg.norm(vector1)
+        v2 = vector2 / np.linalg.norm(vector2)
+        result = np.arccos(np.clip(np.dot(v1, v2), -1.0, 1.0))
+        return result
+    
+    @staticmethod
+    def rotate_point_origin(x, y, angle) -> tuple:
+        """Rotaciona um ponto em torno da origem"""
+        matrix_rotate = Transform.matrix_rotate(angle)
+        matrix_homogenous = np.array([x, y, 1])
+        result = np.dot(matrix_homogenous, matrix_rotate)
+        x = result[0]
+        y = result[1]
+        return x, y
+
+    @staticmethod
+    def to_screen_coordinates(x, y, window) -> tuple:
+        """Converte coordenadas de janela para coordenadas de tela"""
+        center_x, center_y = window.get_center()
+
+        scn_x = -1 + 2 * (x - (window.x_min - center_x)) / (
+            (window.x_max - center_x) - (window.x_min - center_x)
+        )
+        scn_y = -1 + 2 * (y - (window.y_min - center_y)) / (
+            (window.y_max - center_y) - (window.y_min - center_y)
+        )
+        return scn_x, scn_y
