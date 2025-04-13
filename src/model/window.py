@@ -56,6 +56,12 @@ class Window:
     def get_center(self) -> tuple:
         """Calculate the center of the window."""
         return self.x_min, self.y_min
+    def get_min(self) -> tuple:
+        """Get the minimum coordinates of the window."""
+        return self.x_min, self.y_min
+    def get_max(self) -> tuple:
+        """Get the maximum coordinates of the window."""
+        return self.x_max, self.y_max
 
     def transform_vector(self, actual_direction:np.ndarray, rotarion_matrix:np.ndarray) -> np.ndarray:
         """Transform the direction vector using a rotation matrix."""

@@ -13,7 +13,7 @@ class Point(GraphicObject):
         self.y = y
         self.scn_x = 0
         self.scn_y = 0
-        self.window = window
+        self._window = window
         self.inside_window = False
         self.convert_coordinates()
 
@@ -21,7 +21,7 @@ class Point(GraphicObject):
 
         if not self.inside_window:
             return
-        transformed_point = viewport.transform(self, self.window)
+        transformed_point = viewport.transform(self, self._window)
         
         x, y = int(transformed_point.x), int(transformed_point.y)
         painter.setPen(QPen(self.color, POINT_THICKNESS))
@@ -43,21 +43,22 @@ class Point(GraphicObject):
 
     def convert_coordinates(self) -> None:
         """Converte as coordenadas do ponto do espaço da janela para o espaço da cena"""
-        center_x, center_y = self.window.get_center()
+
+        center_x, center_y = self._window.get_center()
 
         # Translação para centralizar no (0, 0)
         translated = np.dot([self.x, self.y, 1], Transform.matrix_translate(-center_x, -center_y))
         x, y = translated[0], translated[1]
 
         # Rotaciona conforme a direção da janela
-        angle = Transform.calculate_angle((0, 1), self.window.direction) * (180 / np.pi)
-        if self.window.direction[0] < 0:
+        angle = Transform.calculate_angle((0, 1), self._window.direction) * (180 / np.pi)
+        if self._window.direction[0] < 0:
             angle = 360 - angle
         if angle != 0:
             x, y = Transform.rotate_point_origin(x, y, angle)
 
         # Converte para coordenadas da cena
-        self.scn_x, self.scn_y = Transform.to_screen_coordinates(x, y, self.window)
+        self.scn_x, self.scn_y = Transform.to_screen_coordinates(x, y, self._window)
 
     def get_points_obj(self):
         return f'v {self.x} {self.y} 0\n'

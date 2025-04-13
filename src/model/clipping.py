@@ -200,18 +200,26 @@ class Cliper:
 		# Pega as coordenadas SCN (normalizadas) dos pontos
 		wireframe_points = [(p.scn_x, p.scn_y) for p in wireframe.points]
 
+		clipped = wireframe_points  # Inicializa com os pontos do wireframe original
 		for edge in clipper_edges:
 			x1, y1, x2, y2 = edge
-			wireframe_points = self.sutherland_hodgman(wireframe_points, x1, y1, x2, y2)
+			clipped = self.sutherland_hodgman(clipped, x1, y1, x2, y2)  # Aplica o corte cumulativo
 
-		if wireframe_points:
-			wireframe.points = []
-			for x, y in wireframe_points:
-				point = Point(x, y, self.window)
-				point.inside_window = True
-				wireframe.points.append(point)
-			print('novas coordenadas do wireframe:', wireframe.points)
-			print(f'coodrnadas da janela : {self.x_min, self.y_min, self.x_max, self.y_max}')
+			if not clipped: # nenhum ponto foi recortado
+				print('Nenhum ponto recortado')
+				return
+			# Atualiza diretamente os pontos em wireframe
+			for i, point in enumerate(wireframe.points):
+				# Aqui, clipped[i] deve conter as coordenadas recortadas
+				if i < len(clipped): 
+					point.scn_x, point.scn_y = clipped[i]
+					point.scx_x = clipped[i][0]  # Atribuindo a coordenada X
+					point.scx_y = clipped[i][1]  # Atribuindo a coordenada Y
+					point.inside_window = True
+					print(f'Novas coordenadas do wireframe x {point.scn_x}:, y {point.scn_y}')
+				else:
+					point.inside_window = False
+			print(f'Coordenadas da janela: ({self.x_min}, {self.y_min}, {self.x_max}, {self.y_max})')
 
 	def sutherland_hodgman(self, subject_polygon, x1, y1, x2, y2):
 		def inside(p):
@@ -231,17 +239,17 @@ class Cliper:
 			t = ((x1 - p1[0]) * dy_clip - (y1 - p1[1]) * dx_clip) / denominator
 			return (p1[0] + t * dx, p1[1] + t * dy)
 
-			output_list = []
-			n = len(subject_polygon)
-			for i in range(n):
-				current = subject_polygon[i]
-				prev = subject_polygon[i - 1]
+		output_list = []
+		n = len(subject_polygon)
+		for i in range(n):
+			current = subject_polygon[i]
+			prev = subject_polygon[i - 1]
 
-				if inside(current):
-					if not inside(prev):
-						output_list.append(compute_intersection(prev, current))
-					output_list.append(current)
-				elif inside(prev):
+			if inside(current):
+				if not inside(prev):
 					output_list.append(compute_intersection(prev, current))
+				output_list.append(current)
+			elif inside(prev):
+				output_list.append(compute_intersection(prev, current))
 
-				return output_list
+			return output_list

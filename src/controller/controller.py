@@ -90,7 +90,6 @@ class Controller:
         # Desenha os objetos clipados
         for obj in graphic_objects:
             # Verifica se todos os pontos do objeto estão dentro da janela
-            print('OBJETO GRÁFICO:', obj)
             if all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])):
                 print(f'objeto clipado e visível')
                 obj.draw(painter, self.viewport)
