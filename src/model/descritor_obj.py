@@ -52,11 +52,13 @@ class DescritorOBJ:
                     current_points = [points[i] for i in indices]
                     if len(current_points) == 1:
                         current_points = current_points[0]
+                    filled = False if current_type in ['l', 'p'] else True
                     current_object = {
                         "name": current_name,
                         "type": current_type,
                         "points": current_points,
-                        "material": current_material
+                        "material": current_material,
+                        "filled" : filled
                     }
                     objects.append(current_object)
                     current_object = None
@@ -101,7 +103,9 @@ class DescritorOBJ:
                     file.write(f"p {points[(obj.x, obj.y)]}\n")
                 elif isinstance(obj, Line):
                     file.write(f"l {points[(obj.x1(), obj.y1())]} {points[(obj.x2(), obj.y2())]}\n")
-                elif isinstance(obj, Wireframe):
+                elif isinstance(obj, Wireframe) and obj.filled:
+                    file.write(f"w {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
+                elif isinstance(obj, Wireframe) and not obj.filled:
                     file.write(f"l {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
 
     @staticmethod

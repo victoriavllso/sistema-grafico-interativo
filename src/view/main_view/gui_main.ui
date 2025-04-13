@@ -303,7 +303,7 @@
         </rect>
        </property>
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
       </widget>
      </widget>
@@ -489,7 +489,7 @@
     <widget class="QPushButton" name="color_button">
      <property name="geometry">
       <rect>
-       <x>90</x>
+       <x>160</x>
        <y>140</y>
        <width>91</width>
        <height>31</height>
@@ -502,6 +502,19 @@
       <string>set color</string>
      </property>
     </widget>
+    <widget class="QRadioButton" name="radioButton">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>150</y>
+       <width>100</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>rachurado</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -510,7 +523,7 @@
      <x>0</x>
      <y>0</y>
      <width>1119</width>
-     <height>19</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">

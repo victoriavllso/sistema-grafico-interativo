@@ -188,45 +188,47 @@ class Cliper:
 			return (x1_clipped, y1_clipped), (x2_clipped, y2_clipped)
 	
 	def clip_wireframe(self, wireframe):
-
-
 		clipper_edges = [
-		    (self.x_min, self.y_min, self.x_max, self.y_min),  # Bottom
-		    (self.x_max, self.y_min, self.x_max, self.y_max),  # Right
-		    (self.x_max, self.y_max, self.x_min, self.y_max),  # Top
-		    (self.x_min, self.y_max, self.x_min, self.y_min)   # Left
+			(self.x_min, self.y_min, self.x_max, self.y_min),  # Bottom
+			(self.x_max, self.y_min, self.x_max, self.y_max),  # Right
+			(self.x_max, self.y_max, self.x_min, self.y_max),  # Top
+			(self.x_min, self.y_max, self.x_min, self.y_min)   # Left
 		]
 
 		# Pega as coordenadas SCN (normalizadas) dos pontos
 		wireframe_points = [(p.scn_x, p.scn_y) for p in wireframe.points]
 
 		clipped = wireframe_points  # Inicializa com os pontos do wireframe original
+
+		# Aplica o corte cumulativo para cada aresta da janela
 		for edge in clipper_edges:
 			x1, y1, x2, y2 = edge
-			clipped = self.sutherland_hodgman(clipped, x1, y1, x2, y2)  # Aplica o corte cumulativo
+			clipped = self.sutherland_hodgman(clipped, x1, y1, x2, y2)  # Aplica o corte da aresta
 
-			if not clipped: # nenhum ponto foi recortado
+			if not clipped:  # Se o recorte resultar em uma lista vazia, não há interseção
 				print('Nenhum ponto recortado')
-				return
-			# Atualiza diretamente os pontos em wireframe
-			for i, point in enumerate(wireframe.points):
-				# Aqui, clipped[i] deve conter as coordenadas recortadas
-				if i < len(clipped): 
-					point.scn_x, point.scn_y = clipped[i]
-					point.scx_x = clipped[i][0]  # Atribuindo a coordenada X
-					point.scx_y = clipped[i][1]  # Atribuindo a coordenada Y
-					point.inside_window = True
-					print(f'Novas coordenadas do wireframe x {point.scn_x}:, y {point.scn_y}')
-				else:
-					point.inside_window = False
-			print(f'Coordenadas da janela: ({self.x_min}, {self.y_min}, {self.x_max}, {self.y_max})')
+				return  # Retorna imediatamente se nenhum ponto foi recortado
+
+		# Atualiza diretamente os pontos em wireframe com os pontos recortados
+		for i, point in enumerate(wireframe.points):
+			if i < len(clipped):
+				point.scn_x, point.scn_y = clipped[i][0], clipped[i][1]
+				point.scx_x = clipped[i][0]  # Atribuindo a coordenada X
+				point.scx_y = clipped[i][1]  # Atribuindo a coordenada Y
+				point.inside_window = True
+				print(f'Novas coordenadas do wireframe: x={point.scn_x}, y={point.scn_y}')
+			else:
+				point.inside_window = False  # Marca o ponto como fora da janela
+
+		print(f'Coordenadas da janela: ({self.x_min}, {self.y_min}, {self.x_max}, {self.y_max})')
 
 	def sutherland_hodgman(self, subject_polygon, x1, y1, x2, y2):
 		def inside(p):
-		#	 Determina se o ponto p está à esquerda da aresta (x1,y1)->(x2,y2)
+			# Determina se o ponto p está à esquerda da aresta (x1,y1) -> (x2,y2)
 			return (x2 - x1)*(p[1] - y1) - (y2 - y1)*(p[0] - x1) >= 0
 
 		def compute_intersection(p1, p2):
+			# Calcula a interseção entre a aresta do polígono e a borda do clipper
 			dx = p2[0] - p1[0]
 			dy = p2[1] - p1[1]
 			dx_clip = x2 - x1
@@ -234,17 +236,19 @@ class Cliper:
 
 			denominator = dx * dy_clip - dy * dx_clip
 			if denominator == 0:
-				return p1  # Linhas paralelas
+				return p1  # Linhas paralelas, sem interseção
 
 			t = ((x1 - p1[0]) * dy_clip - (y1 - p1[1]) * dx_clip) / denominator
 			return (p1[0] + t * dx, p1[1] + t * dy)
 
 		output_list = []
 		n = len(subject_polygon)
+
 		for i in range(n):
 			current = subject_polygon[i]
 			prev = subject_polygon[i - 1]
 
+			# Verifica se o ponto atual está dentro da borda
 			if inside(current):
 				if not inside(prev):
 					output_list.append(compute_intersection(prev, current))
@@ -252,4 +256,4 @@ class Cliper:
 			elif inside(prev):
 				output_list.append(compute_intersection(prev, current))
 
-			return output_list
+		return output_list

@@ -49,7 +49,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.button_turn_window_right.setText("\u21b7")
 
         #botao de criação e deletar
-        self.create_but.clicked.connect(lambda: self.controller.create_object(name=self.get_name(), color=self.color, points_input=self.get_points_input()))
+        self.create_but.clicked.connect(lambda: self.controller.create_object(name=self.get_name(), color=self.color, points_input=self.get_points_input(), filled=self.get_filled()))
         self.delete_but.clicked.connect(lambda: self.controller.delete_object(self.get_selected_name_in_display()))
         
         # botoes de navegação
@@ -115,7 +115,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         margin_x = int(VP_X_MAX * MARGIN_FACTOR)
         margin_y = int(VP_Y_MAX *MARGIN_FACTOR)
 
-        aux = self.vp.rect().adjusted(margin_x, margin_y, VP_X_MIN - 2 *margin_x, VP_Y_MIN-2 *margin_y)
+        aux = self.vp.rect().adjusted(margin_x, margin_y, VP_X_MIN - 2 *margin_x, VP_Y_MIN-2 *margin_y + 30)
         self.painter.setPen(pen)
         self.painter.drawRect(aux)
 
@@ -158,3 +158,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
             return "cohen-sutherland"
         else:
             return "cohen-sutherland" # deixar como padrão caso nada seja selecionado
+        
+    def get_filled(self):
+        if self.radioButton.isChecked():
+            return True
+        return False

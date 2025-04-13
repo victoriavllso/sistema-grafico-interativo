@@ -1,8 +1,11 @@
 # Exported .obj file
 mtllib sample3.mtl
 
+v 100 100 0
+v 200 100 0
+v 200 200 0
+v 100 200 0
 v 250.0 650.0 0
-v 100.0 100.0 0
 v 300.0 300.0 0
 v 500.0 750.0 0
 v 750.0 750.0 0
@@ -12,15 +15,18 @@ v 500.0 100.0 0
 v 500.0 350.0 0
 v 750.0 350.0 0
 
+o obj_2
+usemtl obj_2
+l 6 2 3 4
 o r1
 usemtl r1
-p 1
+p 5
 o r2
 usemtl r2
-l 2 3
+l 6 6
 o r3
 usemtl r3
-l 4 5 6 7
+l 7 8 9 10
 o r4
 usemtl r4
-l 8 9 10
+l 11 12 13

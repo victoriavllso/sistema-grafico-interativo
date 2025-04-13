@@ -41,7 +41,7 @@ class Controller:
 
     #---------- Graphic Objects ----------#
 
-    def create_object(self, points_input, color, name=None) -> None:
+    def create_object(self, points_input, color, name=None, filled=False) -> None:
         """Cria um objeto gráfico"""
 
         obj = None
@@ -59,7 +59,7 @@ class Controller:
         elif len(points_input) > 2:
             try:
                 points = [Point(window=self.window, x=x, y=y) for x, y in points_input]
-                obj = Wireframe(window=self.window, name=name, points=points, color=color)
+                obj = Wireframe(window=self.window, name=name, points=points, color=color, filled=filled)
             except Exception:
                 GUIUtils.show_popup("Erro", "Wireframe inválido!", QMessageBox.Icon.Critical)
                 return
@@ -240,7 +240,7 @@ class Controller:
         for obj in objs:
             obj = Controller.assign_material_color(obj)
             obj = Controller.assign_default_name(obj, self.display_file)
-            self.create_object(points_input=obj["points"], color=obj["material"], name=obj["name"])
+            self.create_object(points_input=obj["points"], color=obj["material"], name=obj["name"], filled=obj["filled"])
 
     def export_obj(self) -> None:
         """Exporta os objetos do mundo para um arquivo OBJ."""

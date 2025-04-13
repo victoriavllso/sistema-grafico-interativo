@@ -4,9 +4,12 @@ from PyQt6.QtGui import QPen
 from PyQt6.QtCore import Qt
 from src.utils.utils import LINE_THICKNESS
 import numpy as np
+from PyQt6.QtGui import QBrush
+from PyQt6.QtCore import QPointF
+from PyQt6.QtGui import QPolygonF
 
 class Wireframe(GraphicObject):
-    def __init__(self,window, name, points: list[Point], color=Qt.GlobalColor.blue):
+    def __init__(self,window, name, points: list[Point], color=Qt.GlobalColor.blue, filled=True):
         super().__init__(name, color)
         if not self._is_valid_polygon(points):
             raise ValueError("Invalid polygon: The given points do not form a valid shape.")
@@ -16,6 +19,8 @@ class Wireframe(GraphicObject):
 
         for point in self.points:
             point.convert_coordinates()
+        
+        self.filled = filled
 
     def draw(self, painter, viewport) -> None:
         print("drawing wireframe chamado")
@@ -23,16 +28,26 @@ class Wireframe(GraphicObject):
             if not point.inside_window:
                 return
 
-        painter.setPen(QPen(self.color, LINE_THICKNESS))
+        # Converte os pontos para o sistema de coordenadas da viewport
+        transformed_points = [viewport.transform(p, self.window) for p in self.points]
         
-        for i in range(len(self.points)):
-            p1 = self.points[i]
-            p2 = self.points[(i + 1) % len(self.points)]
-            #p1.convert_coordinates()
-            #p2.convert_coordinates()
-            p1 = viewport.transform(p1, self.window)
-            p2 = viewport.transform(p2, self.window)
+        if self.filled:
+            # Cria o polígono preenchido
+            polygon = QPolygonF([QPointF(p.x, p.y) for p in transformed_points])
+            brush = QBrush(self.color, Qt.BrushStyle.SolidPattern)
+            painter.setBrush(brush)
+        else:
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+
+        painter.setPen(QPen(self.color, LINE_THICKNESS))
+
+        for i in range(len(transformed_points)):
+            p1 = transformed_points[i]
+            p2 = transformed_points[(i + 1) % len(transformed_points)]
             painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
+
+        if self.filled:
+            painter.drawPolygon(QPolygonF([QPointF(p.x, p.y) for p in transformed_points]))
 
     def _is_concave(self) -> bool:
 
@@ -110,4 +125,4 @@ class Wireframe(GraphicObject):
         return f"{points_str}\n"
     
     def get_type_obj(self):
-        return 'w'
+        return 'w' if self.filled else 'l'
