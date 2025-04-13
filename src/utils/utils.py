@@ -30,3 +30,6 @@ DT_Y_MAX = 220
 # Espessura (Thickness)
 POINT_THICKNESS = 5
 LINE_THICKNESS = 3
+
+# Subcanvas
+MARGIN_FACTOR = 0.03

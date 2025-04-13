@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1119</width>
-    <height>828</height>
+    <height>921</height>
    </rect>
   </property>
   <property name="palette">
@@ -127,7 +127,7 @@
       <x>760</x>
       <y>480</y>
       <width>281</width>
-      <height>301</height>
+      <height>391</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -142,7 +142,7 @@
        <x>0</x>
        <y>0</y>
        <width>279</width>
-       <height>299</height>
+       <height>389</height>
       </rect>
      </property>
      <widget class="QPushButton" name="up">
@@ -235,7 +235,7 @@
         <x>30</x>
         <y>20</y>
         <width>231</width>
-        <height>121</height>
+        <height>131</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -247,10 +247,10 @@
       <widget class="QPushButton" name="button_turn_window_left">
        <property name="geometry">
         <rect>
-         <x>60</x>
-         <y>70</y>
-         <width>51</width>
-         <height>51</height>
+         <x>70</x>
+         <y>80</y>
+         <width>41</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="text">
@@ -261,9 +261,9 @@
        <property name="geometry">
         <rect>
          <x>120</x>
-         <y>70</y>
-         <width>51</width>
-         <height>51</height>
+         <y>80</y>
+         <width>41</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="text">
@@ -274,7 +274,7 @@
        <property name="geometry">
         <rect>
          <x>50</x>
-         <y>30</y>
+         <y>40</y>
          <width>121</width>
          <height>31</height>
         </rect>
@@ -285,7 +285,7 @@
         <rect>
          <x>40</x>
          <y>-10</y>
-         <width>151</width>
+         <width>171</width>
          <height>41</height>
         </rect>
        </property>
@@ -293,6 +293,52 @@
         <string>window rotation angle:</string>
        </property>
       </widget>
+      <widget class="QSlider" name="rotation_window">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>20</y>
+         <width>160</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>310</y>
+        <width>281</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Clipping line&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_cohen">
+         <property name="text">
+          <string>Cohen Sutherland</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_barsky">
+         <property name="text">
+          <string>Liang Barsky</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </widget>

@@ -1,5 +1,6 @@
 from src.model.descritor_obj import DescritorOBJ
 from src.model.transform import Transform
+from src.model.clipping import Cliper
 
 from src.model.display.display_transform import DisplayTransform
 from src.model.display.display_file import DisplayFile
@@ -33,6 +34,7 @@ class Controller:
         self.transform_window = None
         self.obj_window = None
         self.transform = Transform()
+        self.cliper = Cliper(self.window, self.viewport)
         self.descritor_obj = DescritorOBJ()
         self.main_window = MainWindow(self)
         self.main_window.show()
@@ -75,8 +77,27 @@ class Controller:
 
     def draw_objects(self, painter: QPainter) -> None:
         """Desenha os objetos na área de visualização."""
-        for obj in self.display_file.get_all(): 
-            obj.draw(painter, self.viewport)
+
+        # pega todos os objetos gráficos
+        graphic_objects = self.display_file.get_all()
+
+        # pega o algoritmo de clipping para retas selecionado no raddio button
+        clipping_algorithm = self.main_window.get_clipping_algorithm()
+
+        # clipa os objetos
+        self.cliper.clip_object(graphic_objects, clipping_algorithm)
+
+        # Desenha os objetos clipados
+        for obj in graphic_objects:
+            # Verifica se todos os pontos do objeto estão dentro da janela
+            print('OBJETO GRÁFICO:', obj)
+            if all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])):
+                print(f'objeto clipado e visível')
+                obj.draw(painter, self.viewport)
+
+            # Resetar flag dos pontos após o desenho
+            for p in getattr(obj, "points", []):
+                p.inside_window = False
 
     def delete_object(self, obj_name) -> None:
         """Remove o objeto selecionado do arquivo de exibição."""
@@ -182,7 +203,7 @@ class Controller:
         zoom_function()
         self.main_window.update_viewport()
     
-    def rotate_window(self, direction) -> None:
+    def rotate_window2(self, direction) -> None:
         """Rotaciona a janela de visualização na direção especificada."""
         direction_actions = {
             "left": self.window.rotate_window_left,
@@ -200,6 +221,10 @@ class Controller:
         rotate_function(angle)
         self.main_window.update_viewport()
 
+    def rotate_window(self, angle) -> None:
+        """Rotaciona a janela de visualização na direção especificada."""
+        self.window.rotate(angle)
+        self.main_window.update_viewport()
     #---------- Métodos de Importação/Exportação ----------#
 
     def open_obj_window(self) -> None:
@@ -265,3 +290,8 @@ class Controller:
             return pontos
         except Exception:
             return []
+
+
+
+
+

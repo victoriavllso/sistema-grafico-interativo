@@ -14,11 +14,15 @@ class Point(GraphicObject):
         self.scn_x = 0
         self.scn_y = 0
         self.window = window
+        self.inside_window = False
         self.convert_coordinates()
 
     def draw(self, painter, viewport):
-        self.convert_coordinates()
+
+        if not self.inside_window:
+            return
         transformed_point = viewport.transform(self, self.window)
+        
         x, y = int(transformed_point.x), int(transformed_point.y)
         painter.setPen(QPen(self.color, POINT_THICKNESS))
 
@@ -34,7 +38,8 @@ class Point(GraphicObject):
         self.y = new_point[1]
     
     def __str__(self):
-        return f"Point({self.name}, {self.x}, {self.y}, color={self.color.name()})"
+        color_name = self.color.name() if callable(getattr(self.color, "name", None)) else self.color
+        return f"Point({self.name}, {self.x}, {self.y}, color={color_name})"
 
     def convert_coordinates(self) -> None:
         """Converte as coordenadas do ponto do espaço da janela para o espaço da cena"""

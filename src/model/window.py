@@ -62,7 +62,17 @@ class Window:
         aux = actual_direction/ np.linalg.norm(actual_direction)
         result = np.dot(rotarion_matrix, aux)
         return result
-
+    
+    def rotate(self, angle):
+        """Rotate the window by a given angle."""
+        actual_direction = np.array(self.direction)
+        radians = angle * np.pi / 180
+        cos = np.cos(radians)
+        sin = np.sin(radians)
+        rotation_matrix = [[cos, -sin], 
+                           [sin, cos]]
+        rotate = self.transform_vector(actual_direction, rotation_matrix)
+        self.direction = (rotate[0], rotate[1])
     def rotate_window_left(self, angle:int) -> None:
         """Rotate the window to the left by a given angle."""
         angle *= -1

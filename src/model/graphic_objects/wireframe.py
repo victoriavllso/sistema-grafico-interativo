@@ -14,13 +14,22 @@ class Wireframe(GraphicObject):
         self.concave = self._is_concave()
         self.window = window
 
+        for point in self.points:
+            point.convert_coordinates()
+
     def draw(self, painter, viewport) -> None:
+        print("drawing wireframe chamado")
+        for point in self.points:
+            if not point.inside_window:
+                return
+
         painter.setPen(QPen(self.color, LINE_THICKNESS))
+        
         for i in range(len(self.points)):
             p1 = self.points[i]
             p2 = self.points[(i + 1) % len(self.points)]
-            p1.convert_coordinates()
-            p2.convert_coordinates()
+            #p1.convert_coordinates()
+            #p2.convert_coordinates()
             p1 = viewport.transform(p1, self.window)
             p2 = viewport.transform(p2, self.window)
             painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))

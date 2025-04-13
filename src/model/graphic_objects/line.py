@@ -11,6 +11,8 @@ class Line(GraphicObject):
         super().__init__(name, color)
         self.points = [point1, point2]
         self.window = window
+        for point in self.points:
+            point.convert_coordinates()
 
     def x1(self) -> float:
         """Retorna a coordenada x do primeiro ponto da linha."""
@@ -30,13 +32,16 @@ class Line(GraphicObject):
 
     def draw(self, painter, viewport):
         """Desenha a linha no viewport."""
-        painter.setPen(QPen(self.color, LINE_THICKNESS))
 
-        for points in self.points:
-            points.convert_coordinates()
+        for point in self.points:
+            if not point.inside_window:
+                return
+
+        painter.setPen(QPen(self.color, LINE_THICKNESS))
 
         transformed_p1 = viewport.transform(self.points[0], self.window)
         transformed_p2 = viewport.transform(self.points[1], self.window)
+
         painter.drawLine(int(transformed_p1.x), int(transformed_p1.y), int(transformed_p2.x), int(transformed_p2.y))
 
     def geometric_center(self) -> tuple[float, float]:

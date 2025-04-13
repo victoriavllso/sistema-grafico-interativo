@@ -3,16 +3,16 @@ from PyQt6.QtGui import QPixmap
 from src.utils.utils import *
 from src.view.main_view.gui_main import Ui_main, QtWidgets
 from PyQt6.QtWidgets import QListWidget, QColorDialog
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QPen
 
 class MainWindow(QtWidgets.QMainWindow, Ui_main):
     def __init__(self, controller):
         super().__init__()
+        self.controller = controller
         self.setupUi(self)
         self.initUI()
 
-        self.controller = controller
         self.canvas = QPixmap(self.controller.viewport.x_max - self.controller.viewport.x_min, self.controller.viewport.y_max - self.controller.viewport.y_min)
         self.canvas.fill(QColor("white"))
         self.painter = QPainter(self.canvas)
@@ -32,7 +32,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.layout().addWidget(self.display)
 
         # desenha o subcanvas (borda)
-        self.update_viewport()
+        QTimer.singleShot(0, self.update_viewport)
+        #self.draw_subcanvas()
+        #self.update_viewport()
 
     # Connect signals to slots
     def initUI(self):
@@ -45,20 +47,33 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.z_out.setText("\u2796")
         self.button_turn_window_left.setText("\u21b6")
         self.button_turn_window_right.setText("\u21b7")
+
+        #botao de criação e deletar
         self.create_but.clicked.connect(lambda: self.controller.create_object(name=self.get_name(), color=self.color, points_input=self.get_points_input()))
         self.delete_but.clicked.connect(lambda: self.controller.delete_object(self.get_selected_name_in_display()))
+        
+        # botoes de navegação
         self.up.clicked.connect(lambda: self.controller.move_window("up"))
         self.down.clicked.connect(lambda: self.controller.move_window("down"))
         self.left.clicked.connect(lambda: self.controller.move_window("left"))
         self.right.clicked.connect(lambda: self.controller.move_window("right"))
         self.z_in.clicked.connect(lambda: self.controller.zoom("in"))
         self.z_out.clicked.connect(lambda: self.controller.zoom("out"))
+        
+        # botao para abrir a janela de transformação
         self.transform_button.clicked.connect(lambda: self.controller.open_transform_window())
         self.color_button.clicked.connect(self.open_color_dialog)
-        self.button_turn_window_left.clicked.connect(lambda: self.controller.rotate_window("left"))
-        self.button_turn_window_right.clicked.connect(lambda: self.controller.rotate_window("right"))
+        
+
+        # rotação da windo3
+        self.rotation_window.valueChanged.connect(self.controller.rotate_window)
+        self.button_turn_window_left.clicked.connect(lambda: self.controller.rotate_window2("left"))
+        self.button_turn_window_right.clicked.connect(lambda: self.controller.rotate_window2("right"))
+        
+        # botao para abrir a janela de obj
         self.actionObject_Files.triggered.connect(lambda: self.controller.open_obj_window())
 
+        
     def update_viewport(self) -> None:
         """Atualiza a área de visualização."""
 
@@ -93,16 +108,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
 
     def draw_subcanvas(self) -> None:
         """Desenha o subcanvas (borda) na área de visualização."""
-        margin_factor = 0.03
 
         pen = QPen(QColor("red"))
         pen.setWidth(LINE_THICKNESS)
 
-        margin_x = int(VP_X_MAX * margin_factor)
-        margin_y = int(VP_Y_MAX * margin_factor)
+        margin_x = int(VP_X_MAX * MARGIN_FACTOR)
+        margin_y = int(VP_Y_MAX *MARGIN_FACTOR)
 
         aux = self.vp.rect().adjusted(margin_x, margin_y, VP_X_MIN - 2 *margin_x, VP_Y_MIN-2 *margin_y)
-        
         self.painter.setPen(pen)
         self.painter.drawRect(aux)
 
@@ -136,3 +149,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
             return pontos
         except Exception:
             return []
+        
+    def get_clipping_algorithm(self):
+
+        if self.radioButton_barsky.isChecked():
+            return "liang-barsky"
+        elif self.radioButton_cohen.isChecked():
+            return "cohen-sutherland"
+        else:
+            return "cohen-sutherland" # deixar como padrão caso nada seja selecionado

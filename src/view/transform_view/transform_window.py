@@ -1,7 +1,6 @@
 from src.view.transform_view.gui_transform import Ui_Dialog, QtWidgets
 from PyQt6.QtWidgets import QListWidget
 from src.utils.utils import DT_X_MAX, DT_X_MIN, DT_Y_MAX, DT_Y_MIN
-from PyQt6.QtCore import Qt
 
 
 class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
