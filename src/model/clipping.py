@@ -250,8 +250,10 @@ class Cliper:
 		wireframe.points_draw = []
 		for point in output_polygon:
 			x, y = point
-			x, y = Transform.convert_scn_coords(x, y, self.window)
-			p = Point(self.window, x, y)
+			x2, y2 = Transform.convert_scn_coords(x, y, self.window)
+			p = Point(self.window, x2, y2)
+			p.scn_x = x
+			p.scn_y = y
 			p.inside_window = True
 			wireframe.points_draw.append(p)
 

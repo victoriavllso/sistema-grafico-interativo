@@ -82,7 +82,6 @@ class Transform:
     @staticmethod
     def to_screen_coordinates(x, y, window) -> tuple:
         """Converte coordenadas de janela para coordenadas de tela"""
-
         center_x, center_y = window.get_center()
         x_min, y_min = window.get_min()
         x_max, y_max = window.get_max()
