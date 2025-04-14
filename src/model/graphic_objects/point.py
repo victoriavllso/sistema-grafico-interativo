@@ -36,6 +36,7 @@ class Point(GraphicObject):
         new_point = point_matrix @ matrix
         self.x = new_point[0]
         self.y = new_point[1]
+        self.convert_coordinates()
     
     def __str__(self):
         color_name = self.color.name() if callable(getattr(self.color, "name", None)) else self.color

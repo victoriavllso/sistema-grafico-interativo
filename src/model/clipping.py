@@ -2,6 +2,7 @@ from src.model.graphic_objects.line import Line
 from src.model.graphic_objects.point import Point
 from src.model.graphic_objects.wireframe import Wireframe
 from src.utils.utils import MARGIN_FACTOR
+from src.model.transform import Transform
 
 class Cliper:
 	def __init__(self, window, viewport):
@@ -19,46 +20,32 @@ class Cliper:
 		self.y_max = 1 - 2* MARGIN_FACTOR
 
 	def clip_object(self, graphic_objects, clipping_algorithm):
-		
 
 		for obj in graphic_objects:
-
 			if isinstance(obj, Point): 
 					obj.convert_coordinates()
 					self.clip_point(obj)
-
 			if isinstance(obj, Line):
 				for point in obj.points:
 					point.convert_coordinates()
 				self.clip_line(obj, clipping_algorithm)
-
 			if isinstance(obj, Wireframe):
 				for point in obj.points:
 					point.convert_coordinates()
 				print('clip wireframe chamado')
 				self.clip_wireframe(obj)
-			
-
 
 	def clip_point(self, point):
 		x, y = point.scn_x, point.scn_y
-
 		if ((x <= self.x_max) and (x >= self.x_min)) and ((y<= self.y_max) and (y >= self.y_min)):
-		
 			point.inside_window = True
 		else:
 			point.inside_window = False
-		
 			 
 	def clip_line(self, line, clipping_algorithm):
-			
-			# pega as coordenadas normalizadas
 			x1, y1 = line.points[0].scn_x, line.points[0].scn_y
 			x2, y2 = line.points[1].scn_x, line.points[1].scn_y
-
 			result = None
-
-			############## verifica a clipagem selecionada
 			
 			if clipping_algorithm == "cohen-sutherland":
 				# chama o algoritmo de cohen-sutherland
@@ -188,72 +175,85 @@ class Cliper:
 			return (x1_clipped, y1_clipped), (x2_clipped, y2_clipped)
 	
 	def clip_wireframe(self, wireframe):
-		clipper_edges = [
-			(self.x_min, self.y_min, self.x_max, self.y_min),  # Bottom
-			(self.x_max, self.y_min, self.x_max, self.y_max),  # Right
-			(self.x_max, self.y_max, self.x_min, self.y_max),  # Top
-			(self.x_min, self.y_max, self.x_min, self.y_min)   # Left
-		]
 
-		# Pega as coordenadas SCN (normalizadas) dos pontos
-		wireframe_points = [(p.scn_x, p.scn_y) for p in wireframe.points]
+		def inside(p, edge, clip_edge_type):
+			x, y = p
+			if clip_edge_type == 'LEFT':
+				return x >= edge
+			elif clip_edge_type == 'RIGHT':
+				return x <= edge
+			elif clip_edge_type == 'BOTTOM':
+				return y >= edge
+			elif clip_edge_type == 'TOP':
+				return y <= edge
+			
+		def compute_intersection(p1, p2, edge, clip_edge_type):
+			x1, y1 = p1
+			x2, y2 = p2
 
-		clipped = wireframe_points  # Inicializa com os pontos do wireframe original
-
-		# Aplica o corte cumulativo para cada aresta da janela
-		for edge in clipper_edges:
-			x1, y1, x2, y2 = edge
-			clipped = self.sutherland_hodgman(clipped, x1, y1, x2, y2)  # Aplica o corte da aresta
-
-			if not clipped:  # Se o recorte resultar em uma lista vazia, não há interseção
-				print('Nenhum ponto recortado')
-				return  # Retorna imediatamente se nenhum ponto foi recortado
-
-		# Atualiza diretamente os pontos em wireframe com os pontos recortados
-		for i, point in enumerate(wireframe.points):
-			if i < len(clipped):
-				point.scn_x, point.scn_y = clipped[i][0], clipped[i][1]
-				point.scx_x = clipped[i][0]  # Atribuindo a coordenada X
-				point.scx_y = clipped[i][1]  # Atribuindo a coordenada Y
-				point.inside_window = True
-				print(f'Novas coordenadas do wireframe: x={point.scn_x}, y={point.scn_y}')
+			if x1 == x2:
+				m = None  # Vertical line
 			else:
-				point.inside_window = False  # Marca o ponto como fora da janela
+				m = (y2 - y1) / (x2 - x1)
 
-		print(f'Coordenadas da janela: ({self.x_min}, {self.y_min}, {self.x_max}, {self.y_max})')
+			if clip_edge_type == 'LEFT' or clip_edge_type == 'RIGHT':
+				x_edge = edge
+				if m is not None:
+					y = m * (x_edge - x1) + y1
+				else:
+					y = y1
+				return (x_edge, y)
+			else:  # BOTTOM or TOP
+				y_edge = edge
+				if m is not None:
+					x = (y_edge - y1) / m + x1
+				else:
+					x = x1
+				return (x, y_edge)
+		
+		polygon = [(point.scn_x, point.scn_y) for point in wireframe.points]
+		clip_window = (self.x_min, self.y_min, self.x_max, self.y_max)
 
-	def sutherland_hodgman(self, subject_polygon, x1, y1, x2, y2):
-		def inside(p):
-			# Determina se o ponto p está à esquerda da aresta (x1,y1) -> (x2,y2)
-			return (x2 - x1)*(p[1] - y1) - (y2 - y1)*(p[0] - x1) >= 0
+		edges = [
+        ('LEFT', clip_window[0]),
+        ('RIGHT', clip_window[2]),
+        ('BOTTOM', clip_window[1]),
+        ('TOP', clip_window[3])
+    ]
 
-		def compute_intersection(p1, p2):
-			# Calcula a interseção entre a aresta do polígono e a borda do clipper
-			dx = p2[0] - p1[0]
-			dy = p2[1] - p1[1]
-			dx_clip = x2 - x1
-			dy_clip = y2 - y1
+		output_polygon = polygon
+		for edge_type, edge_val in edges:
+			input_polygon = output_polygon
+			output_polygon = []
+			if not input_polygon:
+				break
+			prev_point = input_polygon[-1]
 
-			denominator = dx * dy_clip - dy * dx_clip
-			if denominator == 0:
-				return p1  # Linhas paralelas, sem interseção
+			for curr_point in input_polygon:
+				if inside(curr_point, edge_val, edge_type):
+					if inside(prev_point, edge_val, edge_type):
+						output_polygon.append(curr_point)
+					else:
+						inter_pt = compute_intersection(prev_point, curr_point, edge_val, edge_type)
+						output_polygon.append(inter_pt)
+						output_polygon.append(curr_point)
+				elif inside(prev_point, edge_val, edge_type):
+					inter_pt = compute_intersection(prev_point, curr_point, edge_val, edge_type)
+					output_polygon.append(inter_pt)
+				prev_point = curr_point
 
-			t = ((x1 - p1[0]) * dy_clip - (y1 - p1[1]) * dx_clip) / denominator
-			return (p1[0] + t * dx, p1[1] + t * dy)
+		for point in wireframe.points:
+			point.inside_window = True
 
-		output_list = []
-		n = len(subject_polygon)
+		print("output_polygon", output_polygon)
 
-		for i in range(n):
-			current = subject_polygon[i]
-			prev = subject_polygon[i - 1]
+		wireframe.points_draw = []
+		for point in output_polygon:
+			x, y = point
+			x, y = Transform.convert_scn_coords(x, y, self.window)
+			p = Point(self.window, x, y)
+			p.inside_window = True
+			wireframe.points_draw.append(p)
 
-			# Verifica se o ponto atual está dentro da borda
-			if inside(current):
-				if not inside(prev):
-					output_list.append(compute_intersection(prev, current))
-				output_list.append(current)
-			elif inside(prev):
-				output_list.append(compute_intersection(prev, current))
 
-		return output_list
+		return output_polygon

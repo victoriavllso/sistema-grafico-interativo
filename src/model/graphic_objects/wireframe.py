@@ -16,6 +16,7 @@ class Wireframe(GraphicObject):
         self.points = points
         self.concave = self._is_concave()
         self.window = window
+        self.points_draw = []
 
         for point in self.points:
             point.convert_coordinates()
@@ -29,7 +30,7 @@ class Wireframe(GraphicObject):
                 return
 
         # Converte os pontos para o sistema de coordenadas da viewport
-        transformed_points = [viewport.transform(p, self.window) for p in self.points]
+        transformed_points = [viewport.transform(p, self.window) for p in self.points_draw]
         
         if self.filled:
             # Cria o polígono preenchido
