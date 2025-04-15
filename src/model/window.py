@@ -79,6 +79,7 @@ class Window:
                            [sin, cos]]
         rotate = self.transform_vector(actual_direction, rotation_matrix)
         self.direction = (rotate[0], rotate[1])
+        
     def rotate_window_left(self, angle:int) -> None:
         """Rotate the window to the left by a given angle."""
         angle *= -1

@@ -284,26 +284,13 @@
        <property name="geometry">
         <rect>
          <x>40</x>
-         <y>-10</y>
+         <y>0</y>
          <width>171</width>
          <height>41</height>
         </rect>
        </property>
        <property name="text">
         <string>window rotation angle:</string>
-       </property>
-      </widget>
-      <widget class="QSlider" name="rotation_window">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>20</y>
-         <width>160</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
        </property>
       </widget>
      </widget>
@@ -523,7 +510,7 @@
      <x>0</x>
      <y>0</y>
      <width>1119</width>
-     <height>24</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">

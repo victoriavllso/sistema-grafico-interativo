@@ -91,7 +91,6 @@ class Controller:
         for obj in graphic_objects:
             # Verifica se todos os pontos do objeto estão dentro da janela
             if all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])):
-                print(f'objeto clipado e visível')
                 obj.draw(painter, self.viewport)
 
             # Resetar flag dos pontos após o desenho
@@ -202,7 +201,7 @@ class Controller:
         zoom_function()
         self.main_window.update_viewport()
     
-    def rotate_window2(self, direction) -> None:
+    def rotate_window(self, direction) -> None:
         """Rotaciona a janela de visualização na direção especificada."""
         direction_actions = {
             "left": self.window.rotate_window_left,
@@ -220,10 +219,7 @@ class Controller:
         rotate_function(angle)
         self.main_window.update_viewport()
 
-    def rotate_window(self, angle) -> None:
-        """Rotaciona a janela de visualização na direção especificada."""
-        self.window.rotate(angle)
-        self.main_window.update_viewport()
+
     #---------- Métodos de Importação/Exportação ----------#
 
     def open_obj_window(self) -> None:

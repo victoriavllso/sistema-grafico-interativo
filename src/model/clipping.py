@@ -32,7 +32,6 @@ class Cliper:
 			if isinstance(obj, Wireframe):
 				for point in obj.points:
 					point.convert_coordinates()
-				print('clip wireframe chamado')
 				self.clip_wireframe(obj)
 
 	def clip_point(self, point):
@@ -245,7 +244,6 @@ class Cliper:
 		for point in wireframe.points:
 			point.inside_window = True
 
-		print("output_polygon", output_polygon)
 
 		wireframe.points_draw = []
 		for point in output_polygon:

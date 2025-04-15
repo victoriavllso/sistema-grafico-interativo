@@ -24,7 +24,6 @@ class Wireframe(GraphicObject):
         self.filled = filled
 
     def draw(self, painter, viewport) -> None:
-        print("drawing wireframe chamado")
         for point in self.points:
             if not point.inside_window:
                 return

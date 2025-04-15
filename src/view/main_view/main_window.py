@@ -66,9 +66,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         
 
         # rotação da windo3
-        self.rotation_window.valueChanged.connect(self.controller.rotate_window)
-        self.button_turn_window_left.clicked.connect(lambda: self.controller.rotate_window2("left"))
-        self.button_turn_window_right.clicked.connect(lambda: self.controller.rotate_window2("right"))
+        self.button_turn_window_left.clicked.connect(lambda: self.controller.rotate_window("left"))
+        self.button_turn_window_right.clicked.connect(lambda: self.controller.rotate_window("right"))
         
         # botao para abrir a janela de obj
         self.actionObject_Files.triggered.connect(lambda: self.controller.open_obj_window())
