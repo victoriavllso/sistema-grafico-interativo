@@ -28,7 +28,6 @@ class Controller:
     def __init__(self):
         self.display_file = DisplayFile()
         self.display_transform = DisplayTransform()
-
         self.viewport = Viewport()
         self.window = Window()
         self.transform_window = None
@@ -43,57 +42,47 @@ class Controller:
 
     def create_object(self, points_input, color, name=None, filled=False) -> None:
         """Cria um objeto gráfico"""
-
         obj = None
         name = name or self.display_file.get_next_possible_name()
 
         if len(points_input) == 2:
-            
+
             if isinstance(points_input[0], (int, float)) and isinstance(points_input[1], (int, float)):
                 obj = Point(window=self.window, name=name, x=points_input[0], y=points_input[1], color=color)
-
             else:
                 point0, point1 = Point(window=self.window, x=points_input[0][0], y=points_input[0][1]), Point(window=self.window, x=points_input[1][0], y=points_input[1][1])
                 obj = Line(window=self.window, name=name, point1=point0, point2=point1, color=color)
 
         elif len(points_input) > 2:
+
             try:
                 points = [Point(window=self.window, x=x, y=y) for x, y in points_input]
                 obj = Wireframe(window=self.window, name=name, points=points, color=color, filled=filled)
             except Exception:
                 GUIUtils.show_popup("Erro", "Wireframe inválido!", QMessageBox.Icon.Critical)
                 return
-
+            
         if obj is None:
             GUIUtils.show_popup("Erro", "Não foi possível criar o objeto", QMessageBox.Icon.Critical)
             return
-
+        
         if self.display_file.verify_name(obj.name):
             GUIUtils.show_popup("Erro", "Nome de objeto inválido: O nome do objeto já existe", QMessageBox.Icon.Critical)
             return
-
+        
         self.display_file.add(obj)
         self.main_window.update_viewport()
 
     def draw_objects(self, painter: QPainter) -> None:
         """Desenha os objetos na área de visualização."""
-
-        # pega todos os objetos gráficos
         graphic_objects = self.display_file.get_all()
-
-        # pega o algoritmo de clipping para retas selecionado no raddio button
         clipping_algorithm = self.main_window.get_clipping_algorithm()
-
-        # clipa os objetos
         self.cliper.clip_object(graphic_objects, clipping_algorithm)
 
-        # Desenha os objetos clipados
         for obj in graphic_objects:
-            # Verifica se todos os pontos do objeto estão dentro da janela
             if all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])):
                 obj.draw(painter, self.viewport)
 
-            # Resetar flag dos pontos após o desenho
             for p in getattr(obj, "points", []):
                 p.inside_window = False
 
@@ -136,7 +125,6 @@ class Controller:
   
     def transform_object(self, selected_object) -> None:
         """Aplica a transformação ao objeto selecionado."""
-
         if not selected_object:
             GUIUtils.show_popup("Erro", "Nenhum objeto selecionado para transformar!", QMessageBox.Icon.Critical)
             return
@@ -156,6 +144,7 @@ class Controller:
                 self.transform.scale_object(selected_object, sx, sy)
             elif tr_type == "rotate":
                 angle = transform.get("angle")
+
                 if transform.get("type_rotate") == "rotate_origin":
                     self.transform.rotate_object(selected_object, angle)
                 elif transform.get("type_rotate") == "rotate_point":
@@ -184,6 +173,7 @@ class Controller:
         move_function = move_actions.get(direction)
         if move_function is None:
             return
+        
         move_function()
         self.main_window.update_viewport()
 
@@ -198,6 +188,7 @@ class Controller:
         zoom_function = zoom_actions.get(action)
         if zoom_function is None:
             return
+        
         zoom_function()
         self.main_window.update_viewport()
     
@@ -219,6 +210,11 @@ class Controller:
         rotate_function(angle)
         self.main_window.update_viewport()
 
+    def get_margin(self) -> None:
+        """Calcula a margem da janela de visualização."""
+        margin_x = int(VP_X_MAX * MARGIN_FACTOR)
+        margin_y = int(VP_Y_MAX * MARGIN_FACTOR)
+        return margin_x, margin_y
 
     #---------- Métodos de Importação/Exportação ----------#
 
@@ -285,8 +281,3 @@ class Controller:
             return pontos
         except Exception:
             return []
-
-
-
-
-

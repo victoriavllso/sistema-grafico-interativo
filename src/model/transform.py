@@ -55,21 +55,6 @@ class Transform:
             obj.receive_transform(matrix)
 
     @staticmethod
-    def convert_scn_coords(scn_x: float, scn_y: float, window: Window) -> tuple[float, float]:
-        """Converte coordenadas da cena para coordenadas da janela"""
-        x = (scn_x + 1) / 2 * (window.x_max - window.x_min) + window.x_min
-        y = (scn_y + 1) / 2 * (window.y_max - window.y_min) + window.y_min
-        return x, y
-    
-    @staticmethod
-    def calculate_angle(vector1, vector2) -> float:
-        """Calcula o ângulo entre dois vetores"""
-        v1 = vector1 / np.linalg.norm(vector1)
-        v2 = vector2 / np.linalg.norm(vector2)
-        result = np.arccos(np.clip(np.dot(v1, v2), -1.0, 1.0))
-        return result
-    
-    @staticmethod
     def rotate_point_origin(x, y, angle) -> tuple:
         """Rotaciona um ponto em torno da origem"""
         matrix_rotate = Transform.matrix_rotate(angle)
@@ -78,6 +63,18 @@ class Transform:
         x = result[0]
         y = result[1]
         return x, y
+    
+    #---------- Cálculo de ângulo entre vetores ----------#
+    
+    @staticmethod
+    def calculate_angle(vector1, vector2) -> float:
+        """Calcula o ângulo entre dois vetores"""
+        v1 = vector1 / np.linalg.norm(vector1)
+        v2 = vector2 / np.linalg.norm(vector2)
+        result = np.arccos(np.clip(np.dot(v1, v2), -1.0, 1.0))
+        return result
+
+    #---------- Conversão entre coordenadas de janela e coordenadas de tela ----------#
 
     @staticmethod
     def to_screen_coordinates(x, y, window) -> tuple:
@@ -92,3 +89,10 @@ class Transform:
             (y_max - center_y) - (y_min - center_y)
         )
         return scn_x, scn_y
+    
+    @staticmethod
+    def from_screen_coordinates(scn_x: float, scn_y: float, window: Window) -> tuple[float, float]:
+        """Converte coordenadas da cena para coordenadas da janela"""
+        x = (scn_x + 1) / 2 * (window.x_max - window.x_min) + window.x_min
+        y = (scn_y + 1) / 2 * (window.y_max - window.y_min) + window.y_min
+        return x, y

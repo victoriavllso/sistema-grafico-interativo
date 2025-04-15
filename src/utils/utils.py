@@ -12,8 +12,8 @@ W_Y_MAX = 1000
 # Viewport
 VP_X_MIN = 0
 VP_Y_MIN = 0
-VP_X_MAX = 600
-VP_Y_MAX = 670
+VP_X_MAX = 620
+VP_Y_MAX = 660
 
 # Display File
 DF_X_MIN = 780

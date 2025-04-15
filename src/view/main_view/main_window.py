@@ -17,7 +17,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.canvas.fill(QColor("white"))
         self.painter = QPainter(self.canvas)
         self.vp.setPixmap(self.canvas)
-
         self.color = QColor("black")
 
         # Display
@@ -33,8 +32,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
 
         # desenha o subcanvas (borda)
         QTimer.singleShot(0, self.update_viewport)
-        #self.draw_subcanvas()
-        #self.update_viewport()
 
     # Connect signals to slots
     def initUI(self):
@@ -75,16 +72,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         
     def update_viewport(self) -> None:
         """Atualiza a área de visualização."""
-
         self.canvas.fill(QColor("white"))
-
         if self.painter.isActive():
             self.painter.end()
-
         self.painter.begin(self.canvas)
         self.draw_subcanvas()
         self.controller.draw_objects(self.painter)
-
         self.painter.end()
         self.vp.setPixmap(self.canvas)
         self.update_display()
@@ -106,16 +99,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         return self.name_ln.text().strip()
 
     def draw_subcanvas(self) -> None:
-        """Desenha o subcanvas (borda) na área de visualização."""
-
+        """Desenha o subcanvas (borda do retângulo de clipping) na área de visualização."""
         pen = QPen(QColor("red"))
         pen.setWidth(LINE_THICKNESS)
-
-        margin_x = int(VP_X_MAX * MARGIN_FACTOR)
-        margin_y = int(VP_Y_MAX *MARGIN_FACTOR)
-
-        aux = self.vp.rect().adjusted(margin_x, margin_y, VP_X_MIN - 2 *margin_x, VP_Y_MIN-2 *margin_y + 30)
         self.painter.setPen(pen)
+        margin_x, margin_y = self.controller.get_margin()
+        aux = self.vp.rect().adjusted(margin_x, margin_y, -margin_x, -margin_y)
         self.painter.drawRect(aux)
 
     def get_angle_rotation(self) -> float:
@@ -132,7 +121,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         if selected_items:
             full_text = selected_items[0].text()
             name_part = full_text.split(' - ')[0]
-            print(name_part)
             return name_part
         return None
     
@@ -149,16 +137,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         except Exception:
             return []
         
-    def get_clipping_algorithm(self):
-
+    def get_clipping_algorithm(self) -> str:
+        """Retorna o algoritmo de recorte selecionado pelo usuário."""
         if self.radioButton_barsky.isChecked():
             return "liang-barsky"
-        elif self.radioButton_cohen.isChecked():
-            return "cohen-sutherland"
-        else:
-            return "cohen-sutherland" # deixar como padrão caso nada seja selecionado
+        return "cohen-sutherland"
         
-    def get_filled(self):
+    def get_filled(self) -> bool:
+        """Retorna se o objeto deve ser preenchido ou não."""
         if self.radioButton.isChecked():
             return True
         return False

@@ -61,6 +61,28 @@ class Point(GraphicObject):
         # Converte para coordenadas da cena
         self.scn_x, self.scn_y = Transform.to_screen_coordinates(x, y, self._window)
 
+    def from_scene_coordinates(self, scn_x: float, scn_y: float) -> None:
+        """Converte coordenadas da cena para coordenadas da janela"""
+
+        # Inverte a conversão para coordenadas da cena
+        x, y = Transform.from_screen_coordinates(scn_x, scn_y, self._window)
+
+        # Inverte a rotação
+        angle = Transform.calculate_angle((0, 1), self._window.direction) * (180 / np.pi)
+        if self._window.direction[0] < 0:
+            angle = 360 - angle
+        if angle != 0:
+            x, y = Transform.rotate_point_origin(x, y, -angle)
+
+        # Inverte a translação
+        center_x, center_y = self._window.get_center()
+        translated = np.dot([x, y, 1], Transform.matrix_translate(center_x, center_y))
+
+        # Define os valores reais
+        self.x, self.y = translated[0], translated[1]
+        self.scn_x, self.scn_y = scn_x, scn_y
+
+
     def get_points_obj(self):
         return f'v {self.x} {self.y} 0\n'
     
