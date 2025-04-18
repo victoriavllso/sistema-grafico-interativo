@@ -288,3 +288,7 @@ class Controller:
     def open_bezier_window(self):
         self.bezier_window = BezierWindow(self)
         self.bezier_window.show()
+
+    def create_bezier_curve(self):
+        pass
+        # criar um model para a curva bezier e conectar aqui

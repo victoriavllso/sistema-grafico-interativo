@@ -12,7 +12,9 @@ class BezierWindow(QtWidgets.QDialog, Ui_Dialog):
 
 
 	def initUI(self):
-		self.create_bezier_button.clicked.connect(self.create_bezier)
+
+		# chama a função que cria a curva bezier (função do model, acionada pelo controller)
+		self.create_bezier_button.clicked.connect(lambda: self.controller(self.create_bezier_curve()))
 
 	def get_points_input(self):
 
@@ -20,3 +22,8 @@ class BezierWindow(QtWidgets.QDialog, Ui_Dialog):
 		points = self.input_bezier.text().strip()
 		points - list(eval(points))
 		return points
+	
+	def get_name(self):
+
+		name = self.name_curve_bezier.text().strip()
+		return name
