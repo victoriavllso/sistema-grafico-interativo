@@ -19,6 +19,7 @@ from src.view.transform_view.transform_window import TransformWindow
 from src.view.main_view.main_window import MainWindow
 from src.view.obj_view.obj_window import OBJDialog
 from src.view.bezier_view.bezier_window import BezierWindow
+from src.view.create_object_view.create_object_window import CreateObjectWindow
 
 from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtGui import QPainter
@@ -34,6 +35,7 @@ class Controller:
         self.transform_window = None
         self.obj_window = None
         self.bezier_window = None
+        self.create_object_window = None
         self.transform = Transform()
         self.cliper = Cliper(self.window, self.viewport)
         self.descritor_obj = DescritorOBJ()
@@ -42,10 +44,20 @@ class Controller:
 
     #---------- Graphic Objects ----------#
 
+    def open_create_window(self):
+
+        """Abre a janela de criação de objetos gráficos."""
+        self.create_object_window = CreateObjectWindow(self)
+        self.create_object_window.show()
+
     def create_object(self, points_input, color, name=None, filled=False) -> None:
         """Cria um objeto gráfico"""
+
+        print(f'pontos no inicio de create_object: {points_input}')
         obj = None
         name = name or self.display_file.get_next_possible_name()
+        points_input = self.parse_coordinates(points_input)
+        print(f'pontos retornados: {points_input}')
 
         if len(points_input) == 2:
 
@@ -278,6 +290,7 @@ class Controller:
     @staticmethod
     def parse_coordinates(input_text: str) -> list:
         """Converte uma string de coordenadas em uma lista de pontos."""
+        print(f'pontos passados para coordinadas: {input_text}')
         try:
             pontos = list(eval(input_text))
             return pontos

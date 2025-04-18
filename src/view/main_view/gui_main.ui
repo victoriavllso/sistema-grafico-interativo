@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1119</width>
-    <height>921</height>
+    <height>815</height>
    </rect>
   </property>
   <property name="palette">
@@ -124,8 +124,8 @@
    <widget class="QScrollArea" name="scrollArea">
     <property name="geometry">
      <rect>
-      <x>760</x>
-      <y>480</y>
+      <x>770</x>
+      <y>370</y>
       <width>281</width>
       <height>391</height>
      </rect>
@@ -332,8 +332,8 @@
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>760</x>
-      <y>370</y>
+      <x>770</x>
+      <y>260</y>
       <width>281</width>
       <height>101</height>
      </rect>
@@ -412,102 +412,11 @@
     <zorder>label</zorder>
     <zorder>delete_but</zorder>
    </widget>
-   <widget class="QWidget" name="widget_2" native="true">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>180</y>
-      <width>281</width>
-      <height>181</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(62, 31, 0);</string>
-    </property>
-    <widget class="QLineEdit" name="points_ln">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>231</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QLabel" name="points_lbl">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>58</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>points:</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="name_lbl">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>70</y>
-       <width>58</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>name:</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="name_ln">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>231</width>
-       <height>31</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="color_button">
-     <property name="geometry">
-      <rect>
-       <x>160</x>
-       <y>140</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string>set color</string>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="radioButton">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>150</y>
-       <width>100</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>rachurado</string>
-     </property>
-    </widget>
-   </widget>
    <widget class="QPushButton" name="open_window_bezier_button">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>780</y>
+      <x>830</x>
+      <y>200</y>
       <width>151</width>
       <height>41</height>
      </rect>

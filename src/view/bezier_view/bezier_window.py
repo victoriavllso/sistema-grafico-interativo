@@ -19,7 +19,7 @@ class BezierWindow(QtWidgets.QDialog, Ui_Dialog):
 	def get_points_input(self):
 
 		#pega os pontos de entrada
-		points = self.input_bezier.text().strip()
+		points = self.input_bezier.toPlainText().strip()
 		points - list(eval(points))
 		return points
 	

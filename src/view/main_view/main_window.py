@@ -17,7 +17,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.canvas.fill(QColor("white"))
         self.painter = QPainter(self.canvas)
         self.vp.setPixmap(self.canvas)
-        self.color = QColor("black")
 
         # Display
         self.display = QListWidget()
@@ -45,8 +44,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         self.button_turn_window_left.setText("\u21b6")
         self.button_turn_window_right.setText("\u21b7")
 
-        #botao de criação e deletar
-        self.create_but.clicked.connect(lambda: self.controller.create_object(name=self.get_name(), color=self.color, points_input=self.get_points_input(), filled=self.get_filled()))
+        #botao de criação e deletar objetos 2D
+        self.create_but.clicked.connect(lambda: self.controller.open_create_window())
         self.delete_but.clicked.connect(lambda: self.controller.delete_object(self.get_selected_name_in_display()))
         
         # botoes de navegação
@@ -59,7 +58,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         
         # botao para abrir a janela de transformação
         self.transform_button.clicked.connect(lambda: self.controller.open_transform_window())
-        self.color_button.clicked.connect(self.open_color_dialog)
         
 
         # rotação da windo3
@@ -96,10 +94,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         """Abre o diálogo de seleção de cor."""
         self.color = QColorDialog.getColor()
 
-    def get_name(self) -> str:
-        """Retorna o nome que o usuário deu de entrada."""
-        return self.name_ln.text().strip()
-
     def draw_subcanvas(self) -> None:
         """Desenha o subcanvas (borda do retângulo de clipping) na área de visualização."""
         pen = QPen(QColor("red"))
@@ -126,18 +120,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
             return name_part
         return None
     
-    def get_points_input(self) -> list:
-        """Retorna os pontos de entrada do usuário."""
-        return self.parse_coordinates(self.points_ln.text().strip())
-
-    @staticmethod
-    def parse_coordinates(input_text: str) -> list:
-        """Converte uma string de coordenadas em uma lista de pontos."""
-        try:
-            pontos = list(eval(input_text))
-            return pontos
-        except Exception:
-            return []
         
     def get_clipping_algorithm(self) -> str:
         """Retorna o algoritmo de recorte selecionado pelo usuário."""
@@ -145,8 +127,3 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
             return "liang-barsky"
         return "cohen-sutherland"
         
-    def get_filled(self) -> bool:
-        """Retorna se o objeto deve ser preenchido ou não."""
-        if self.radioButton.isChecked():
-            return True
-        return False
