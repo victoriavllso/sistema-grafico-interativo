@@ -503,6 +503,19 @@
      </property>
     </widget>
    </widget>
+   <widget class="QPushButton" name="open_window_bezier_button">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>780</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Creater bezier curve</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

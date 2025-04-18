@@ -18,6 +18,7 @@ from src.utils.gui_utils import GUIUtils
 from src.view.transform_view.transform_window import TransformWindow
 from src.view.main_view.main_window import MainWindow
 from src.view.obj_view.obj_window import OBJDialog
+from src.view.bezier_view.bezier_window import BezierWindow
 
 from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtGui import QPainter
@@ -32,6 +33,7 @@ class Controller:
         self.window = Window()
         self.transform_window = None
         self.obj_window = None
+        self.bezier_window = None
         self.transform = Transform()
         self.cliper = Cliper(self.window, self.viewport)
         self.descritor_obj = DescritorOBJ()
@@ -281,3 +283,8 @@ class Controller:
             return pontos
         except Exception:
             return []
+    #---------- Métodos de bezier ----------#
+
+    def open_bezier_window(self):
+        self.bezier_window = BezierWindow(self)
+        self.bezier_window.show()
