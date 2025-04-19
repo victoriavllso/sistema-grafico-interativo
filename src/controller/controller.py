@@ -11,6 +11,7 @@ from src.model.window import Window
 from src.model.graphic_objects.point import Point
 from src.model.graphic_objects.line import Line
 from src.model.graphic_objects.wireframe import Wireframe
+from src.model.graphic_objects.bezier import Bezier
 
 from src.utils.utils import *
 from src.utils.gui_utils import GUIUtils
@@ -53,11 +54,8 @@ class Controller:
     def create_object(self, points_input, color, name=None, filled=False) -> None:
         """Cria um objeto gráfico"""
 
-        print(f'pontos no inicio de create_object: {points_input}')
         obj = None
         name = name or self.display_file.get_next_possible_name()
-        points_input = self.parse_coordinates(points_input)
-        print(f'pontos retornados: {points_input}')
 
         if len(points_input) == 2:
 
@@ -302,6 +300,7 @@ class Controller:
         self.bezier_window = BezierWindow(self)
         self.bezier_window.show()
 
-    def create_bezier_curve(self):
+    def create_bezier_curve(self, points_input, name=None):
+        """Cria uma curva bezier com os pontos dados"""
         pass
         # criar um model para a curva bezier e conectar aqui

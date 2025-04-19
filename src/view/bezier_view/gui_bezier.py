@@ -12,11 +12,8 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(407, 419)
+        Dialog.resize(416, 468)
         Dialog.setStyleSheet("background-color: rgb(86, 43, 0);")
-        self.create_bezier_button = QtWidgets.QPushButton(parent=Dialog)
-        self.create_bezier_button.setGeometry(QtCore.QRect(150, 370, 101, 31))
-        self.create_bezier_button.setObjectName("create_bezier_button")
         self.points_lbl = QtWidgets.QLabel(parent=Dialog)
         self.points_lbl.setGeometry(QtCore.QRect(40, 120, 281, 21))
         self.points_lbl.setObjectName("points_lbl")
@@ -29,6 +26,13 @@ class Ui_Dialog(object):
         self.input_bezier = QtWidgets.QPlainTextEdit(parent=Dialog)
         self.input_bezier.setGeometry(QtCore.QRect(40, 150, 291, 211))
         self.input_bezier.setObjectName("input_bezier")
+        self.create_bezier_button = QtWidgets.QDialogButtonBox(parent=Dialog)
+        self.create_bezier_button.setGeometry(QtCore.QRect(120, 410, 171, 51))
+        self.create_bezier_button.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Cancel|QtWidgets.QDialogButtonBox.StandardButton.Ok)
+        self.create_bezier_button.setObjectName("create_bezier_button")
+        self.set_color_bezier = QtWidgets.QPushButton(parent=Dialog)
+        self.set_color_bezier.setGeometry(QtCore.QRect(40, 380, 80, 22))
+        self.set_color_bezier.setObjectName("set_color_bezier")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -36,6 +40,6 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.create_bezier_button.setText(_translate("Dialog", "Create bezier"))
         self.points_lbl.setText(_translate("Dialog", "points:   (x1,y1),(x2,y2) ... (xn,yn)"))
-        self.points_lbl_2.setText(_translate("Dialog", "points:   (x1,y1),(x2,y2) ... (xn,yn)"))
+        self.points_lbl_2.setText(_translate("Dialog", "name:"))
+        self.set_color_bezier.setText(_translate("Dialog", "Set color"))

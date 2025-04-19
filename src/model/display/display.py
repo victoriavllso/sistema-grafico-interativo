@@ -29,3 +29,8 @@ class Display(ABC):
     def clear(self) -> None:
         """Clear the display list"""
         self.list.clear()
+
+    def get_object_name(self):
+
+        for obj in self.list:
+            return obj.name

@@ -91,7 +91,7 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
         return self._parse_float(self.y_rotate.text())
 
     def get_name(self) -> str:
-        return self.controller.main_window.name_ln.text().strip()
+        return self.controller.display_file.get_object_name()
     
     def get_selected_in_display(self) -> str:
         "Retorna a transformada selecionada no display"

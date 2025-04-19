@@ -23,3 +23,4 @@ class DisplayFile(Display):
             if obj.name == name:
                 return True
         return False
+    
