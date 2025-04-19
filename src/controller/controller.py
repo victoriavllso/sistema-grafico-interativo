@@ -300,7 +300,8 @@ class Controller:
         self.bezier_window = BezierWindow(self)
         self.bezier_window.show()
 
-    def create_bezier_curve(self, points_input, name=None):
+    def create_bezier_curve(self, points_input, color, name):
         """Cria uma curva bezier com os pontos dados"""
-        pass
-        # criar um model para a curva bezier e conectar aqui
+        obj = Bezier(self.window, name, points_input,color)
+
+
