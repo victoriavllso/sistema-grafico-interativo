@@ -1,6 +1,7 @@
 from src.model.graphic_objects.line import Line
 from src.model.graphic_objects.point import Point
 from src.model.graphic_objects.wireframe import Wireframe
+from src.model.graphic_objects.bezier import Bezier
 from src.utils.utils import MARGIN_FACTOR
 from src.model.transform import Transform
 
@@ -34,6 +35,12 @@ class Cliper:
 					point.convert_coordinates()
 				self.clip_wireframe(obj)
 
+			if isinstance(obj, Bezier):
+				for point in obj.points:
+					point.convert_coordinates()
+					self.clip_point(point)
+			
+				
 	def clip_point(self, point):
 		x, y = point.scn_x, point.scn_y
 		if ((x <= self.x_max) and (x >= self.x_min)) and ((y<= self.y_max) and (y >= self.y_min)):

@@ -67,6 +67,7 @@ Exemplos de entrada:
 Ponto: (500, 500)
 Reta: (900,600),(200,600)
 Polígono: (100,100), (200,100), (200, 200), (100, 200)
+Bezier: (100,250), (150,100), (250, 400), (300, 250)
 ```
 
 - O nome pode ser gerado automaticamente ou pelo usuário, lembrando que o sistema não suporta nomes repetidos.

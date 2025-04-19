@@ -300,8 +300,28 @@ class Controller:
         self.bezier_window = BezierWindow(self)
         self.bezier_window.show()
 
-    def create_bezier_curve(self, points_input, color, name):
+    def create_bezier_curve(self, points_input, color, name=None):
         """Cria uma curva bezier com os pontos dados"""
-        obj = Bezier(self.window, name, points_input,color)
+
+        obj = None
+        points = []
+        name = name or self.display_file.get_next_possible_name()
+
+        if len(points_input) < 4:
+            GUIUtils.show_popup("Erro", "É necessário inserir ao menos 4 pontos.", QMessageBox.Icon.Critical)
+            return
+        for x,y in points_input:
+            points.append(Point(window=self.window, x=x, y=y))
+           
+        obj = Bezier(self.window, name, points,color)
+
+        if obj is None:
+            GUIUtils.show_popup("Erro", "Não foi possível criar o objeto", QMessageBox.Icon.Critical)
+            return
+        if self.display_file.verify_name(obj.name):
+            GUIUtils.show_popup("Erro", "Nome de objeto inválido: O nome do objeto já existe", QMessageBox.Icon.Critical)
+            return
+        self.display_file.add(obj)
+        self.main_window.update_viewport()
 
 

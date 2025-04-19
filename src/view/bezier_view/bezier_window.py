@@ -31,7 +31,7 @@ class BezierWindow(QtWidgets.QDialog, Ui_Dialog):
 	
 	def handle_create_bezier(self):
 		""" lidamos com a criação de objecto para que a janela não fique com os dados do objeto criado anteriormente"""
-		self.controller.create_bezier_curve(name=self.get_name(), points_input=self.get_points_input())
+		self.controller.create_bezier_curve(name=self.get_name(), points_input=self.get_points_input(), color=self.color)
 		self.reset_fields()
 
 	def reset_fields(self):
