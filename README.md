@@ -1,11 +1,14 @@
-# Sistema Gráfico Interativo (SGI)
+# Sistema Gráfico Interativo (SGI) - Entrega 5
 
 ## 👨‍🎓 Alunos
 - Eduardo Achar - 23102448  
 - Victoria Rodrigues Veloso - 23100460  
 
 ## 🧑‍🏫 Turma
-INE5420-05208 (2025.1) - Computação Gráfica  
+INE5420-05208 (2025.1) - Computação Gráfica
+
+## Data da entrega
+22/04/2025
 
 ## 📦 Instalação de Dependências 
 
@@ -55,12 +58,21 @@ Descrição: Nesta interface é possível aplicar **translação**, **rotação*
 
 ---
 
+### Tela de Criação de Objetos
+
+Descrição: Nesta interface é possível criar objetos gráficos inserindo nome, coordenadas, cor, preenchimento, e tipo do objeto.
+
+![Tela de Criação de objetos](assets/images/tela_criacao_objetos.png)
+
+---
+
 ## 🛠️ Funcionalidades Principais
 
 ### Criação de Objetos
 - Ponto
 - Reta
 - Polígono
+- Curva
 
 Exemplos de entrada:
 ```
@@ -76,8 +88,7 @@ Bezier: (100,250), (150,100), (250, 400), (300, 250)
 - O nome pode ser gerado automaticamente ou pelo usuário, lembrando que o sistema não suporta nomes repetidos.
 - A cor pode ser escolhida automaticamente ou pelo usuário.
 - Para polígonos, a flag *rachurado* define se o objeto será preenchido ou em modelo de arame.
-- Não é possível editar um objeto, apenas excluir ou criar, além de selecionar no display.
-- Para apagar um objeto do mundo, você deve seleciona-lo no display, assim como para aplicar transformações nele.
+- Não é possível editar um objeto, apenas excluir ou criar, além de selecionar no display para exclui-lo ou aplicar transformações.
 
 ### Transformações Suportadas
 - **Translação**: movimentação do objeto no espaço
@@ -102,6 +113,7 @@ src/
 │       ├── display_transform.py       # Aplica transformações
 │       └── display.py                 # Interface geral do display
 │   └── graphic_objects/
+│       └── bezier.py                  # Representação de curvas
 │       ├── graphic_object.py          # Classe base
 │       ├── line.py                    # Representação de retas
 │       ├── point.py                   # Representação de pontos
@@ -115,6 +127,10 @@ src/
 │   ├── gui_utils.py                   # Auxiliares para interface
 │   └── utils.py                       # Funções auxiliares gerais
 ├── view/
+│   ├── create_object_view/
+│   │   ├── create_object_window.py    # Interface para criação de objetos
+│   │   ├── gui_create_object.py       
+│   │   └── gui_create_object.ui        
 │   ├── main_view/
 │   │   ├── gui_main.py
 │   │   ├── gui_main.ui
