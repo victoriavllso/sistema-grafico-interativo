@@ -99,12 +99,8 @@ class Controller:
         self.cliper.clip_object(graphic_objects, clipping_algorithm)
 
         for obj in graphic_objects:
-
-            if isinstance(obj, Bezier):
+            if all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])) or isinstance(obj, Bezier):
                 obj.draw(painter, self.viewport)
-            elif all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])):
-                obj.draw(painter, self.viewport)
-
             for p in getattr(obj, "points", []):
                 p.inside_window = False
 

@@ -3,7 +3,6 @@ from src.model.graphic_objects.point import Point
 from src.model.graphic_objects.wireframe import Wireframe
 from src.model.graphic_objects.bezier import Bezier
 from src.utils.utils import MARGIN_FACTOR
-from src.model.transform import Transform
 
 class Cliper:
 	def __init__(self, window, viewport):
@@ -15,13 +14,13 @@ class Cliper:
 		self.window = window
 		self.viewport = viewport
 
+		# define a viewport
 		self.x_min = -1 + 2* MARGIN_FACTOR
 		self.x_max = 1 - 2* MARGIN_FACTOR
 		self.y_min = -1 + 2* MARGIN_FACTOR
 		self.y_max = 1 - 2* MARGIN_FACTOR
 
 	def clip_object(self, graphic_objects, clipping_algorithm):
-
 		for obj in graphic_objects:
 			if isinstance(obj, Point): 
 					obj.convert_coordinates()
@@ -34,13 +33,11 @@ class Cliper:
 				for point in obj.points:
 					point.convert_coordinates()
 				self.clip_wireframe(obj)
-
 			if isinstance(obj, Bezier):
 				for point in obj.points:
 					point.convert_coordinates()
 					self.clip_bezier(obj)
-			
-				
+
 	def clip_point(self, point):
 		x, y = point.scn_x, point.scn_y
 		if ((x <= self.x_max) and (x >= self.x_min)) and ((y<= self.y_max) and (y >= self.y_min)):
@@ -63,7 +60,6 @@ class Cliper:
 					line.points[1].scn_x, line.points[1].scn_y = result[1][0], result[1][1]
 					line.points[0].inside_window = True
 					line.points[1].inside_window = True
-
 				else:
 					line.points[0].inside_window = False
 					line.points[1].inside_window = False
@@ -88,7 +84,6 @@ class Cliper:
 		#  associa código de região a cada ponto da linha
 		code1, code2 = self.get_code(x1, y1, x_min, x_max, y_min, y_max), self.get_code(x2, y2, x_min, x_max, y_min, y_max)
 
-
 		# verifica se a linha é totalmente isível, invisível ou parcialmente visível
 		while True:
 			# completamente visível
@@ -112,7 +107,6 @@ class Cliper:
 					m = float('inf')
 				
 				# calclamos as intersecções
-
 				if code_outside & self.top:
 					x_intersection = x1 + 1/m * (y_max - y1)
 					y_intersection = y_max
@@ -133,11 +127,9 @@ class Cliper:
 					x2, y2 = x_intersection, y_intersection
 					code2 = self.get_code(x2, y2, x_min, x_max, y_min, y_max)
 		if inside:
-			return (x1, y1), (x2, y2)	
-
+			return (x1, y1), (x2, y2)
 		else:
 			return 
-				
 
 	def get_code(self, x, y, x_min, x_max, y_min, y_max):
 		code = 0
@@ -250,20 +242,18 @@ class Cliper:
 
 		for point in wireframe.points:
 			point.inside_window = True
-
-
 		wireframe.points_draw = []
+
 		for point in output_polygon:
 			x, y = point
 			p = Point(self.window, x, y)
 			p.from_scene_coordinates(x, y)
 			p.inside_window = True
 			wireframe.points_draw.append(p)
-
-
 		return output_polygon
 
-	def clip_bezier(self, bezier):
+	def clip_bezier(self, bezier) -> None:
+		"""Clip a Bezier curve"""
 		bezier.points_draw = []
 		for point in bezier.curve_points:
 			point.convert_coordinates()
