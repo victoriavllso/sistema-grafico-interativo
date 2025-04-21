@@ -17,6 +17,9 @@ class Bezier(GraphicObject):
 		for point in self.points:
 			point.convert_coordinates()
 
+		self.generate_curve_points()
+		self.points_draw = []
+
 
 	def calculate_bezier(self, point1: Point, point2: Point, point3: Point, point4: Point):
 		
@@ -58,22 +61,27 @@ class Bezier(GraphicObject):
 		return curve
 
 	def draw(self, painter, viewport):
-		for point in self.points:
-			if not point.inside_window:
-				return
+		"""Desenha a curva de bezier na tela"""
+
+		if len(self.curve_points) == 0:
+			return
+
+		transformed_points = [viewport.transform(p, self.window) for p in self.points_draw]
+		painter.setPen(QPen(self.color, 2))
+
+		for i in range(len(transformed_points) - 2):
+			p1 = transformed_points[i]
+			p2 = transformed_points[(i + 1)]
+			painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
+
+	def generate_curve_points(self):
+		"""Gera os pontos da curva de bezier"""
 		if len(self.points) == 4:
 			self.curve_points = self.calculate_bezier(self.points[0], self.points[1], self.points[2], self.points[3])
-
-			# Converte os pontos para o sistema de coordenadas da viewport
-			transformed_points = [viewport.transform(p, self.window) for p in self.curve_points]
-			painter.setPen(QPen(self.color, 2))
-
-			for i in range(len(transformed_points) - 1):
-				p1 = transformed_points[i]
-				p2 = transformed_points[(i + 1) ]
-				painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
-
-
+		else:
+			self.curve_points = []
+		
+		return self.curve_points
 
 	def geometric_center(self):
 		x_center = 0

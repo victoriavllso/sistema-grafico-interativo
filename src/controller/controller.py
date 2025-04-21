@@ -92,7 +92,10 @@ class Controller:
         self.cliper.clip_object(graphic_objects, clipping_algorithm)
 
         for obj in graphic_objects:
-            if all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])):
+
+            if isinstance(obj, Bezier):
+                obj.draw(painter, self.viewport)
+            elif all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])):
                 obj.draw(painter, self.viewport)
 
             for p in getattr(obj, "points", []):
@@ -288,7 +291,6 @@ class Controller:
     @staticmethod
     def parse_coordinates(input_text: str) -> list:
         """Converte uma string de coordenadas em uma lista de pontos."""
-        print(f'pontos passados para coordinadas: {input_text}')
         try:
             pontos = list(eval(input_text))
             return pontos

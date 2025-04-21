@@ -38,7 +38,7 @@ class Cliper:
 			if isinstance(obj, Bezier):
 				for point in obj.points:
 					point.convert_coordinates()
-					self.clip_point(point)
+					self.clip_bezier(obj)
 			
 				
 	def clip_point(self, point):
@@ -257,12 +257,16 @@ class Cliper:
 			x, y = point
 			p = Point(self.window, x, y)
 			p.from_scene_coordinates(x, y)
-			# x2, y2 = Transform.convert_scn_coords(x, y, self.window)
-			# p = Point(self.window, x2, y2)
-			# p.scn_x = x
-			# p.scn_y = y
 			p.inside_window = True
 			wireframe.points_draw.append(p)
 
 
 		return output_polygon
+
+	def clip_bezier(self, bezier):
+		bezier.points_draw = []
+		for point in bezier.curve_points:
+			point.convert_coordinates()
+			self.clip_point(point)
+			if point.inside_window:
+				bezier.points_draw.append(point)
