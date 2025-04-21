@@ -24,3 +24,9 @@ class DisplayFile(Display):
                 return True
         return False
     
+    def get_all_names(self) -> list[str]:
+        """Retorna todos os nomes dos objetos gráficos"""
+        names = []
+        for obj in self.list:
+            names.append(obj.name)
+        return names

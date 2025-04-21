@@ -19,7 +19,6 @@ from src.utils.gui_utils import GUIUtils
 from src.view.transform_view.transform_window import TransformWindow
 from src.view.main_view.main_window import MainWindow
 from src.view.obj_view.obj_window import OBJDialog
-from src.view.bezier_view.bezier_window import BezierWindow
 from src.view.create_object_view.create_object_window import CreateObjectWindow
 
 from PyQt6.QtWidgets import QMessageBox
@@ -46,42 +45,50 @@ class Controller:
     #---------- Graphic Objects ----------#
 
     def open_create_window(self):
-
         """Abre a janela de criação de objetos gráficos."""
         self.create_object_window = CreateObjectWindow(self)
         self.create_object_window.show()
 
-    def create_object(self, points_input, color, name=None, filled=False) -> None:
+    def create_object(self, points_input, color, type, filled, name) -> None:
         """Cria um objeto gráfico"""
+        name = Controller.assign_default_name({"name": name}, self.display_file)
+        name = name["name"]
 
-        obj = None
-        name = name or self.display_file.get_next_possible_name()
-
-        if len(points_input) == 2:
-
-            if isinstance(points_input[0], (int, float)) and isinstance(points_input[1], (int, float)):
+        if type == "point":
+            try:
                 obj = Point(window=self.window, name=name, x=points_input[0], y=points_input[1], color=color)
-            else:
+            except Exception:
+                GUIUtils.show_popup("Erro", "Ponto inválido!", QMessageBox.Icon.Critical)
+                return
+            
+        elif type == "line":
+            try:
                 point0, point1 = Point(window=self.window, x=points_input[0][0], y=points_input[0][1]), Point(window=self.window, x=points_input[1][0], y=points_input[1][1])
                 obj = Line(window=self.window, name=name, point1=point0, point2=point1, color=color)
+            except Exception:
+                GUIUtils.show_popup("Erro", "Linha inválida!", QMessageBox.Icon.Critical)
+                return
 
-        elif len(points_input) > 2:
-
+        elif type == "wireframe":
             try:
                 points = [Point(window=self.window, x=x, y=y) for x, y in points_input]
                 obj = Wireframe(window=self.window, name=name, points=points, color=color, filled=filled)
             except Exception:
                 GUIUtils.show_popup("Erro", "Wireframe inválido!", QMessageBox.Icon.Critical)
                 return
-            
-        if obj is None:
-            GUIUtils.show_popup("Erro", "Não foi possível criar o objeto", QMessageBox.Icon.Critical)
-            return
         
-        if self.display_file.verify_name(obj.name):
-            GUIUtils.show_popup("Erro", "Nome de objeto inválido: O nome do objeto já existe", QMessageBox.Icon.Critical)
-            return
+        elif type == "bezier":
+            try:
+                points = [Point(window=self.window, x=x, y=y) for x, y in points_input]
+                obj = Bezier(window=self.window, name=name, points=points, color=color)
+            except Exception:
+                GUIUtils.show_popup("Erro", "Bezier inválido!", QMessageBox.Icon.Critical)
+                return
         
+        else:
+            GUIUtils.show_popup("Erro", "Tipo de objeto inválido!", QMessageBox.Icon.Critical)
+            return
+
         self.display_file.add(obj)
         self.main_window.update_viewport()
 
@@ -247,7 +254,8 @@ class Controller:
         for obj in objs:
             obj = Controller.assign_material_color(obj)
             obj = Controller.assign_default_name(obj, self.display_file)
-            self.create_object(points_input=obj["points"], color=obj["material"], name=obj["name"], filled=obj["filled"])
+            obj = Controller.assign_type(obj)
+            self.create_object(points_input=obj["points"], color=obj["material"], name=obj["name"], filled=obj["filled"], type=obj["type"])
 
     def export_obj(self) -> None:
         """Exporta os objetos do mundo para um arquivo OBJ."""
@@ -280,12 +288,21 @@ class Controller:
     @staticmethod
     def assign_default_name(obj, display_file) -> dict:
         """Atribui um nome padrão ao objeto, se não houver nome fornecido."""
-        if obj["name"] is None or obj["name"] == "":
-            dic = {
-                "p": Point,
-                "l": Wireframe
-            }
-            obj["name"] = f"{obj['type']}_{display_file.get_object_count(dic[obj['type']]) + 1}"
+        if obj["name"] is None or obj["name"] == "" or obj["name"] in display_file.get_all_names():
+            obj["name"] = display_file.get_next_possible_name()
+        return obj
+    
+    @staticmethod
+    def assign_type(obj) -> dict:
+        """Atribui o tipo de objeto ao objeto."""
+        if obj["type"] == "p":
+            obj["type"] = "point"
+        elif obj["type"] == "l":
+            obj["type"] = "line"
+        elif obj["type"] == "w":
+            obj["type"] = "wireframe"
+        elif obj["type"] == "b":
+            obj["type"] = "bezier"
         return obj
 
     @staticmethod
@@ -296,34 +313,3 @@ class Controller:
             return pontos
         except Exception:
             return []
-    #---------- Métodos de bezier ----------#
-
-    def open_bezier_window(self):
-        self.bezier_window = BezierWindow(self)
-        self.bezier_window.show()
-
-    def create_bezier_curve(self, points_input, color, name=None):
-        """Cria uma curva bezier com os pontos dados"""
-
-        obj = None
-        points = []
-        name = name or self.display_file.get_next_possible_name()
-
-        if len(points_input) < 4:
-            GUIUtils.show_popup("Erro", "É necessário inserir ao menos 4 pontos.", QMessageBox.Icon.Critical)
-            return
-        for x,y in points_input:
-            points.append(Point(window=self.window, x=x, y=y))
-           
-        obj = Bezier(self.window, name, points,color)
-
-        if obj is None:
-            GUIUtils.show_popup("Erro", "Não foi possível criar o objeto", QMessageBox.Icon.Critical)
-            return
-        if self.display_file.verify_name(obj.name):
-            GUIUtils.show_popup("Erro", "Nome de objeto inválido: O nome do objeto já existe", QMessageBox.Icon.Critical)
-            return
-        self.display_file.add(obj)
-        self.main_window.update_viewport()
-
-

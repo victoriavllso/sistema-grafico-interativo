@@ -1,15 +1,15 @@
-newmtl obj_2
+newmtl obj_1
 Kd 0.0000 0.0000 0.0000
 
-newmtl r1
-Kd 1.0000 0.5686 0.0000
+newmtl a
+Kd 0.0000 0.0000 0.0000
 
-newmtl r2
-Kd 0.5765 0.1255 0.5686
+newmtl obj_3
+Kd 0.0000 0.0000 0.0000
 
-newmtl r3
-Kd 0.0000 0.9765 0.0000
+newmtl obj_4
+Kd 0.0000 0.0000 0.0000
 
-newmtl r4
-Kd 0.0157 0.1961 1.0000
+newmtl b
+Kd 1.0000 0.2528 1.0000
 

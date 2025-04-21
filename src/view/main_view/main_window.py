@@ -66,9 +66,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
         
         # botao para abrir a janela de obj
         self.actionObject_Files.triggered.connect(lambda: self.controller.open_obj_window())
-
-        # botão para abrir a janela de bezier
-        self.open_window_bezier_button.clicked.connect(lambda: self.controller.open_bezier_window())
         
     def update_viewport(self) -> None:
         """Atualiza a área de visualização."""
@@ -120,10 +117,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_main):
             return name_part
         return None
     
-        
     def get_clipping_algorithm(self) -> str:
         """Retorna o algoritmo de recorte selecionado pelo usuário."""
         if self.radioButton_barsky.isChecked():
             return "liang-barsky"
         return "cohen-sutherland"
-        

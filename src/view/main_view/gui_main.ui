@@ -412,19 +412,6 @@
     <zorder>label</zorder>
     <zorder>delete_but</zorder>
    </widget>
-   <widget class="QPushButton" name="open_window_bezier_button">
-    <property name="geometry">
-     <rect>
-      <x>830</x>
-      <y>200</y>
-      <width>151</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Creater bezier curve</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -432,7 +419,7 @@
      <x>0</x>
      <y>0</y>
      <width>1119</width>
-     <height>19</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">

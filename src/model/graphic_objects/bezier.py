@@ -10,19 +10,18 @@ class Bezier(GraphicObject):
 	def __init__(self, window, name, points: list[Point], color=Qt.GlobalColor.red):
 		super().__init__(name, color)
 		self.points = points
-		self.color = color
 		self.window = window
 		self.curve_points = []
 
 		for point in self.points:
 			point.convert_coordinates()
-
 		self.generate_curve_points()
+
 		self.points_draw = []
 
 
-	def calculate_bezier(self, point1: Point, point2: Point, point3: Point, point4: Point):
-		
+	def calculate_bezier(self, point1: Point, point2: Point, point3: Point, point4: Point) -> list[Point]:
+		"""Calcula os pontos da curva de bezier"""
 		curve = []
 		t = 0.0 # 1001 pontos gerador
 		step = 0.001
@@ -60,7 +59,7 @@ class Bezier(GraphicObject):
 		curve.append(point4)
 		return curve
 
-	def draw(self, painter, viewport):
+	def draw(self, painter, viewport) -> None:
 		"""Desenha a curva de bezier na tela"""
 
 		if len(self.curve_points) == 0:
@@ -74,7 +73,7 @@ class Bezier(GraphicObject):
 			p2 = transformed_points[(i + 1)]
 			painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
 
-	def generate_curve_points(self):
+	def generate_curve_points(self) -> list[Point]:
 		"""Gera os pontos da curva de bezier"""
 		if len(self.points) == 4:
 			self.curve_points = self.calculate_bezier(self.points[0], self.points[1], self.points[2], self.points[3])
@@ -83,7 +82,8 @@ class Bezier(GraphicObject):
 		
 		return self.curve_points
 
-	def geometric_center(self):
+	def geometric_center(self) -> tuple[int, int]:
+		"""Calcula o centro geometrico do objeto grafico"""
 		x_center = 0
 		y_center = 0
 		for p in self.points:
@@ -93,20 +93,22 @@ class Bezier(GraphicObject):
 		y_center /= len(self.points)
 		return int(x_center), int(y_center)
 	
-	def receive_transform(self, matrix):
+	def receive_transform(self, matrix) -> None:
+		"""Recebe a matriz de transformação e aplica aos pontos do objeto gráfico"""
 		for point in self.points:
 			point_matrix = np.array([point.x, point.y, 1])
 			new_point = point_matrix @ matrix
 			point.x = new_point[0]
 			point.y = new_point[1]
-
 		self.curve_points = self.calculate_bezier(self.points[0], self.points[1], self.points[2], self.points[3])
 
 	def __str__(self):
 		return f'Bezier {self.name} color {self.color}'
+
 	def get_points_obj(self):
 		"""Retorna os pontos do objeto gráfico em formato .obj"""
 		return self.points
+
 	def get_type_obj(self):
 		"""Retorna o tipo do objeto gráfico"""
 		return 'Bezier'

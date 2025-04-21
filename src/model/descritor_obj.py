@@ -1,6 +1,7 @@
 from src.model.graphic_objects.point import Point
 from src.model.graphic_objects.line import Line
 from src.model.graphic_objects.wireframe import Wireframe
+from src.model.graphic_objects.bezier import Bezier
 
 from PyQt6.QtGui import QColor
 
@@ -45,7 +46,7 @@ class DescritorOBJ:
                     _, current_material = line.split()
                     if current_material in materials:
                         current_material = materials[current_material]['color']
-                elif line and line[0] in ['w', 'l', 'f', 'p']:
+                elif line and line[0] in ['w', 'l', 'f', 'p', 'b']:
                     tokens = line.split()
                     current_type = tokens[0]
                     indices = list(map(int, tokens[1:]))
@@ -91,6 +92,9 @@ class DescritorOBJ:
                 elif isinstance(obj, Wireframe):
                     for point in obj.points:
                         points[(point.x, point.y)] = len(points) + 1
+                elif isinstance(obj, Bezier):
+                    for point in obj.points:
+                        points[(point.x, point.y)] = len(points) + 1
                 materials[obj.name] = obj.color
             for point, index in points.items():
                 file.write(f"v {point[0]} {point[1]} 0\n")
@@ -107,6 +111,8 @@ class DescritorOBJ:
                     file.write(f"w {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
                 elif isinstance(obj, Wireframe) and not obj.filled:
                     file.write(f"l {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
+                elif isinstance(obj, Bezier):
+                    file.write(f"b {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
 
     @staticmethod
     def read_material_library(lib_name):
