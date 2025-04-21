@@ -10,19 +10,17 @@ from PyQt6.QtGui import QPolygonF
 
 class Wireframe(GraphicObject):
     def __init__(self,window, name, points: list[Point], color=Qt.GlobalColor.blue, filled=True):
-        super().__init__(name, color)
+        super().__init__(name, color, window)
         if not self._is_valid_polygon(points):
             raise ValueError("Invalid polygon: The given points do not form a valid shape.")
         self.points = points
         self.concave = self._is_concave()
-        self.window = window
         self.points_draw = []
+        self.filled = filled
 
         for point in self.points:
             point.convert_coordinates()
         
-        self.filled = filled
-
     def draw(self, painter, viewport) -> None:
         for point in self.points:
             if not point.inside_window:
@@ -125,4 +123,4 @@ class Wireframe(GraphicObject):
         return f"{points_str}\n"
     
     def get_type_obj(self):
-        return 'w' if self.filled else 'l'
+        return 'f' if self.filled else 'l'

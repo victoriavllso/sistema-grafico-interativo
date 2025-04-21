@@ -1,15 +1,24 @@
-newmtl obj_1
+newmtl ponto_1
 Kd 0.0000 0.0000 0.0000
 
-newmtl a
+newmtl reta_1
+Kd 0.0000 0.9768 0.0000
+
+newmtl poligono_1
 Kd 0.0000 0.0000 0.0000
 
-newmtl obj_3
+newmtl poligono_2
+Kd 1.0000 0.5764 0.0000
+
+newmtl curva_1
+Kd 0.5792 0.1280 0.5727
+
+newmtl triangulo
+Kd 0.9994 0.9855 0.0000
+
+newmtl pentagono
 Kd 0.0000 0.0000 0.0000
 
-newmtl obj_4
-Kd 0.0000 0.0000 0.0000
-
-newmtl b
-Kd 1.0000 0.2528 1.0000
+newmtl hexagono
+Kd 0.0000 0.9768 0.0000
 

@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import (
 )
 import sys
 from src.model.descritor_obj import DescritorOBJ
+import os
 
 class OBJDialog(QDialog):
     def __init__(self, controller):
@@ -39,6 +40,15 @@ class OBJDialog(QDialog):
 
     def select_file(self) -> str:
         """Retorna o caminho do arquivo .obj"""
-        file_name, _ = QFileDialog.getOpenFileName(self, "Carregar Arquivo OBJ", "", "Arquivos OBJ (*.obj);;Todos os Arquivos (*)")
+        # Caminho da pasta 'models' dentro do diretório do projeto
+        initial_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'models')
+
+        # Abre o diálogo de seleção de arquivo já nessa pasta
+        file_name, _ = QFileDialog.getOpenFileName(
+            self,
+            "Carregar Arquivo OBJ",
+            initial_dir,
+            "Arquivos OBJ (*.obj);;Todos os Arquivos (*)"
+        )
         
         return file_name

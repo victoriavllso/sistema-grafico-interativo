@@ -273,7 +273,7 @@ class Controller:
             GUIUtils.show_popup("Erro", str(e), QMessageBox.Icon.Critical)
             return
 
-    # ---------- Métodos Estáticos ----------#
+    #---------- Métodos Estáticos ----------#
 
     @staticmethod
     def assign_material_color(obj) -> dict:
@@ -298,10 +298,13 @@ class Controller:
         if obj["type"] == "p":
             obj["type"] = "point"
         elif obj["type"] == "l":
-            obj["type"] = "line"
+            if len(obj["points"]) == 2:
+                obj["type"] = "line"
+            else:
+                obj["type"] = "wireframe"
         elif obj["type"] == "w":
             obj["type"] = "wireframe"
-        elif obj["type"] == "b":
+        elif obj["type"] == "curve":
             obj["type"] = "bezier"
         return obj
 

@@ -1,5 +1,30 @@
-newmtl red
-Kd 1.000000 0.000000 0.000000
+newmtl r1
+Kd 1.0000 0.5725 0.0000
 
-newmtl texture
-Kd 0.800000 0.800000 0.800000
+newmtl r2
+Kd 0.5765 0.1255 0.5725
+
+newmtl r3
+Kd 0.0000 0.9765 0.0000
+
+newmtl r4
+Kd 0.0157 0.1961 1.0000
+
+newmtl obj_1
+Kd 0.0000 0.0000 0.0000
+
+newmtl a
+Kd 0.0000 0.0000 0.0000
+
+newmtl obj_3
+Kd 0.0000 0.0000 0.0000
+
+newmtl obj_4
+Kd 0.0000 0.0000 0.0000
+
+newmtl b
+Kd 1.0000 0.2510 1.0000
+
+newmtl obj_10
+Kd 0.5792 0.1280 0.5727
+

@@ -46,14 +46,14 @@ class DescritorOBJ:
                     _, current_material = line.split()
                     if current_material in materials:
                         current_material = materials[current_material]['color']
-                elif line and line[0] in ['w', 'l', 'f', 'p', 'b']:
+                elif line and line[0] in ['w', 'l', 'f', 'p', "c"]:
                     tokens = line.split()
                     current_type = tokens[0]
                     indices = list(map(int, tokens[1:]))
                     current_points = [points[i] for i in indices]
                     if len(current_points) == 1:
                         current_points = current_points[0]
-                    filled = False if current_type in ['l', 'p'] else True
+                    filled = False if current_type  == "l" else True
                     current_object = {
                         "name": current_name,
                         "type": current_type,
@@ -112,7 +112,7 @@ class DescritorOBJ:
                 elif isinstance(obj, Wireframe) and not obj.filled:
                     file.write(f"l {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
                 elif isinstance(obj, Bezier):
-                    file.write(f"b {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
+                    file.write(f"curve {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
 
     @staticmethod
     def read_material_library(lib_name):

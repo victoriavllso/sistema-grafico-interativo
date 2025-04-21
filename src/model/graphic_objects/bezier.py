@@ -8,17 +8,15 @@ from PyQt6.QtGui import QPen
 
 class Bezier(GraphicObject):	
 	def __init__(self, window, name, points: list[Point], color=Qt.GlobalColor.red):
-		super().__init__(name, color)
-		self.points = points
-		self.window = window
-		self.curve_points = []
+		super().__init__(name, color, window)
+		self.points = points # pontos de entrada
+		self.curve_points = [] # pontos da curva
+		self.points_draw = [] # pontos a serem desenhados
 
 		for point in self.points:
 			point.convert_coordinates()
+
 		self.generate_curve_points()
-
-		self.points_draw = []
-
 
 	def calculate_bezier(self, point1: Point, point2: Point, point3: Point, point4: Point) -> list[Point]:
 		"""Calcula os pontos da curva de bezier"""
@@ -111,4 +109,4 @@ class Bezier(GraphicObject):
 
 	def get_type_obj(self):
 		"""Retorna o tipo do objeto gráfico"""
-		return 'Bezier'
+		return 'curve'

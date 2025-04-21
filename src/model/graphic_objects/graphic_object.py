@@ -3,9 +3,10 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor
 
 class GraphicObject(ABC):
-	def __init__(self, name: str, color: Qt.GlobalColor = Qt.GlobalColor.black):
+	def __init__(self, name: str, color: Qt.GlobalColor = Qt.GlobalColor.black, window=None):
 		self.name = name
 		self.color = color
+		self.window = window
 
 	@abstractmethod
 	def draw(self) -> None:

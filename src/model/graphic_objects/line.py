@@ -8,11 +8,8 @@ import numpy as np
 
 class Line(GraphicObject):
     def __init__(self, window, name, point1: Point, point2: Point, color=Qt.GlobalColor.red):
-        super().__init__(name, color)
+        super().__init__(name, color, window)
         self.points = [point1, point2]
-        self.window = window
-        for point in self.points:
-            point.convert_coordinates()
 
     def x1(self) -> float:
         """Retorna a coordenada x do primeiro ponto da linha."""
