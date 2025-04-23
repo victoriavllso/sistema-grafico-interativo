@@ -12,6 +12,7 @@ from src.model.graphic_objects.point import Point
 from src.model.graphic_objects.line import Line
 from src.model.graphic_objects.wireframe import Wireframe
 from src.model.graphic_objects.bezier import Bezier
+from src.model.graphic_objects.bspline import BSpline
 
 from src.utils.utils import *
 from src.utils.gui_utils import GUIUtils
@@ -53,7 +54,8 @@ class Controller:
         """Cria um objeto gráfico"""
         name = Controller.assign_default_name({"name": name}, self.display_file)
         name = name["name"]
-
+        obj = None # objeto unico
+        objects = [] # lista de objetos (bezier, por exemplo)
         if type == "point":
             try:
                 obj = Point(window=self.window, name=name, x=points_input[0], y=points_input[1], color=color)
@@ -79,17 +81,38 @@ class Controller:
         
         elif type == "bezier":
             try:
-                points = [Point(window=self.window, x=x, y=y) for x, y in points_input]
-                obj = Bezier(window=self.window, name=name, points=points, color=color)
-            except Exception:
+                if len(points_input) >= 4:
+                    for i in range(0, len(points_input) - 3,3):
+                        bezier_points = points_input[i:i+4]
+                        points = [Point(window=self.window, x=x, y=y) for x, y in bezier_points]
+                        bezier_obj = Bezier(window=self.window, name=f"{name}_{i//3}", points=points, color=color)
+                        objects.append(bezier_obj)
+                   
+            except Exception as e:
                 GUIUtils.show_popup("Erro", "Bezier inválido!", QMessageBox.Icon.Critical)
                 return
         
+        elif type == "spline":
+            try:
+                if len(points_input) >= 4:
+                    for i in range(0, len(points_input) - 3,3):
+                        spline_points = points_input[i:i+4]
+                        points = [Point(window=self.window, x=x, y=y) for x, y in spline_points]
+                        spline_obj = BSpline(window=self.window, name=f"{name}_{i//3}", points=points, color=color)
+                        objects.append(spline_obj)
+         
+            except Exception:
+                GUIUtils.show_popup("Erro", "Spline inválido!", QMessageBox.Icon.Critical)
+                return
         else:
             GUIUtils.show_popup("Erro", "Tipo de objeto inválido!", QMessageBox.Icon.Critical)
             return
-
-        self.display_file.add(obj)
+        
+        if obj:
+            self.display_file.add(obj)
+        elif objects:
+            for obj in objects:
+                self.display_file.add(obj)
         self.main_window.update_viewport()
 
     def draw_objects(self, painter: QPainter) -> None:
