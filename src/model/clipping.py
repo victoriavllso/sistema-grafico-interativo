@@ -2,6 +2,7 @@ from src.model.graphic_objects.line import Line
 from src.model.graphic_objects.point import Point
 from src.model.graphic_objects.wireframe import Wireframe
 from src.model.graphic_objects.bezier import Bezier
+from src.model.graphic_objects.bspline import BSpline
 from src.utils.utils import MARGIN_FACTOR
 
 class Cliper:
@@ -34,6 +35,11 @@ class Cliper:
 					point.convert_coordinates()
 				self.clip_wireframe(obj)
 			if isinstance(obj, Bezier):
+				for point in obj.points:
+					point.convert_coordinates()
+					self.clip_bezier(obj)
+
+			if isinstance(obj, BSpline):
 				for point in obj.points:
 					point.convert_coordinates()
 					self.clip_bezier(obj)

@@ -21,7 +21,7 @@ class Bezier(GraphicObject):
 	def calculate_bezier(self, point1: Point, point2: Point, point3: Point, point4: Point) -> list[Point]:
 		"""Calcula os pontos da curva de bezier"""
 		curve = []
-		t = 0.0 # 1001 pontos gerador
+		t = 0.0 # 1001 pontos gerados
 		step = 0.001
 
 		mb = np.array([ [-1,3,-3,1],  # matriz de Bernstein

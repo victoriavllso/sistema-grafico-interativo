@@ -101,7 +101,8 @@ class Controller:
                         spline_obj = BSpline(window=self.window, name=f"{name}_{i//3}", points=points, color=color)
                         objects.append(spline_obj)
          
-            except Exception:
+            except Exception as e:
+                print(f' erro obtido com spline: {e}')
                 GUIUtils.show_popup("Erro", "Spline inválido!", QMessageBox.Icon.Critical)
                 return
         else:
@@ -120,10 +121,10 @@ class Controller:
         graphic_objects = self.display_file.get_all()
         clipping_algorithm = self.main_window.get_clipping_algorithm()
         self.cliper.clip_object(graphic_objects, clipping_algorithm)
-
         for obj in graphic_objects:
             if all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])) or isinstance(obj, Bezier):
                 obj.draw(painter, self.viewport)
+                print(f'draw do controller chamado')
             for p in getattr(obj, "points", []):
                 p.inside_window = False
 
