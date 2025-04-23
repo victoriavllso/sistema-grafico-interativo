@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>568</width>
-    <height>275</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,24 +62,11 @@
     </rect>
    </property>
   </widget>
-  <widget class="QDialogButtonBox" name="confirm_create_object">
-   <property name="geometry">
-    <rect>
-     <x>380</x>
-     <y>230</y>
-     <width>167</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::NoButton</set>
-   </property>
-  </widget>
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>160</y>
+     <x>380</x>
+     <y>100</y>
      <width>171</width>
      <height>91</height>
     </rect>
@@ -90,11 +77,24 @@
    <property name="frameShape">
     <enum>QFrame::NoFrame</enum>
    </property>
+   <widget class="QRadioButton" name="radioButton">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>20</y>
+      <width>129</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>rachurado</string>
+    </property>
+   </widget>
    <widget class="QPushButton" name="color_button">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>50</y>
+      <y>60</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -104,19 +104,6 @@
     </property>
     <property name="text">
      <string>set color</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>129</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>rachurado</string>
     </property>
    </widget>
   </widget>
@@ -141,6 +128,19 @@
    </property>
    <property name="text">
     <string>object type:</string>
+   </property>
+  </widget>
+  <widget class="QDialogButtonBox" name="confirm_create_object">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>260</y>
+     <width>167</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
  </widget>

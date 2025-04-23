@@ -86,7 +86,7 @@ Bezier: (100,250), (150,100), (250, 400), (300, 250)
 Bezier: (300, 250), (350, 100), (450, 400), (500, 250)
 ```
 (100,250), (150,100), (250, 400), (300, 250), (300, 250), (350, 100), (450, 400), (500, 250)
-
+(50,50), (250,50), (50, 250), (250, 250)
 - O nome pode ser gerado automaticamente ou pelo usuário, lembrando que o sistema não suporta nomes repetidos.
 - A cor pode ser escolhida automaticamente ou pelo usuário.
 - Para polígonos, a flag *rachurado* define se o objeto será preenchido ou em modelo de arame.
