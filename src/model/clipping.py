@@ -34,12 +34,7 @@ class Cliper:
 				for point in obj.points:
 					point.convert_coordinates()
 				self.clip_wireframe(obj)
-			if isinstance(obj, Bezier):
-				for point in obj.points:
-					point.convert_coordinates()
-					self.clip_bezier(obj)
-
-			if isinstance(obj, BSpline):
+			if isinstance(obj, Bezier) or isinstance(obj, BSpline):
 				for point in obj.points:
 					point.convert_coordinates()
 					self.clip_bezier(obj)

@@ -18,7 +18,7 @@ class BSpline(GraphicObject):
 		self.generate_curve_points()
 
 
-	def calculate_bspline(self): # forward differences
+	def calculate_bspline(self) -> list[Point]:
 		curve= []
 
 		delta1 = 0.001
@@ -38,7 +38,7 @@ class BSpline(GraphicObject):
 					[6*delta3, 0, 0, 0]])
 		
 		for i in range(0, len(self.points) - 3):
-			gx = np.array([self.points[i].x, self.points[i+1].x, self.points[i+2].x, self.points[i+3].x]) # matriz de geomatria para x
+			gx = np.array([self.points[i].x, self.points[i+1].x, self.points[i+2].x, self.points[i+3].x])
 			gy = np.array([self.points[i].y, self.points[i+1].y, self.points[i+2].y, self.points[i+3].y])
 			cx = np.dot(mbs,gx)
 			cy = np.dot(mbs, gy)
@@ -48,7 +48,8 @@ class BSpline(GraphicObject):
 
 		return curve
 	
-	def draw(self, painter, viewport):
+	def draw(self, painter, viewport) -> None:
+		"""Desenha a curva bspline"""
 		if len(self.curve_points) == 0:
 			return
 		
@@ -59,9 +60,8 @@ class BSpline(GraphicObject):
 			p1 = transformed_points[i]
 			p2 = transformed_points[(i + 1)]
 			painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
-			print(f'draw chamado, com {self.points_draw}')
 
-	def draw_foward_differences(self,n ,x, dx,d2x,d3x,y,dy,d2y,d3y):
+	def draw_foward_differences(self,n ,x, dx,d2x,d3x,y,dy,d2y,d3y) -> list[Point]:
 		curve = []
 
 		x_old = x # guarda inicio do segmento de curva quando i=1
@@ -79,16 +79,15 @@ class BSpline(GraphicObject):
 			curve.append(Point(window=self.window, x=x_old, y=y_old))
 			curve.append(Point(window=self.window, x=x, y=y))
 			x_old, y_old = x, y
+
 		return curve
 
-	def generate_curve_points(self):
-		if len(self.points) ==4:
-			self.calculate_bspline()
-		else:
-			self.curve_points = []
-		return self.curve_points
+	def generate_curve_points(self) -> list[Point]:
+		"""Gera os pontos da curva bspline"""
+		self.curve_points = self.calculate_bspline()
 
-	def receive_transform(self, matrix):
+	def receive_transform(self, matrix) -> None:
+		"""Recebe a matriz de transformacao e aplica aos pontos"""
 		for point in self.points:
 			point_matrix = np.array([point.x, point.y, 1])
 			new_point = point_matrix @ matrix
@@ -101,7 +100,6 @@ class BSpline(GraphicObject):
 
 	def get_points_obj(self):
 		return self.points
-
 
 	def get_type_obj(self):
 		return super().get_type_obj()
