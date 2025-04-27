@@ -84,9 +84,10 @@ Polígono [pentágono]: (150, 80), (210, 130), (185, 200), (115, 200), (90, 130)
 Polígono [hexágono]: (150, 80), (200, 110), (200, 170), (150, 200), (100, 170), (100, 110)
 Bezier: (100,250), (150,100), (250, 400), (300, 250)
 Bezier: (300, 250), (350, 100), (450, 400), (500, 250)
+Bspline: (0, 20), (20, 20), (0, 15), (15, 15), (0, 7), (7, 7) # apagar essa
+Bspline: (100,250), (150,100), (250, 400), (300, 250), (300, 250), (350, 100), (450, 400), (500, 250)
 ```
-(100,250), (150,100), (250, 400), (300, 250), (300, 250), (350, 100), (450, 400), (500, 250)
-(50,50), (250,50), (50, 250), (250, 250)
+
 - O nome pode ser gerado automaticamente ou pelo usuário, lembrando que o sistema não suporta nomes repetidos.
 - A cor pode ser escolhida automaticamente ou pelo usuário.
 - Para polígonos, a flag *rachurado* define se o objeto será preenchido ou em modelo de arame.

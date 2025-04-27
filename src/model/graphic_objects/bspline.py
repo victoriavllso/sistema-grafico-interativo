@@ -21,30 +21,53 @@ class BSpline(GraphicObject):
 	def calculate_bspline(self) -> list[Point]:
 		curve= []
 
-		delta1 = 0.001
-		delta2 = delta1**2
-		delta3 = delta2 * delta1
+		delta_t = 0.01
+	
 
-		n = 1/delta1
+		n = int(1/delta_t)
 
-		mbs = np.array([[-1/6, 3/6, -3/6, 1/6],
-				 		[3/6, -6/6, 3/6, 0],
-						[-3/6, 0, 3/6, 0],
-						[1/6, 4/6, 1/6, 0]])
+		M =  (1/6) * np.array([
+            [-1,  3, -3,  1],
+            [ 3, -6,  3,  0],
+            [-3,  0,  3,  0],
+            [ 1,  4,  1,  0]
+        ])
 
-		d = np.array([[0, 0, 0, 1],
-			   		[delta3, delta2, delta1, 0],
-					[6*delta3, 2*delta2, 0, 0],
-					[6*delta3, 0, 0, 0]])
+
 		
 		for i in range(0, len(self.points) - 3):
-			gx = np.array([self.points[i].x, self.points[i+1].x, self.points[i+2].x, self.points[i+3].x])
-			gy = np.array([self.points[i].y, self.points[i+1].y, self.points[i+2].y, self.points[i+3].y])
-			cx = np.dot(mbs,gx)
-			cy = np.dot(mbs, gy)
-			dx = np.dot(d, cx)
-			dy = np.dot(d,cy)
-			curve = curve + self.draw_foward_differences(int(n), dx[0], dx[1],dx[2],dx[3],dy[0],dy[1],dy[2],dy[3])
+			# gera os pontos de controle
+			Px = np.array([p.x for p in self.points[i:i+4]])
+			Py = np.array([p.y for p in self.points[i:i+4]])
+
+			# coeficientes da curva
+			Cx = M @ Px
+			Cy = M @ Py
+
+			# diferenças progressivas
+
+			x = Cx[3]
+			dx = Cx[2]*delta_t + Cx[1]*delta_t**2 + Cx[0]*delta_t**3
+			d2x = 2*Cx[1]*delta_t**2 + 6*Cx[0]*delta_t**3
+			d3x = 6*Cx[0]*delta_t**3
+
+			y = Cy[3]  # termo constante (d)
+			dy = Cy[2]*delta_t + Cy[1]*delta_t**2 + Cy[0]*delta_t**3
+			d2y = 2*Cy[1]*delta_t**2 + 6*Cy[0]*delta_t**3
+			d3y = 6*Cy[0]*delta_t**3
+
+			segment_points = []
+			# gera pontos pra esse segmento
+			
+			for _ in range(n):
+				segment_points.append(Point(window=self.window, x=x, y=y))
+				x += dx
+				dx += d2x
+				d2x += d3x
+				y += dy
+				dy += d2y
+				d2y += d3y
+			curve.extend(segment_points)
 
 		return curve
 	

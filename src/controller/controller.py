@@ -95,14 +95,12 @@ class Controller:
         elif type == "spline":
             try:
                 if len(points_input) >= 4:
-                    for i in range(0, len(points_input) - 3,3):
-                        spline_points = points_input[i:i+4]
-                        points = [Point(window=self.window, x=x, y=y) for x, y in spline_points]
-                        spline_obj = BSpline(window=self.window, name=f"{name}_{i//3}", points=points, color=color)
-                        objects.append(spline_obj)
+                    points = [Point(window=self.window, x=x, y=y) for x, y in points_input]
+                    spline_obj = BSpline(window=self.window, name=f"{name}", points=points, color=color)
+                    objects.append(spline_obj)
          
             except Exception as e:
-                # print(f' erro obtido com spline: {e}')
+                print(f' erro obtido com spline: {e}')
                 GUIUtils.show_popup("Erro", "Spline inválido!", QMessageBox.Icon.Critical)
                 return
         else:
