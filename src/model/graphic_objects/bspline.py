@@ -84,27 +84,6 @@ class BSpline(GraphicObject):
 			p2 = transformed_points[(i + 1)]
 			painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
 
-	def draw_foward_differences(self,n ,x, dx,d2x,d3x,y,dy,d2y,d3y) -> list[Point]:
-		curve = []
-
-		x_old = x # guarda inicio do segmento de curva quando i=1
-		y_old = y 
-		i = 1
-
-		while i < n:
-			i+=1
-			x += dx
-			dx += d2x
-			d2x += d3x
-			y += dy
-			dy += d2y
-			d2y += d3y
-			curve.append(Point(window=self.window, x=x_old, y=y_old))
-			curve.append(Point(window=self.window, x=x, y=y))
-			x_old, y_old = x, y
-
-		return curve
-
 	def generate_curve_points(self) -> list[Point]:
 		"""Gera os pontos da curva bspline"""
 		self.curve_points = self.calculate_bspline()
@@ -116,7 +95,7 @@ class BSpline(GraphicObject):
 			new_point = point_matrix @ matrix
 			point.x = new_point[0]
 			point.y = new_point[1]
-		self.curve_points = self.calculate_bspline() # _--------------- to do
+		self.curve_points = self.calculate_bspline()
 
 	def __str__(self):
 		return f"BSpline: {self.name}, Points: {self.points}, Color: {self.color}"
@@ -125,7 +104,7 @@ class BSpline(GraphicObject):
 		return self.points
 
 	def get_type_obj(self):
-		return super().get_type_obj()
+		return 'curve_spline'
 
 	def geometric_center(self) -> tuple[int, int]:
 		"""Calcula o centro geometrico do objeto grafico"""

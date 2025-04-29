@@ -72,7 +72,7 @@ Descrição: Nesta interface é possível criar objetos gráficos inserindo nome
 - Ponto
 - Reta
 - Polígono
-- Curva
+- Curvas
 
 Exemplos de entrada:
 ```
@@ -84,7 +84,6 @@ Polígono [pentágono]: (150, 80), (210, 130), (185, 200), (115, 200), (90, 130)
 Polígono [hexágono]: (150, 80), (200, 110), (200, 170), (150, 200), (100, 170), (100, 110)
 Bezier: (100,250), (150,100), (250, 400), (300, 250)
 Bezier: (300, 250), (350, 100), (450, 400), (500, 250)
-Bspline: (0, 20), (20, 20), (0, 15), (15, 15), (0, 7), (7, 7) # apagar essa
 Bspline: (100,250), (150,100), (250, 400), (300, 250), (300, 250), (350, 100), (450, 400), (500, 250)
 ```
 
@@ -117,6 +116,7 @@ src/
 │       └── display.py                 # Interface geral do display
 │   └── graphic_objects/
 │       └── bezier.py                  # Representação de curvas
+│       ├── bspline.py                 # Representação de curvas com o algoritmo de bspline
 │       ├── graphic_object.py          # Classe base
 │       ├── line.py                    # Representação de retas
 │       ├── point.py                   # Representação de pontos

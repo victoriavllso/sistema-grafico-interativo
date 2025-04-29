@@ -2,6 +2,7 @@ from src.model.graphic_objects.point import Point
 from src.model.graphic_objects.line import Line
 from src.model.graphic_objects.wireframe import Wireframe
 from src.model.graphic_objects.bezier import Bezier
+from src.model.graphic_objects.bspline import BSpline
 
 from PyQt6.QtGui import QColor
 
@@ -46,9 +47,11 @@ class DescritorOBJ:
                     _, current_material = line.split()
                     if current_material in materials:
                         current_material = materials[current_material]['color']
-                elif line and line[0] in ['w', 'l', 'f', 'p', "c"]:
+                elif line and (line[0] in ['w', 'l', 'f', 'p', "c"] or line.startswith("curve_spline")):
                     tokens = line.split()
                     current_type = tokens[0]
+                    if line.startswith("curve_spline"):
+                        current_type = "curve_spline"
                     indices = list(map(int, tokens[1:]))
                     current_points = [points[i] for i in indices]
                     if len(current_points) == 1:
@@ -85,16 +88,13 @@ class DescritorOBJ:
             points = {}
             for obj in objects:
                 if isinstance(obj, Point):
-                    points[(obj.x, obj.y)] = len(points) + 1
+                    points.setdefault((obj.x, obj.y), len(points) + 1)
                 elif isinstance(obj, Line):
-                    points[(obj.x1(), obj.y1())] = len(points) + 1
-                    points[(obj.x2(), obj.y2())] = len(points) + 1
-                elif isinstance(obj, Wireframe):
+                    points.setdefault((obj.x1(), obj.y1()), len(points) + 1)
+                    points.setdefault((obj.x2(), obj.y2()), len(points) + 1)
+                elif isinstance(obj, (Wireframe, Bezier, BSpline)):
                     for point in obj.points:
-                        points[(point.x, point.y)] = len(points) + 1
-                elif isinstance(obj, Bezier):
-                    for point in obj.points:
-                        points[(point.x, point.y)] = len(points) + 1
+                        points.setdefault((point.x, point.y), len(points) + 1)
                 materials[obj.name] = obj.color
             for point, index in points.items():
                 file.write(f"v {point[0]} {point[1]} 0\n")
@@ -113,6 +113,8 @@ class DescritorOBJ:
                     file.write(f"l {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
                 elif isinstance(obj, Bezier):
                     file.write(f"curve {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
+                elif isinstance(obj, BSpline):
+                    file.write(f"curve_spline {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
 
     @staticmethod
     def read_material_library(lib_name):

@@ -324,6 +324,8 @@ class Controller:
             obj["type"] = "wireframe"
         elif obj["type"] == "curve":
             obj["type"] = "bezier"
+        elif obj["type"] == "curve_spline":
+            obj["type"] = "spline"
         return obj
 
     @staticmethod
