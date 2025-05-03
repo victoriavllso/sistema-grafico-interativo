@@ -95,11 +95,9 @@ class Controller:
         elif type == "spline":
             try:
                 if len(points_input) >= 4:
-                    for i in range(0, len(points_input) - 3,3):
-                        spline_points = points_input[i:i+4]
-                        points = [Point(window=self.window, x=x, y=y) for x, y in spline_points]
-                        spline_obj = BSpline(window=self.window, name=f"{name}_{i//3}", points=points, color=color)
-                        objects.append(spline_obj)
+                    points = [Point(window=self.window, x=x, y=y) for x, y in points_input]
+                    spline_obj = BSpline(window=self.window, name=f"{name}", points=points, color=color)
+                    objects.append(spline_obj)
          
             except Exception as e:
                 print(f' erro obtido com spline: {e}')
@@ -122,9 +120,9 @@ class Controller:
         clipping_algorithm = self.main_window.get_clipping_algorithm()
         self.cliper.clip_object(graphic_objects, clipping_algorithm)
         for obj in graphic_objects:
-            if all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])) or isinstance(obj, Bezier):
+            #TODO: refatorar - passar essa verificação como um método do objeto
+            if all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])) or isinstance(obj, Bezier) or isinstance(obj, BSpline):
                 obj.draw(painter, self.viewport)
-                print(f'draw do controller chamado')
             for p in getattr(obj, "points", []):
                 p.inside_window = False
 
@@ -326,6 +324,8 @@ class Controller:
             obj["type"] = "wireframe"
         elif obj["type"] == "curve":
             obj["type"] = "bezier"
+        elif obj["type"] == "curve_spline":
+            obj["type"] = "spline"
         return obj
 
     @staticmethod

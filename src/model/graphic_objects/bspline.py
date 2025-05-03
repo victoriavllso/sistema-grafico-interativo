@@ -18,37 +18,61 @@ class BSpline(GraphicObject):
 		self.generate_curve_points()
 
 
-	def calculate_bspline(self): # forward differences
+	def calculate_bspline(self) -> list[Point]:
 		curve= []
 
-		delta1 = 0.001
-		delta2 = delta1**2
-		delta3 = delta2 * delta1
+		delta_t = 0.01
+	
 
-		n = 1/delta1
+		n = int(1/delta_t)
 
-		mbs = np.array([[-1/6, 3/6, -3/6, 1/6],
-				 		[3/6, -6/6, 3/6, 0],
-						[-3/6, 0, 3/6, 0],
-						[1/6, 4/6, 1/6, 0]])
+		M =  (1/6) * np.array([
+            [-1,  3, -3,  1],
+            [ 3, -6,  3,  0],
+            [-3,  0,  3,  0],
+            [ 1,  4,  1,  0]
+        ])
 
-		d = np.array([[0, 0, 0, 1],
-			   		[delta3, delta2, delta1, 0],
-					[6*delta3, 2*delta2, 0, 0],
-					[6*delta3, 0, 0, 0]])
+
 		
 		for i in range(0, len(self.points) - 3):
-			gx = np.array([self.points[i].x, self.points[i+1].x, self.points[i+2].x, self.points[i+3].x]) # matriz de geomatria para x
-			gy = np.array([self.points[i].y, self.points[i+1].y, self.points[i+2].y, self.points[i+3].y])
-			cx = np.dot(mbs,gx)
-			cy = np.dot(mbs, gy)
-			dx = np.dot(d, cx)
-			dy = np.dot(d,cy)
-			curve = curve + self.draw_foward_differences(int(n), dx[0], dx[1],dx[2],dx[3],dy[0],dy[1],dy[2],dy[3])
+			# gera os pontos de controle
+			Px = np.array([p.x for p in self.points[i:i+4]])
+			Py = np.array([p.y for p in self.points[i:i+4]])
+
+			# coeficientes da curva
+			Cx = M @ Px
+			Cy = M @ Py
+
+			# diferenças progressivas
+
+			x = Cx[3]
+			dx = Cx[2]*delta_t + Cx[1]*delta_t**2 + Cx[0]*delta_t**3
+			d2x = 2*Cx[1]*delta_t**2 + 6*Cx[0]*delta_t**3
+			d3x = 6*Cx[0]*delta_t**3
+
+			y = Cy[3]  # termo constante (d)
+			dy = Cy[2]*delta_t + Cy[1]*delta_t**2 + Cy[0]*delta_t**3
+			d2y = 2*Cy[1]*delta_t**2 + 6*Cy[0]*delta_t**3
+			d3y = 6*Cy[0]*delta_t**3
+
+			segment_points = []
+			# gera pontos pra esse segmento
+			
+			for _ in range(n):
+				segment_points.append(Point(window=self.window, x=x, y=y))
+				x += dx
+				dx += d2x
+				d2x += d3x
+				y += dy
+				dy += d2y
+				d2y += d3y
+			curve.extend(segment_points)
 
 		return curve
 	
-	def draw(self, painter, viewport):
+	def draw(self, painter, viewport) -> None:
+		"""Desenha a curva bspline"""
 		if len(self.curve_points) == 0:
 			return
 		
@@ -59,42 +83,19 @@ class BSpline(GraphicObject):
 			p1 = transformed_points[i]
 			p2 = transformed_points[(i + 1)]
 			painter.drawLine(int(p1.x), int(p1.y), int(p2.x), int(p2.y))
-			print(f'draw chamado, com {self.points_draw}')
 
-	def draw_foward_differences(self,n ,x, dx,d2x,d3x,y,dy,d2y,d3y):
-		curve = []
+	def generate_curve_points(self) -> list[Point]:
+		"""Gera os pontos da curva bspline"""
+		self.curve_points = self.calculate_bspline()
 
-		x_old = x # guarda inicio do segmento de curva quando i=1
-		y_old = y 
-		i = 1
-
-		while i < n:
-			i+=1
-			x += dx
-			dx += d2x
-			d2x += d3x
-			y += dy
-			dy += d2y
-			d2y += d3y
-			curve.append(Point(window=self.window, x=x_old, y=y_old))
-			curve.append(Point(window=self.window, x=x, y=y))
-			x_old, y_old = x, y
-		return curve
-
-	def generate_curve_points(self):
-		if len(self.points) ==4:
-			self.calculate_bspline()
-		else:
-			self.curve_points = []
-		return self.curve_points
-
-	def receive_transform(self, matrix):
+	def receive_transform(self, matrix) -> None:
+		"""Recebe a matriz de transformacao e aplica aos pontos"""
 		for point in self.points:
 			point_matrix = np.array([point.x, point.y, 1])
 			new_point = point_matrix @ matrix
 			point.x = new_point[0]
 			point.y = new_point[1]
-		self.curve_points = self.calculate_bspline() # _--------------- to do
+		self.curve_points = self.calculate_bspline()
 
 	def __str__(self):
 		return f"BSpline: {self.name}, Points: {self.points}, Color: {self.color}"
@@ -102,9 +103,8 @@ class BSpline(GraphicObject):
 	def get_points_obj(self):
 		return self.points
 
-
 	def get_type_obj(self):
-		return super().get_type_obj()
+		return 'curve_spline'
 
 	def geometric_center(self) -> tuple[int, int]:
 		"""Calcula o centro geometrico do objeto grafico"""
