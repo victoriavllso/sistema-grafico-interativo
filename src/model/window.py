@@ -114,17 +114,11 @@ class Window:
         self.direction = self.rotate_vector(self.direction, -angle, axis='z')
         self.view_up = self.rotate_vector(self.view_up, angle, axis='z')
 
-        
+
     def rotate_window_right(self, angle:int) -> None:
         """Rotate the window to the right by a given angle.""" 
-        actual_direction = np.array(self.direction)
-        radians = angle * np.pi / 180
-        cos = np.cos(radians)
-        sin = np.sin(radians)
-        rotation_matrix = [[cos, -sin], 
-                           [sin, cos]]
-        rotate = self.transform_vector(actual_direction, rotation_matrix)
-        self.direction = (rotate[0], rotate[1])
+        self.direction = self.rotate_vector(self.direction, angle, axis='z')
+        self.view_up = self.rotate_vector(self.view_up, -angle, axis='z')
     
     def get_vrp(self):
         return self.get_center()

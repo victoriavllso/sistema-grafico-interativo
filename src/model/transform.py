@@ -60,18 +60,18 @@ class Transform:
         ])
 
     @staticmethod
-    def translate_object(obj:GraphicObject, dx:int, dy:int) -> None:
+    def translate_object(obj:GraphicObject, dx:int, dy:int, dz:int) -> None:
         """Translada um objeto gráfico"""
-        obj.receive_transform(Transform.matrix_translate(dx, dy))
+        obj.receive_transform(Transform.matrix_translate(dx, dy, dz))
 
     @staticmethod
-    def scale_object(obj:GraphicObject, sx:int, sy:int) -> None:
+    def scale_object(obj:GraphicObject, sx:int, sy:int, sz:int) -> None:
         """Escala um objeto gráfico em torno do seu centro geométrico"""
-        cx, cy = obj.geometric_center()
+        cx, cy, cz = obj.geometric_center()
         matrixs = [
-            Transform.matrix_translate(-cx, -cy),
-            Transform.matrix_scale(sx, sy),
-            Transform.matrix_translate(cx, cy)
+            Transform.matrix_translate(-cx, -cy, -cz),
+            Transform.matrix_scale(sx, sy, sz),
+            Transform.matrix_translate(cx, cy, cz)
         ]
         for matrix in matrixs:
             obj.receive_transform(matrix)
@@ -125,12 +125,12 @@ class Transform:
         return scn_x, scn_y, scn_z
     
     @staticmethod
-    def from_screen_coordinates(scn_x: float, scn_y: float, snc_z:float, window: Window) -> tuple[float, float]:
+    def from_screen_coordinates(scn_x: float, scn_y: float, scn_z:float, window: Window) -> tuple[float, float]:
         """Converte coordenadas da cena para coordenadas da janela"""
         x = (scn_x + 1) / 2 * (window.x_max - window.x_min) + window.x_min
         y = (scn_y + 1) / 2 * (window.y_max - window.y_min) + window.y_min
         if hasattr(window, 'z_min') and hasattr(window, 'z_max'):
-            z = snc_z * (window.z_max - window.z_min) + window.z_min
+            z = scn_z * (window.z_max - window.z_min) + window.z_min
         else:
             z = scn_z
         return x, y, z
