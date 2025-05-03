@@ -333,7 +333,7 @@
     <property name="geometry">
      <rect>
       <x>770</x>
-      <y>150</y>
+      <y>250</y>
       <width>281</width>
       <height>101</height>
      </rect>
@@ -389,107 +389,9 @@
       <string>Transform object</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>31</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>2D</string>
-     </property>
-    </widget>
     <zorder>create_but</zorder>
     <zorder>transform_button</zorder>
-    <zorder>label</zorder>
     <zorder>delete_but</zorder>
-   </widget>
-   <widget class="QWidget" name="widget_2" native="true">
-    <property name="geometry">
-     <rect>
-      <x>770</x>
-      <y>260</y>
-      <width>281</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(62, 31, 0);</string>
-    </property>
-    <widget class="QPushButton" name="create_but_3D">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>20</y>
-       <width>101</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(166, 83, 0);</string>
-     </property>
-     <property name="text">
-      <string>Create</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="transform_button_3D">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>60</y>
-       <width>131</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(166, 83, 0);</string>
-     </property>
-     <property name="text">
-      <string>Transform object</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>31</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>3D</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="delete_but_3D">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>20</y>
-       <width>101</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(166, 83, 0);</string>
-     </property>
-     <property name="text">
-      <string>Delete</string>
-     </property>
-    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

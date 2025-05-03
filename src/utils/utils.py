@@ -8,6 +8,8 @@ W_X_MIN = 0
 W_Y_MIN = 0
 W_X_MAX = 1000
 W_Y_MAX = 1000
+W_Z_MIN = 0
+W_Z_MAX = 1000
 
 # Viewport
 VP_X_MIN = 0

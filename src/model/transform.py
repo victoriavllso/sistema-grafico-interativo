@@ -4,27 +4,60 @@ from src.model.window import Window
 
 class Transform:
     @staticmethod
-    def matrix_translate(dx:int, dy:int) -> np.ndarray:
+    def matrix_translate(tx:int, ty:int, tz:int) -> np.ndarray:
         """Matriz de translação"""
-        return np.array([[1, 0, 0],
-                         [0, 1, 0],
-                         [dx, dy, 1]])
+        return np.array([
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 1, 0],
+            [tx, ty, tz, 1]
+        ])
 
     @staticmethod
-    def matrix_scale(sx:int, sy:int) -> np.ndarray:
+    def matrix_scale(sx:int, sy:int, sz) -> np.ndarray:
         """Matriz de escala"""
-        return np.array([[sx, 0, 0],
-                         [0, sy, 0],
-                         [0, 0, 1]])
+        return np.array([
+            [sx, 0, 0, 0],
+            [0, sy, 0, 0],
+            [0, 0, sz, 0],
+            [0, 0, 0, 1]
+        ])
 
     @staticmethod
-    def matrix_rotate(angle:int) -> np.ndarray:
+    def matrix_rotate_x(angle:int) -> np.ndarray:
         """Matriz de rotação"""
         angle = np.radians(angle)
         cos_a, sin_a = np.cos(angle), np.sin(angle)
-        return np.array([[cos_a, -sin_a, 0],
-                         [sin_a, cos_a, 0],
-                         [0, 0, 1]])
+        return np.array([
+            [1, 0, 0, 0],
+            [0, cos_a, -sin_a, 0],
+            [0, sin_a, cos_a, 0],
+            [0, 0, 0, 1]
+        ])
+
+    @staticmethod
+    def matrix_rotate_y(angle:int) -> np.ndarray:
+        """Matriz de rotação"""
+        angle = np.radians(angle)
+        cos_a, sin_a = np.cos(angle), np.sin(angle)
+        return np.array([
+            [cos_a, 0, sin_a, 0],
+            [0, 1, 0, 0],
+            [-sin_a, 0, cos_a, 0],
+            [0, 0, 0, 1]
+        ])
+    
+    @staticmethod
+    def matrix_rotate_z(angle:int) -> np.ndarray:
+        """Matriz de rotação"""
+        angle = np.radians(angle)
+        cos_a, sin_a = np.cos(angle), np.sin(angle)
+        return np.array([
+            [cos_a, -sin_a, 0, 0],
+            [sin_a, cos_a, 0, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1]
+        ])
 
     @staticmethod
     def translate_object(obj:GraphicObject, dx:int, dy:int) -> None:
@@ -77,22 +110,27 @@ class Transform:
     #---------- Conversão entre coordenadas de janela e coordenadas de tela ----------#
 
     @staticmethod
-    def to_screen_coordinates(x, y, window) -> tuple:
+    def to_screen_coordinates(x, y, z, window) -> tuple:
         """Converte coordenadas de janela para coordenadas de tela"""
-        center_x, center_y = window.get_center()
-        x_min, y_min = window.get_min()
-        x_max, y_max = window.get_max()
+        center_x, center_y, center_z = window.get_center()
+        x_min, y_min, z_min = window.get_min()
+        x_max, y_max, z_max = window.get_max()
         scn_x = -1 + 2 * (x - (x_min - center_x)) / (
             (x_max - center_x) - (x_min - center_x)
         )
         scn_y = -1 + 2 * (y - (y_min - center_y)) / (
             (y_max - center_y) - (y_min - center_y)
         )
-        return scn_x, scn_y
+        scn_z = (z - z_min) / (z_max - z_min) if z_max != z_min else 0
+        return scn_x, scn_y, scn_z
     
     @staticmethod
-    def from_screen_coordinates(scn_x: float, scn_y: float, window: Window) -> tuple[float, float]:
+    def from_screen_coordinates(scn_x: float, scn_y: float, snc_z:float, window: Window) -> tuple[float, float]:
         """Converte coordenadas da cena para coordenadas da janela"""
         x = (scn_x + 1) / 2 * (window.x_max - window.x_min) + window.x_min
         y = (scn_y + 1) / 2 * (window.y_max - window.y_min) + window.y_min
-        return x, y
+        if hasattr(window, 'z_min') and hasattr(window, 'z_max'):
+            z = snc_z * (window.z_max - window.z_min) + window.z_min
+        else:
+            z = scn_z
+        return x, y, z

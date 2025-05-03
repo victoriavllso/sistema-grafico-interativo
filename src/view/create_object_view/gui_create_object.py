@@ -18,7 +18,7 @@ class Ui_Dialog(object):
         self.name_ln.setGeometry(QtCore.QRect(40, 60, 161, 31))
         self.name_ln.setObjectName("name_ln")
         self.points_lbl = QtWidgets.QLabel(parent=Dialog)
-        self.points_lbl.setGeometry(QtCore.QRect(40, 100, 251, 21))
+        self.points_lbl.setGeometry(QtCore.QRect(40, 100, 301, 21))
         self.points_lbl.setObjectName("points_lbl")
         self.name_lbl = QtWidgets.QLabel(parent=Dialog)
         self.name_lbl.setGeometry(QtCore.QRect(50, 30, 58, 16))
@@ -55,7 +55,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.points_lbl.setText(_translate("Dialog", "points:   (x1,y1),(x2,y2) ... (xn,yn)"))
+        self.points_lbl.setText(_translate("Dialog", "points:   (x1,y1,z1),(x2,y2,z2) ... (xn,yn,zn)"))
         self.name_lbl.setText(_translate("Dialog", "name:"))
         self.color_button.setText(_translate("Dialog", "set color"))
         self.radioButton.setText(_translate("Dialog", "rachurado"))
