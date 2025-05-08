@@ -9,7 +9,7 @@ class Window:
         self.z_min = Z_min
         self.z_max = Z_max
         self.vpn = (0, 0, 1) # x = 0, y = 0, z = 1 
-        self.direction = (1, 0, 0) # x = 0, y = 1
+        self.direction = (0, 1, 0) # x = 0, y = 1, z = 0
         self.view_up = (0,1,0) # x = 0, y = 1, z = 0
 
         """
@@ -57,13 +57,14 @@ class Window:
         self.y_min *= percentage/100 + 1
         self.y_max *= percentage/100 + 1
        
-
     def get_center(self) -> tuple:
         """Calculate the center of the window."""
         return self.x_min, self.y_min, self.z_min
+
     def get_min(self) -> tuple:
         """Get the minimum coordinates of the window."""
         return self.x_min, self.y_min, self.z_min
+
     def get_max(self) -> tuple:
         """Get the maximum coordinates of the window."""
         return self.x_max, self.y_max, self.z_max

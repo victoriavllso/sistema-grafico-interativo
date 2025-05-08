@@ -58,8 +58,6 @@ class Point(GraphicObject):
             vrp, vpn, self.window
         )
 
-        print(f'projected_points: {projected_points}')
-
         x, y = projected_points[0]
 
         transformed_point = viewport.transform(self, self.window)

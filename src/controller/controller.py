@@ -56,7 +56,6 @@ class Controller:
         name = name["name"]
         obj = None # objeto unico
         objects = [] # lista de objetos (bezier, por exemplo)
-        print(f"points_input: {points_input}")
         if type == "point":
             try:
                 obj = Point(window=self.window, name=name, x=points_input[0], y=points_input[1], z=points_input[2], color=color)
@@ -101,7 +100,6 @@ class Controller:
                     objects.append(spline_obj)
          
             except Exception as e:
-                print(f' erro obtido com spline: {e}')
                 GUIUtils.show_popup("Erro", "Spline inválido!", QMessageBox.Icon.Critical)
                 return
         else:
