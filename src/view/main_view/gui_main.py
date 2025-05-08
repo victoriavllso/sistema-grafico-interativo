@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file '/home/victoria/pastinha/cg/src/view/main_view/gui_main.ui'
+# Form implementation generated from reading ui file '/home/bridge/pastinha/cg/src/view/main_view/gui_main.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.2
 #
@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_main(object):
     def setupUi(self, main):
         main.setObjectName("main")
-        main.resize(1119, 815)
+        main.resize(1099, 761)
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(86, 43, 0))
         brush.setStyle(QtCore.Qt.BrushStyle.SolidPattern)
@@ -50,7 +50,7 @@ class Ui_main(object):
         self.vp.setText("")
         self.vp.setObjectName("vp")
         self.scrollArea = QtWidgets.QScrollArea(parent=self.centralwidget)
-        self.scrollArea.setGeometry(QtCore.QRect(770, 370, 281, 391))
+        self.scrollArea.setGeometry(QtCore.QRect(770, 260, 281, 391))
         self.scrollArea.setStyleSheet("background-color: rgb(62, 31, 0);")
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
@@ -99,7 +99,7 @@ class Ui_main(object):
         self.label_2.setGeometry(QtCore.QRect(40, 0, 171, 41))
         self.label_2.setObjectName("label_2")
         self.verticalLayoutWidget_3 = QtWidgets.QWidget(parent=self.scrollAreaWidgetContents)
-        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(0, 310, 281, 71))
+        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(0, 310, 281, 77))
         self.verticalLayoutWidget_3.setObjectName("verticalLayoutWidget_3")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_3)
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -115,7 +115,7 @@ class Ui_main(object):
         self.verticalLayout_3.addWidget(self.radioButton_barsky)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.widget = QtWidgets.QWidget(parent=self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(770, 250, 281, 101))
+        self.widget.setGeometry(QtCore.QRect(770, 150, 281, 101))
         self.widget.setStyleSheet("background-color: rgb(62, 31, 0);")
         self.widget.setObjectName("widget")
         self.create_but = QtWidgets.QPushButton(parent=self.widget)
@@ -135,7 +135,7 @@ class Ui_main(object):
         self.delete_but.raise_()
         main.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=main)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1119, 19))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1099, 22))
         self.menubar.setObjectName("menubar")
         self.menuOptions = QtWidgets.QMenu(parent=self.menubar)
         self.menuOptions.setObjectName("menuOptions")

@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file '/home/victoria/pastinha/cg/src/view/transform_view/gui_transform.ui'
+# Form implementation generated from reading ui file '/home/bridge/pastinha/cg/src/view/transform_view/gui_transform.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.2
 #
@@ -142,22 +142,19 @@ class Ui_Dialog(object):
         self.label_12.setFont(font)
         self.label_12.setObjectName("label_12")
         self.tabWidget.addTab(self.scaling_tab, "")
-        self.ok_cancel_transform = QtWidgets.QDialogButtonBox(parent=Dialog)
-        self.ok_cancel_transform.setGeometry(QtCore.QRect(200, 370, 341, 32))
-        self.ok_cancel_transform.setStyleSheet("background-color: rgb(86, 43, 0);")
-        self.ok_cancel_transform.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.NoButton)
-        self.ok_cancel_transform.setObjectName("ok_cancel_transform")
         self.add_transform_button = QtWidgets.QPushButton(parent=Dialog)
-        self.add_transform_button.setGeometry(QtCore.QRect(390, 50, 161, 21))
+        self.add_transform_button.setGeometry(QtCore.QRect(380, 50, 171, 31))
         self.add_transform_button.setObjectName("add_transform_button")
         self.add_transform_button_2 = QtWidgets.QPushButton(parent=Dialog)
-        self.add_transform_button_2.setGeometry(QtCore.QRect(390, 20, 161, 21))
+        self.add_transform_button_2.setGeometry(QtCore.QRect(380, 10, 171, 31))
         self.add_transform_button_2.setObjectName("add_transform_button_2")
+        self.ok_cancel_transform = QtWidgets.QDialogButtonBox(parent=Dialog)
+        self.ok_cancel_transform.setGeometry(QtCore.QRect(380, 370, 173, 25))
+        self.ok_cancel_transform.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Cancel|QtWidgets.QDialogButtonBox.StandardButton.Ok)
+        self.ok_cancel_transform.setObjectName("ok_cancel_transform")
 
         self.retranslateUi(Dialog)
         self.tabWidget.setCurrentIndex(2)
-        self.ok_cancel_transform.accepted.connect(Dialog.accept) # type: ignore
-        self.ok_cancel_transform.rejected.connect(Dialog.reject) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
