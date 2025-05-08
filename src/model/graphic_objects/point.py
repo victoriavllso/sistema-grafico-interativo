@@ -7,7 +7,7 @@ from src.model.transform import Transform
 from src.model.projection import Projection
 
 class Point(GraphicObject):
-    def __init__(self, window, x: int, y: int, z:int, name="default", color=Qt.GlobalColor.green):
+    def __init__(self, window, x: int, y: int, z:int=0, name="default", color=Qt.GlobalColor.green):
         super().__init__(name=name, color=color, window=window)
         self._x = x
         self._y = y
@@ -107,7 +107,7 @@ class Point(GraphicObject):
         x, y, z = Transform.from_screen_coordinates(scn_x, scn_y,scn_z, self.window)
 
         # Inverte a rotação
-        angle = Transform.calculate_angle((0, 1), self.window.direction) * (180 / np.pi)
+        angle = Transform.calculate_angle((0, 1, 0), self.window.direction) * (180 / np.pi)
         if self.window.direction[0] < 0:
             angle = 360 - angle
         if angle != 0:

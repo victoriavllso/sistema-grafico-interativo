@@ -247,8 +247,8 @@ class Cliper:
 
 		for point in output_polygon:
 			x, y = point
-			p = Point(self.window, x, y)
-			p.from_scene_coordinates(x, y)
+			p = Point(self.window, x, y, 0)
+			p.from_scene_coordinates(x, y, 0)
 			p.inside_window = True
 			wireframe.points_draw.append(p)
 		return output_polygon

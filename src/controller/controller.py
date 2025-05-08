@@ -75,7 +75,8 @@ class Controller:
             try:
                 points = [Point(window=self.window, x=x, y=y, z=z) for x, y, z in points_input]
                 obj = Wireframe(window=self.window, name=name, points=points, color=color, filled=filled)
-            except Exception:
+            except Exception as e:
+                print(e)
                 GUIUtils.show_popup("Erro", "Wireframe inválido!", QMessageBox.Icon.Critical)
                 return
         
@@ -89,6 +90,7 @@ class Controller:
                         objects.append(bezier_obj)
                    
             except Exception as e:
+                print(e)
                 GUIUtils.show_popup("Erro", "Bezier inválido!", QMessageBox.Icon.Critical)
                 return
         
@@ -100,6 +102,7 @@ class Controller:
                     objects.append(spline_obj)
          
             except Exception as e:
+                print(e)
                 GUIUtils.show_popup("Erro", "Spline inválido!", QMessageBox.Icon.Critical)
                 return
         else:

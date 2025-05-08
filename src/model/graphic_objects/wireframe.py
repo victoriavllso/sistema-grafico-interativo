@@ -11,8 +11,8 @@ from PyQt6.QtGui import QPolygonF
 class Wireframe(GraphicObject):
     def __init__(self,window, name, points: list[Point], color=Qt.GlobalColor.blue, filled=True):
         super().__init__(name, color, window)
-        if not self._is_valid_polygon(points):
-            raise ValueError("Invalid polygon: The given points do not form a valid shape.")
+        # if not self._is_valid_polygon(points):
+        #     raise ValueError("Invalid polygon: The given points do not form a valid shape.")
         self.points = points
         self.concave = self._is_concave()
         self.points_draw = []
@@ -82,23 +82,18 @@ class Wireframe(GraphicObject):
     def _is_valid_polygon(points: list[Point]) -> bool:
         if len(points) < 3:
             return False
-        unique_points = set((p.x, p.y) for p in points)
+
+        unique_points = set((p.x, p.y, p.z) for p in points)
         if len(unique_points) != len(points):
             return False
 
-        def are_collinear(p1: Point, p2: Point, p3: Point) -> bool:
-            return (p2.y - p1.y) * (p3.x - p2.x) == (p3.y - p2.y) * (p2.x - p1.x)
-
-        all_collinear = all(are_collinear(points[0], points[i], points[i + 1]) for i in range(1, len(points) - 1))
-        if all_collinear:
-            return False
+        # Verifica interseções 2D apenas em projeção (por exemplo, XY)
         for i in range(len(points)):
             for j in range(i + 2, len(points) - (i == 0)):
-                if Wireframe._lines_intersect(
-                    points[i], points[i + 1], 
-                    points[j], points[(j + 1) % len(points)]
-                ):
+                if Wireframe._lines_intersect(points[i], points[i + 1], 
+                                            points[j], points[(j + 1) % len(points)]):
                     return False
+
         return True
 
     @staticmethod
@@ -113,7 +108,6 @@ class Wireframe(GraphicObject):
         o4 = orientation(p3, p4, p2)
 
         return o1 != o2 and o3 != o4
-
 
     def __str__(self):
         return f"{self.name}: Wireframe with {len(self.points)} points"

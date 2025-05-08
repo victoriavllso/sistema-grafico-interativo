@@ -20,12 +20,8 @@ class BSpline(GraphicObject):
 
 	def calculate_bspline(self) -> list[Point]:
 		curve= []
-
 		delta_t = 0.01
-	
-
 		n = int(1/delta_t)
-
 		M =  (1/6) * np.array([
             [-1,  3, -3,  1],
             [ 3, -6,  3,  0],
@@ -33,8 +29,6 @@ class BSpline(GraphicObject):
             [ 1,  4,  1,  0]
         ])
 
-
-		
 		for i in range(0, len(self.points) - 3):
 			# gera os pontos de controle
 			Px = np.array([p.x for p in self.points[i:i+4]])
