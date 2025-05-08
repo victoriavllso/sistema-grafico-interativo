@@ -11,11 +11,10 @@ class Projection:
 		translated_points = Projection.translate_to_origin(point, vrp)
 
 		# determina angulos de rotação para alinhar vpn com z
-		theta_x, thetha_y = Projection.calculate_rotation_angles(vpn)
+		theta_x, theta_y = Projection.calculate_rotation_angles(vpn)
 
 		# rotaciona o mundo para alinha vpn com z
-
-		rotated_points  = Projection.rotate_to_align_z(translated_points, theta_x, thetha_y)
+		rotated_points  = Projection.rotate_to_align_z(translated_points, theta_x, theta_y)
 
 		# ignora a coordenada z
 		projected_points = []

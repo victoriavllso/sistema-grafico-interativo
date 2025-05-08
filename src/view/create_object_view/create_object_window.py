@@ -32,9 +32,12 @@ class CreateObjectWindow(QtWidgets.QDialog, Ui_Dialog):
 		"""Abre o dialogo de cores"""
 		self.color = QColorDialog.getColor()
 	def get_points_input(self):
-		points = self.points_ln.toPlainText().strip()
-		points = list(eval(points))
-		return points
+		try:
+			points = self.points_ln.toPlainText().strip()
+			points = list(eval(points))
+			return points
+		except Exception:
+			return None
 	
 	def reset_fields(self) -> None:
 		"""Reseta os campos de entrada"""

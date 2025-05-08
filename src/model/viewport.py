@@ -15,5 +15,5 @@ class Viewport:
         y = (1 - (point.scn_y - -1)/(1- -1)) * (VP_Y_MAX)
         name = point.name
         if name != "default":
-            return Point(window=window,x = x, y= y,name= name)
-        return Point(window = window, x = x,y =  y)
+            return Point(window=window,x=x, y=y, z=0, name= name)
+        return Point(window = window, x=x, y=y, z=0)

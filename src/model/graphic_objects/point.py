@@ -36,7 +36,6 @@ class Point(GraphicObject):
         self._y = value
         self.convert_coordinates()
     
-
     @property
     def z(self):
         return self._z
@@ -94,7 +93,7 @@ class Point(GraphicObject):
         x, y, z = translated[0], translated[1], translated[2]
 
         # Rotaciona conforme a direção da janela
-        angle = Transform.calculate_angle((0, 1), self.window.direction) * (180 / np.pi)
+        angle = Transform.calculate_angle(np.array([0, 1, 0]), self.window.direction) * (180 / np.pi)
         if self.window.direction[0] < 0:
             angle = 360 - angle
         if angle != 0:

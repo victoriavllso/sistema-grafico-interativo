@@ -3,6 +3,9 @@ from src.model.graphic_objects.graphic_object import GraphicObject
 from src.model.window import Window
 
 class Transform:
+
+    #---------- Matrizes de transformação ----------#
+
     @staticmethod
     def matrix_translate(tx:int, ty:int, tz:int) -> np.ndarray:
         """Matriz de translação"""
@@ -14,7 +17,7 @@ class Transform:
         ])
 
     @staticmethod
-    def matrix_scale(sx:int, sy:int, sz) -> np.ndarray:
+    def matrix_scale(sx:int, sy:int, sz:int) -> np.ndarray:
         """Matriz de escala"""
         return np.array([
             [sx, 0, 0, 0],
@@ -58,6 +61,8 @@ class Transform:
             [0, 0, 1, 0],
             [0, 0, 0, 1]
         ])
+    
+    #---------- Transformações de objetos gráficos ----------#
 
     @staticmethod
     def translate_object(obj:GraphicObject, dx:int, dy:int, dz:int) -> None:
@@ -77,33 +82,54 @@ class Transform:
             obj.receive_transform(matrix)
 
     @staticmethod
-    def rotate_object(obj:GraphicObject, angle:int, px:int=0, py:int=0) -> None:
-        """Rotaciona um objeto gráfico em torno de um ponto"""
+    def rotate_object(obj: GraphicObject, angle: int, axis: str = 'z', px: int = 0, py: int = 0, pz: int = 0) -> None:
+        """Rotaciona um objeto gráfico em torno de um ponto no eixo especificado (x, y ou z)"""
+        if axis == 'x':
+            rotation_matrix = Transform.matrix_rotate_x(angle)
+        elif axis == 'y':
+            rotation_matrix = Transform.matrix_rotate_y(angle)
+        elif axis == 'z':
+            rotation_matrix = Transform.matrix_rotate_z(angle)
+        else:
+            raise ValueError("Eixo de rotação inválido. Use 'x', 'y' ou 'z'.")
+
         matrixs = [
-            Transform.matrix_translate(-px, -py),
-            Transform.matrix_rotate(angle),
-            Transform.matrix_translate(px, py)
+            Transform.matrix_translate(-px, -py, -pz),
+            rotation_matrix,
+            Transform.matrix_translate(px, py, pz)
         ]
         for matrix in matrixs:
             obj.receive_transform(matrix)
 
     @staticmethod
-    def rotate_point_origin(x, y, angle) -> tuple:
-        """Rotaciona um ponto em torno da origem"""
-        matrix_rotate = Transform.matrix_rotate(angle)
-        matrix_homogenous = np.array([x, y, 1])
-        result = np.dot(matrix_homogenous, matrix_rotate)
-        x = result[0]
-        y = result[1]
-        return x, y
-    
+    def rotate_point_origin(x, y, z, angle, axis='z') -> tuple:
+        """Rotaciona um ponto em torno da origem em torno do eixo especificado"""
+        if axis == 'x':
+            matrix_rotate = Transform.matrix_rotate_x(angle)
+        elif axis == 'y':
+            matrix_rotate = Transform.matrix_rotate_y(angle)
+        elif axis == 'z':
+            matrix_rotate = Transform.matrix_rotate_z(angle)
+        else:
+            raise ValueError("Eixo de rotação inválido. Use 'x', 'y' ou 'z'.")
+
+        point = np.array([x, y, z, 1])  # coordenadas homogêneas
+        result = np.dot(point, matrix_rotate)
+        return result[0], result[1], result[2]
+
     #---------- Cálculo de ângulo entre vetores ----------#
     
     @staticmethod
     def calculate_angle(vector1, vector2) -> float:
-        """Calcula o ângulo entre dois vetores"""
-        v1 = vector1 / np.linalg.norm(vector1)
-        v2 = vector2 / np.linalg.norm(vector2)
+        """Calcula o ângulo entre dois vetores (2D ou 3D)"""
+        v1 = np.array(vector1)
+        v2 = np.array(vector2)
+
+        if v1.shape != v2.shape:
+            raise ValueError(f"Vetores devem ter o mesmo número de dimensões. Recebido {v1.shape} e {v2.shape}.")
+
+        v1 = v1 / np.linalg.norm(v1)
+        v2 = v2 / np.linalg.norm(v2)
         result = np.arccos(np.clip(np.dot(v1, v2), -1.0, 1.0))
         return result
 
@@ -126,7 +152,7 @@ class Transform:
     
     @staticmethod
     def from_screen_coordinates(scn_x: float, scn_y: float, scn_z:float, window: Window) -> tuple[float, float]:
-        """Converte coordenadas da cena para coordenadas da janela"""
+        """Converte coordenadas da tela para coordenadas da janela"""
         x = (scn_x + 1) / 2 * (window.x_max - window.x_min) + window.x_min
         y = (scn_y + 1) / 2 * (window.y_max - window.y_min) + window.y_min
         if hasattr(window, 'z_min') and hasattr(window, 'z_max'):

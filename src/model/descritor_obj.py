@@ -37,7 +37,7 @@ class DescritorOBJ:
                 elif line.startswith("v"):
                     # Lê os pontos
                     _, x, y, z = line.split()
-                    point = (float(x), float(y))
+                    point = (float(x), float(y), float(z))
                     points[len(points)+1] = point
                 elif line.startswith("o"):
                     # Lê o nome do objeto
@@ -88,33 +88,33 @@ class DescritorOBJ:
             points = {}
             for obj in objects:
                 if isinstance(obj, Point):
-                    points.setdefault((obj.x, obj.y), len(points) + 1)
+                    points.setdefault((obj.x, obj.y, obj.z), len(points) + 1)
                 elif isinstance(obj, Line):
-                    points.setdefault((obj.x1(), obj.y1()), len(points) + 1)
-                    points.setdefault((obj.x2(), obj.y2()), len(points) + 1)
+                    points.setdefault((obj.x1(), obj.y1(), obj.z1()), len(points) + 1)
+                    points.setdefault((obj.x2(), obj.y2(), obj.z2()), len(points) + 1)
                 elif isinstance(obj, (Wireframe, Bezier, BSpline)):
                     for point in obj.points:
-                        points.setdefault((point.x, point.y), len(points) + 1)
+                        points.setdefault((point.x, point.y, point.z), len(points) + 1)
                 materials[obj.name] = obj.color
             for point, index in points.items():
-                file.write(f"v {point[0]} {point[1]} 0\n")
+                file.write(f"v {point[0]} {point[1]} {point[2]}\n")
             file.write("\n")
             DescritorOBJ.write_material_library(mtl_path, materials)
             for obj in objects:
                 file.write(f"o {obj.name}\n")
                 file.write(f"usemtl {obj.name}\n")
                 if isinstance(obj, Point):
-                    file.write(f"p {points[(obj.x, obj.y)]}\n")
+                    file.write(f"p {points[(obj.x, obj.y, obj.z)]}\n")
                 elif isinstance(obj, Line):
-                    file.write(f"l {points[(obj.x1(), obj.y1())]} {points[(obj.x2(), obj.y2())]}\n")
+                    file.write(f"l {points[(obj.x1(), obj.y1(), obj.z1())]} {points[(obj.x2(), obj.y2(), obj.z2())]}\n")
                 elif isinstance(obj, Wireframe) and obj.filled:
-                    file.write(f"w {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
+                    file.write(f"w {' '.join(str(points[(point.x, point.y, point.z)]) for point in obj.points)}\n")
                 elif isinstance(obj, Wireframe) and not obj.filled:
-                    file.write(f"l {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
+                    file.write(f"l {' '.join(str(points[(point.x, point.y, point.z)]) for point in obj.points)}\n")
                 elif isinstance(obj, Bezier):
-                    file.write(f"curve {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
+                    file.write(f"curve {' '.join(str(points[(point.x, point.y, point.z)]) for point in obj.points)}\n")
                 elif isinstance(obj, BSpline):
-                    file.write(f"curve_spline {' '.join(str(points[(point.x, point.y)]) for point in obj.points)}\n")
+                    file.write(f"curve_spline {' '.join(str(points[(point.x, point.y, point.z)]) for point in obj.points)}\n")
 
     @staticmethod
     def read_material_library(lib_name):

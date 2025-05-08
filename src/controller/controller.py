@@ -56,16 +56,17 @@ class Controller:
         name = name["name"]
         obj = None # objeto unico
         objects = [] # lista de objetos (bezier, por exemplo)
+        print(f"points_input: {points_input}")
         if type == "point":
             try:
-                obj = Point(window=self.window, name=name, x=points_input[0], y=points_input[1], color=color)
+                obj = Point(window=self.window, name=name, x=points_input[0], y=points_input[1], z=points_input[2], color=color)
             except Exception:
                 GUIUtils.show_popup("Erro", "Ponto inválido!", QMessageBox.Icon.Critical)
                 return
             
         elif type == "line":
             try:
-                point0, point1 = Point(window=self.window, x=points_input[0][0], y=points_input[0][1]), Point(window=self.window, x=points_input[1][0], y=points_input[1][1])
+                point0, point1 = Point(window=self.window, x=points_input[0][0], y=points_input[0][1], z=points_input[0][2]), Point(window=self.window, x=points_input[1][0], y=points_input[1][1], z=points_input[1][2])
                 obj = Line(window=self.window, name=name, point1=point0, point2=point1, color=color)
             except Exception:
                 GUIUtils.show_popup("Erro", "Linha inválida!", QMessageBox.Icon.Critical)
@@ -73,7 +74,7 @@ class Controller:
 
         elif type == "wireframe":
             try:
-                points = [Point(window=self.window, x=x, y=y) for x, y in points_input]
+                points = [Point(window=self.window, x=x, y=y, z=z) for x, y, z in points_input]
                 obj = Wireframe(window=self.window, name=name, points=points, color=color, filled=filled)
             except Exception:
                 GUIUtils.show_popup("Erro", "Wireframe inválido!", QMessageBox.Icon.Critical)
@@ -84,7 +85,7 @@ class Controller:
                 if len(points_input) >= 4:
                     for i in range(0, len(points_input) - 3,3):
                         bezier_points = points_input[i:i+4]
-                        points = [Point(window=self.window, x=x, y=y) for x, y in bezier_points]
+                        points = [Point(window=self.window, x=x, y=y, z=z) for x, y, z in bezier_points]
                         bezier_obj = Bezier(window=self.window, name=f"{name}_{i//3}", points=points, color=color)
                         objects.append(bezier_obj)
                    
@@ -95,7 +96,7 @@ class Controller:
         elif type == "spline":
             try:
                 if len(points_input) >= 4:
-                    points = [Point(window=self.window, x=x, y=y) for x, y in points_input]
+                    points = [Point(window=self.window, x=x, y=y, z=z) for x, y, z in points_input]
                     spline_obj = BSpline(window=self.window, name=f"{name}", points=points, color=color)
                     objects.append(spline_obj)
          
@@ -120,9 +121,8 @@ class Controller:
         clipping_algorithm = self.main_window.get_clipping_algorithm()
         self.cliper.clip_object(graphic_objects, clipping_algorithm)
         for obj in graphic_objects:
-            #TODO: refatorar - passar essa verificação como um método do objeto
-            if all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])) or isinstance(obj, Bezier) or isinstance(obj, BSpline):
-                obj.draw(painter, self.viewport)
+            # if all(getattr(p, "inside_window", False) for p in getattr(obj, "points", [])) or isinstance(obj, Bezier) or isinstance(obj, BSpline):
+            obj.draw(painter, self.viewport)
             for p in getattr(obj, "points", []):
                 p.inside_window = False
 
