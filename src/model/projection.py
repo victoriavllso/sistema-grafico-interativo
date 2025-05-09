@@ -6,23 +6,38 @@ class Projection:
 
 	@staticmethod
 	def orthogonal_projection(point, vrp, vpn, window):
-
-		# translada VRP para a origem
+		# 1. Translação para origem (VRP para (0,0,0))
 		translated_points = Projection.translate_to_origin(point, vrp)
 
-		# determina angulos de rotação para alinhar vpn com z
+		# 2. Rotação para alinhar VPN com o eixo Z
 		theta_x, theta_y = Projection.calculate_rotation_angles(vpn)
+		rotated_points = Projection.rotate_to_align_z(translated_points, theta_x, theta_y)
 
-		# rotaciona o mundo para alinha vpn com z
-		rotated_points  = Projection.rotate_to_align_z(translated_points, theta_x, theta_y)
+		# 3. Aplicar matriz de projeção ortográfica
+		projection_matrix = np.array([
+		[1, 0, 0, 0],
+		[0, 1, 0, 0],
+		[0, 0, 0, 0],  # Z é projetado para 0
+		[0, 0, 0, 1]
+		])
 
-		# ignora a coordenada z
 		projected_points = []
 		for point in rotated_points:
-			projected_points.append((point[0], point[1]))
+			# Converter para coordenadas homogêneas se necessário
+			if len(point) == 3:
+				point = (*point, 1)
+
+			# Aplicar projeção
+			projected = projection_matrix @ np.array(point)
+
+			# Normalizar (dividir por w se não for 1)
+			if projected[3] != 0:
+				projected = projected / projected[3]
+
+			projected_points.append((projected[0], projected[1]))
 
 		return projected_points
-	
+
 	@staticmethod
 	def translate_to_origin(points, vrp):
 		

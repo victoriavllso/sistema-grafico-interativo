@@ -59,7 +59,8 @@ class Controller:
         if type == "point":
             try:
                 obj = Point(window=self.window, name=name, x=points_input[0], y=points_input[1], z=points_input[2], color=color)
-            except Exception:
+            except Exception as e:
+                print(f' erro obtido {e}')
                 GUIUtils.show_popup("Erro", "Ponto inválido!", QMessageBox.Icon.Critical)
                 return
             
@@ -102,7 +103,6 @@ class Controller:
                     objects.append(spline_obj)
          
             except Exception as e:
-                print(e)
                 GUIUtils.show_popup("Erro", "Spline inválido!", QMessageBox.Icon.Critical)
                 return
         else:

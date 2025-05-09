@@ -29,7 +29,7 @@
     <string notr="true">background-color: rgb(86, 43, 0);</string>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="translate_tab">
     <property name="toolTip">
@@ -460,6 +460,16 @@
    </property>
    <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="axis_comboBox">
+   <property name="geometry">
+    <rect>
+     <x>98</x>
+     <y>370</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
    </property>
   </widget>
  </widget>

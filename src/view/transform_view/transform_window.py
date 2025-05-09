@@ -119,3 +119,7 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
             return float(value.strip())
         except ValueError:
             return 0.0  # Ou None, dependendo da lógica
+    def set_axis_rotate(self, types: list[str] = ["x", "y", "z"]) -> None:
+        """Define os tipos de objeto disponíveis na combo box"""
+        self.axis_rotate_comboBox.clear()
+        self.axis_rotate_comboBox.addItems(types)

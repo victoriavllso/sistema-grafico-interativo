@@ -58,6 +58,9 @@ class Point(GraphicObject):
             vrp, vpn, self.window
         )
 
+        if not projected_points:
+            return
+
         x, y = projected_points[0]
 
         transformed_point = viewport.transform(self, self.window)
