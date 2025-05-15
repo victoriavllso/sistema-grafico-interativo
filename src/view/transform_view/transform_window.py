@@ -65,7 +65,7 @@ class TransformWindow(QtWidgets.QDialog, Ui_Dialog):
             if self.rotate_origin_button.isChecked():
                 transform_text += f"Rotação em torno da origem em {self.get_angle()} graus"
             elif self.rotate_center_button.isChecked():
-                transform_text += f"Rotação em torno do ponto ({self.get_x_rotate()}, {self.get_y_rotate(), self.get_z_rotate()}) em {self.get_angle()} graus"
+                transform_text += f"Rotação em torno do ponto ({self.get_x_rotate()}, {self.get_y_rotate()}, {self.get_z_rotate()}) em {self.get_angle()} graus"
             elif self.rotate_point_button.isChecked():
                 transform_text += f"Rotação em torno do centro do objeto em {self.get_angle()} graus"
         elif self.tabWidget.currentIndex() == 2:

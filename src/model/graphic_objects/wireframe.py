@@ -11,8 +11,8 @@ from PyQt6.QtGui import QPolygonF
 class Wireframe(GraphicObject):
     def __init__(self,window, name, points: list[Point], color=Qt.GlobalColor.blue, filled=True):
         super().__init__(name, color, window)
-        # if not self._is_valid_polygon(points):
-        #     raise ValueError("Invalid polygon: The given points do not form a valid shape.")
+        if not self._is_valid_polygon(points):
+            raise ValueError("Invalid polygon: The given points do not form a valid shape.")
         self.points = points
         self.concave = self._is_concave()
         self.points_draw = []

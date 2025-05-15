@@ -13,6 +13,7 @@ from src.model.graphic_objects.line import Line
 from src.model.graphic_objects.wireframe import Wireframe
 from src.model.graphic_objects.bezier import Bezier
 from src.model.graphic_objects.bspline import BSpline
+from src.model.graphic_objects.object import Object
 
 from src.utils.utils import *
 from src.utils.gui_utils import GUIUtils
@@ -105,6 +106,21 @@ class Controller:
             except Exception as e:
                 GUIUtils.show_popup("Erro", "Spline inválido!", QMessageBox.Icon.Critical)
                 return
+            
+        elif type == "object":
+            try:
+                if name not in self.display_file.get_all_names():
+                    points = [Point(window=self.window, x=x, y=y, z=z) for x, y, z in points_input]
+                    wireframe = Wireframe(window=self.window, name=name, points=points, color=color, filled=filled)
+                    obj = Object(window=self.window, name=name, faces=wireframe, color=color)
+                else:
+                    obj = self.display_file.get_object(name)
+                    obj.add_face(Wireframe(window=self.window, name=f'{obj.name}-f{len(obj.faces)}', points=points, color=color, filled=filled))
+            except Exception as e:
+                print(e)
+                GUIUtils.show_popup("Erro", "Objeto inválido!", QMessageBox.Icon.Critical)
+                return
+
         else:
             GUIUtils.show_popup("Erro", "Tipo de objeto inválido!", QMessageBox.Icon.Critical)
             return
@@ -178,24 +194,27 @@ class Controller:
             if tr_type == "translate":
                 dx = transform.get("x_translate")
                 dy = transform.get("y_translate")
-                self.transform.translate_object(selected_object, dx, dy)
+                dz = transform.get("z_translate")
+                self.transform.translate_object(selected_object, dx, dy, dz)
             elif tr_type == "scale":
                 sx = transform.get("x_scale")
                 sy = transform.get("y_scale")
-                self.transform.scale_object(selected_object, sx, sy)
+                sz = transform.get("z_scale")
+                self.transform.scale_object(selected_object, sx, sy, sz)
             elif tr_type == "rotate":
                 angle = transform.get("angle")
-
                 if transform.get("type_rotate") == "rotate_origin":
                     self.transform.rotate_object(selected_object, angle)
                 elif transform.get("type_rotate") == "rotate_point":
                     x = transform.get("x_rotate")
                     y = transform.get("y_rotate")
-                    self.transform.rotate_object(selected_object, angle, x, y)
+                    z = transform.get("z_rotate")
+                    self.transform.rotate_object(selected_object, angle, x, y, z)
                 elif transform.get("type_rotate") == "rotate_center":
                     x = selected_object.geometric_center()[0]
                     y = selected_object.geometric_center()[1]
-                    self.transform.rotate_object(selected_object, angle, x, y)
+                    z = selected_object.geometric_center()[2]
+                    self.transform.rotate_object(selected_object, angle, x, y, z)
 
         self.display_transform.clear()
         self.transform_window.update_display()

@@ -51,7 +51,7 @@ class CreateObjectWindow(QtWidgets.QDialog, Ui_Dialog):
 		self.controller.create_object(name=self.get_name_object(), color=self.color, points_input=self.get_points_input(), filled=self.get_filled(), type=self.get_selected_object_type())	
 		self.reset_fields()
 
-	def set_object_types(self, types: list[str]=["point", "line", "wireframe", "bezier", "spline"]) -> None:
+	def set_object_types(self, types: list[str]=["point", "line", "wireframe", "bezier", "spline", "object"]) -> None:
 		"""Define os tipos de objeto disponíveis na combo box"""
 		self.obj_type_comboBox.clear()
 		self.obj_type_comboBox.addItems(types)
